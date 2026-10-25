@@ -147,11 +147,82 @@ body:not(.yt-collapsed) .reveal-player {
   }
   body:not(.yt-collapsed) .stage .controls-dock .progress{margin-top:2px!important;}
 }
-</style></head><body class="yt-collapsed">
+
+/* v8 anchored audio dock + centre lyrics with no card, YouTube always at bottom. */
+body {background:#000!important}
+.stage,body:not(.yt-collapsed) .stage{
+ position:fixed!important;top:max(66px,calc(48px + env(safe-area-inset-top,0px)))!important;
+ left:50%!important;right:auto!important;
+ bottom:calc(306px + env(safe-area-inset-bottom,0px))!important;
+ width:min(94vw,760px)!important;transform:translateX(-50%)!important;
+ padding:4px 10px!important;margin:0!important;
+ height:auto!important;min-height:0!important;max-height:none!important;
+ display:flex!important;justify-content:center!important;overflow:visible!important;
+}
+.stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+ font-size:clamp(35px,6.8vw,65px)!important;line-height:1.15!important;
+ width:100%!important;max-width:100%!important;max-height:100%!important;
+ flex:0 1 auto!important;overflow-wrap:break-word;
+}
+.controls-dock{
+ position:fixed!important;top:auto!important;left:50%!important;right:auto!important;
+ bottom:calc(213px + env(safe-area-inset-bottom,0px))!important;
+ transform:translateX(-50%)!important;z-index:20!important;
+ width:min(228px,78vw)!important;padding:5px 9px 6px!important;margin:0!important;
+ border-radius:18px!important;border:1px solid rgba(255,201,239,.11)!important;
+ background:rgba(8,4,12,.60)!important;box-shadow:none!important;
+ backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+}
+.controls-dock .controls{gap:9px!important}
+.controls-dock .ctrl{width:32px!important;min-width:32px!important;height:32px!important;font-size:14px!important}
+.controls-dock .ctrl.play{width:38px!important;min-width:38px!important;height:38px!important;font-size:17px!important}
+.controls-dock .progress{margin-top:4px!important;gap:5px!important}
+.controls-dock .time{font-size:9px!important}
+.yt-shell,body:not(.yt-collapsed) .yt-shell{
+ position:fixed!important;top:auto!important;left:50%!important;right:auto!important;
+ bottom:calc(4px + env(safe-area-inset-bottom,0px))!important;
+ transform:translateX(-50%)!important;
+ width:200px!important;height:200px!important;z-index:15!important;
+ display:block!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;
+ border:1px solid rgba(255,190,226,.10)!important;box-shadow:none!important;
+}
+.yt-shell iframe,.yt-shell #youtube-player{width:200px!important;height:200px!important;min-width:200px!important;min-height:200px!important}
+.reveal-player,#reveal-player,#toggle-player{display:none!important}
+@media(max-width:720px){
+ .stage,body:not(.yt-collapsed) .stage{
+  top:max(63px,calc(51px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(301px + env(safe-area-inset-bottom,0px))!important;
+  width:95vw!important;padding:4px 6px!important;
+ }
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(31px,9.4vw,45px)!important;line-height:1.15!important;
+ }
+}
+@media(max-height:720px){
+ .stage,body:not(.yt-collapsed) .stage{
+  top:max(53px,calc(40px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(293px + env(safe-area-inset-bottom,0px))!important;
+ }
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(25px,7.4vw,38px)!important;line-height:1.10!important;
+ }
+ .controls-dock{bottom:calc(210px + env(safe-area-inset-bottom,0px))!important}
+}
+@media(max-height:590px){
+ .stage,body:not(.yt-collapsed) .stage{
+  top:max(45px,calc(32px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(288px + env(safe-area-inset-bottom,0px))!important;
+ }
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(22px,6.6vw,29px)!important;line-height:1.08!important;
+ }
+ .controls-dock{bottom:calc(205px + env(safe-area-inset-bottom,0px))!important}
+}
+</style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
-<main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button><button class="ctrl" id="toggle-player" type="button" aria-label="Show or hide player">♫</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section></main>
-<div class="yt-shell" id="yt-shell"><div id="youtube-player"></div></div><button class="reveal-player" id="reveal-player" type="button" aria-controls="yt-shell" aria-expanded="false" aria-label="Open YouTube player">♫ Open YouTube ▴</button><div id="toast" class="toast" hidden></div>
+<main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2></main><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
+<div class="yt-shell" id="yt-shell"><div id="youtube-player"></div></div><div id="toast" class="toast" hidden></div>
 <script>
 (()=>{
 'use strict';
@@ -160,10 +231,10 @@ const q2="Enikku ninnee othiri othiri othiri ishtamaaa ente mariammee .....";
 const timedLrc = "[00:00.00] \n[00:26.13] Whenever I'm alone with you\n[00:32.05] \n[00:34.41] You make me feel like I am home again\n[00:41.87] Whenever I'm alone with you\n[00:48.24] \n[00:50.33] You make me feel like I am whole again\n[00:57.25] \n[01:15.44] Whenever I'm alone with you\n[01:23.34] You make me feel like I am young again\n[01:31.69] Whenever I'm alone with you\n[01:39.35] You make me feel like I am fun again\n[01:47.39] However far away\n[01:52.15] I will always love you\n[01:56.20] However long I stay\n[02:00.37] I will always love you\n[02:04.18] Whatever words I say\n[02:08.98] I will always love you\n[02:13.40] I will always love you\n[02:19.06] \n[02:32.63] Whenever I'm alone with you\n[02:40.67] You make me feel like I am free again\n[02:48.56] Whenever I'm alone with you\n[02:55.23] \n[02:57.66] You make me feel like I am clean again\n[03:05.32] However far away\n[03:10.15] I will always love you\n[03:13.83] However long I stay\n[03:18.37] I will always love you\n[03:21.82] Whatever words I say\n[03:26.66] I will always love you\n[03:30.39] I will always love you\n[03:37.25] \n[04:06.94] However far away\n[04:11.79] I will always love you\n[04:15.25] However long I stay\n[04:19.97] I will always love you\n[04:23.42] Whatever words I say\n[04:28.29] I will always love you\n[04:34.08] I'll always love you\n[04:38.10] I'll always love you\n[04:42.61] 'Cause I love you\n[04:44.85] \n[05:19.97] ";
 function parseLRC(src){const parsed=[];for(const ln of src.split(/\r?\n/)){const times=[...ln.matchAll(/\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g)];const text=ln.replace(/\[[^\]]*\]/g,'').trim();for(const m of times){const millis=Number((m[3]||'0').padEnd(3,'0'));parsed.push({t:Number(m[1])*60+Number(m[2])+millis/1000,text,sub:''})}}return parsed.sort((a,b)=>a.t-b.t)}
 const cues=parseLRC(timedLrc);const breaks=[{start:57.25,end:75.44,lines:[{at:57.25,text:'In every season, I would choose you.'}]},{start:139.06,end:152.63,lines:[{at:139.06,text:'For every lifetime, a thousand lilies.'}]},{start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]},{start:284.85,end:319.97,lines:[{at:284.85,text:q1},{at:302,text:q2}]}];
-const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getElementById('particles'),lyricEl=document.getElementById('lyric'),playBtn=document.getElementById('play'),pauseBtn=document.getElementById('pause'),rewindBtn=document.getElementById('rewind'),seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast'),toggleBtn=document.getElementById('toggle-player'),revealBtn=document.getElementById('reveal-player');
+const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getElementById('particles'),lyricEl=document.getElementById('lyric'),playBtn=document.getElementById('play'),pauseBtn=document.getElementById('pause'),rewindBtn=document.getElementById('rewind'),seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
 let ytPlayer=null,ytReady=false,ytState=-1,queuedPlay=false,lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;
 const positions=[{x:6,y:14,w:190,r:-20,s:0.92,o:0.46,d:8.2},{x:8,y:28,w:215,r:-12,s:0.99,o:0.55,d:8.7},{x:8,y:42,w:245,r:-10,s:1.08,o:0.62,d:8.3},{x:7,y:58,w:240,r:-16,s:1.05,o:0.62,d:8.1},{x:8,y:74,w:220,r:-18,s:0.96,o:0.53,d:8.0},{x:13,y:86,w:175,r:-18,s:0.80,o:0.36,d:8.8},{x:20,y:12,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:20,y:86,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:31,y:10,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:31,y:88,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:50,y:7,w:160,r:0,s:0.70,o:0.22,d:10.4},{x:50,y:90,w:165,r:0,s:0.72,o:0.22,d:10.2},{x:69,y:10,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:69,y:88,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:80,y:12,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:80,y:86,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:94,y:14,w:190,r:20,s:0.92,o:0.46,d:8.2},{x:92,y:28,w:215,r:12,s:0.99,o:0.55,d:8.7},{x:92,y:42,w:245,r:10,s:1.08,o:0.62,d:8.3},{x:93,y:58,w:240,r:16,s:1.05,o:0.62,d:8.1},{x:92,y:74,w:220,r:18,s:0.96,o:0.53,d:8.0},{x:87,y:86,w:175,r:18,s:0.80,o:0.36,d:8.8},{x:16,y:22,w:142,r:-22,s:0.62,o:0.22,d:10.8},{x:16,y:66,w:142,r:-24,s:0.62,o:0.22,d:10.7},{x:84,y:22,w:142,r:22,s:0.62,o:0.22,d:10.8},{x:84,y:66,w:142,r:24,s:0.62,o:0.22,d:10.7},{x:38,y:16,w:128,r:-3,s:0.56,o:0.16,d:10.9},{x:62,y:16,w:128,r:3,s:0.56,o:0.16,d:10.9}];
-positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
+positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,s:0.91,o:0.46,d:9.5},{x:97,y:32,w:185,r:18,s:0.84,o:0.38,d:9},{x:99,y:63,w:200,r:24,s:0.91,o:0.46,d:9.4},{x:11,y:95,w:235,r:-12,s:0.99,o:0.46,d:8.7},{x:23,y:98,w:212,r:8,s:0.9,o:0.43,d:9.2},{x:35,y:99,w:168,r:-9,s:0.79,o:0.35,d:10.3},{x:49,y:101,w:188,r:0,s:0.89,o:0.32,d:9.9},{x:64,y:99,w:168,r:9,s:0.79,o:0.35,d:10.1},{x:77,y:98,w:212,r:-8,s:0.9,o:0.43,d:9},{x:90,y:95,w:235,r:12,s:0.99,o:0.46,d:8.8},{x:16,y:45,w:156,r:-25,s:0.73,o:0.24,d:10.7},{x:84,y:45,w:156,r:25,s:0.73,o:0.24,d:10.6},{x:4,y:84,w:160,r:-19,s:0.78,o:0.37,d:10.1},{x:96,y:84,w:160,r:19,s:0.78,o:0.37,d:10.3});positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
@@ -171,14 +242,13 @@ function displayLyric(t){const item=getCaption(t);if(item.key===lastCue&&!(lastT
 function youtubeTime(){if(!ytReady||!ytPlayer)return 0;try{const n=ytPlayer.getCurrentTime();return Number.isFinite(n)?Math.max(0,n):0}catch(e){return 0}}
 function youtubeDuration(){if(!ytReady||!ytPlayer)return approxDuration;try{const n=ytPlayer.getDuration();return Number.isFinite(n)&&n>0?n:approxDuration}catch(e){return approxDuration}}
 function isPlaying(){return ytReady&&ytState===YT.PlayerState.PLAYING}
-function collapsePlayer(){pauseSong();document.body.classList.add('yt-collapsed');updateDrawer()} function expandPlayer(){document.body.classList.remove('yt-collapsed');updateDrawer()} function updateDrawer(){const hidden=document.body.classList.contains('yt-collapsed');revealBtn.textContent=hidden?'♫ Open YouTube ▴':'⌄ Hide YouTube';revealBtn.setAttribute('aria-expanded',String(!hidden));revealBtn.setAttribute('aria-label',hidden?'Open YouTube player':'Hide YouTube player');toggleBtn.setAttribute('aria-expanded',String(!hidden))}
-function playSong(){if(!ytReady||!ytPlayer){queuedPlay=true;expandPlayer();showMessage('Preparing the YouTube song…');return}try{expandPlayer();ytPlayer.playVideo();document.body.classList.add('has-song')}catch(e){showMessage('Tap play inside the player ♡')}}
+function playSong(){if(!ytReady||!ytPlayer){queuedPlay=true;showMessage('Preparing Lovesong…');return}try{ytPlayer.playVideo();document.body.classList.add('has-song')}catch(e){showMessage('Tap Play in YouTube player ♡')}}
 function pauseSong(){if(ytReady&&ytPlayer)try{ytPlayer.pauseVideo()}catch(e){}}
-playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pauseSong);rewindBtn.addEventListener('click',()=>{if(!ytReady||!ytPlayer){showMessage('Loading the song…');return}const next=Math.max(0,youtubeTime()-10);ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});toggleBtn.addEventListener('click',()=>{if(document.body.classList.contains('yt-collapsed'))expandPlayer();else{pauseSong();collapsePlayer()}});revealBtn.addEventListener('click',()=>{if(document.body.classList.contains('yt-collapsed'))expandPlayer();else collapsePlayer()});seek.addEventListener('input',()=>{if(!ytReady||!ytPlayer)return;const next=Number(seek.value)/1000*youtubeDuration();ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});
+playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pauseSong);rewindBtn.addEventListener('click',()=>{if(!ytReady||!ytPlayer){showMessage('Loading the song…');return}const next=Math.max(0,youtubeTime()-10);ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});seek.addEventListener('input',()=>{if(!ytReady||!ytPlayer)return;const next=Number(seek.value)/1000*youtubeDuration();ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});
 function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
 function updateButtons(){playBtn.style.opacity=isPlaying()?'.65':'1';pauseBtn.style.opacity=isPlaying()?'1':'.65'}
 let lastFrame=0;function frame(now){requestAnimationFrame(frame);if(now-lastFrame<85)return;lastFrame=now;const t=youtubeTime(),d=youtubeDuration();displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));lastTime=t;updateButtons()};
 function initYoutube(){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;script.onerror=()=>showMessage('YouTube unavailable.');window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('youtube-player',{width:'200',height:'200',videoId:'naUqWQ-of6o',playerVars:{playsinline:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{ytReady=true;if(queuedPlay){queuedPlay=false;playSong()}},onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}if(e.data===YT.PlayerState.ENDED)showMessage('For you, always ♡');updateButtons()},onError:()=>showMessage('YouTube playback unavailable here.')}})};document.head.appendChild(script)}
-updateDrawer();requestAnimationFrame(frame);initYoutube();
+requestAnimationFrame(frame);initYoutube();
 })();
 </script></body></html>
