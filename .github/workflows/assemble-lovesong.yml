@@ -1,0 +1,31 @@
+name: Assemble licensed Lovesong audio
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/assemble-lovesong.yml
+      - assets/lovesong/part-*.bin
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and verify MP3
+        run: |
+          mkdir -p assets
+          cat assets/lovesong/part-*.bin > assets/Lovesong.mp3
+          echo "4e72ed0dc06a08e3a43f780878432a32e6ce3f7e0cdc2414ae3643495e827802  assets/Lovesong.mp3" | sha256sum --check
+      - name: Commit assembled audio
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/Lovesong.mp3
+          if ! git diff --cached --quiet; then
+            git commit -m 'Assemble licensed Lovesong for direct playback'
+            git push
+          fi
