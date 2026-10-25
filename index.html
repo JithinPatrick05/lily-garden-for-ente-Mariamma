@@ -1,309 +1,145 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b1023" />
-  <meta name="description" content="A magical digital garden where colourful lilies grow, bloom and glow. Built with HTML, CSS and JavaScript." />
-  <title>Bloom — A Little Digital Garden</title>
-  <style>
-    :root { color-scheme: dark; --ink:#eff5ff; --muted:#a3b0ca; --aqua:#a0ffdf; --line:rgba(197,225,255,.16); }
-    * { box-sizing:border-box; }
-    html,body { min-height:100%; margin:0; }
-    body {
-      overflow-x:hidden; background:#090d20; color:var(--ink);
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
-    button { font:inherit; }
-    .site {
-      min-height:100svh; position:relative; isolation:isolate; overflow:hidden;
-      background:
-        radial-gradient(ellipse at 53% 71%,rgba(30,64,97,.52), transparent 48%),
-        radial-gradient(ellipse at 89% 34%,rgba(64,39,101,.3),transparent 42%),
-        radial-gradient(ellipse at 12% 28%,rgba(20,76,79,.3),transparent 40%),
-        linear-gradient(180deg,#090d1f 0%,#0c1630 54%,#091b26 100%);
-    }
-    .site::before {
-      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
-      background-image:radial-gradient(rgba(195,230,255,.29) .8px,transparent 1px);
-      background-size:31px 31px; opacity:.16;
-      mask-image:linear-gradient(180deg,transparent 5%,black 44%,transparent 92%);
-    }
-    .site::after { content:""; position:absolute; left:-10%; right:-10%; bottom:-88px;
-      height:240px; background:radial-gradient(ellipse,rgba(71,181,133,.17),transparent 66%);
-      z-index:1; pointer-events:none;
-    }
-    .aura {position:absolute; width:44vw; aspect-ratio:1; border-radius:50%; filter:blur(80px); opacity:.18; pointer-events:none;}
-    .aura-one {top:10%;left:-25%;background:#33c1a9;animation:floatAura 15s ease-in-out infinite alternate;}
-    .aura-two {right:-23%;bottom:1%;background:#b75bc9;animation:floatAura 17s ease-in-out -5s infinite alternate-reverse;}
-    .topbar {position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:20px;
-      padding:27px clamp(22px,5vw,80px);}
-    .brand {display:flex;align-items:center;gap:12px;color:#d5fce9;text-decoration:none;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
-      font-size:12px;letter-spacing:.065em;font-weight:650;}
-    .brand-mark {width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(152,250,213,.55);
-      border-radius:9px;box-shadow:0 0 19px rgba(113,238,189,.13) inset;font-size:17px;}
-    .top-note {font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase;
-      font-size:10px;letter-spacing:.17em;color:#9daac6;display:flex;align-items:center;gap:9px;}
-    .live-dot{height:6px;width:6px;border-radius:50%;background:#82ffd0;box-shadow:0 0 11px #7bffc8;animation:pulse 2.4s ease-in-out infinite;}
-    .hero {position:relative;z-index:4;text-align:center;max-width:850px;margin:clamp(4px,2.5vh,24px) auto 0;
-      padding:0 20px;pointer-events:none;}
-    .eyebrow {display:flex;justify-content:center;align-items:center;gap:12px;color:#a7f8d6;
-      text-transform:uppercase;letter-spacing:.31em;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;margin:0 0 16px;}
-    .eyebrow::before,.eyebrow::after {content:"";width:29px;height:1px;background:rgba(167,248,214,.6);}
-    h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(42px,6.5vw,82px);
-      letter-spacing:-.052em;line-height:1.04;text-shadow:0 5px 40px rgba(6,11,26,.8);}
-    h1 em{font-style:italic;background:linear-gradient(110deg,#c9d9ff 5%,#fcafcf 35%,#fbe8b3 64%,#b7ffda);
-      -webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.11em;}
-    .subtitle{font-size:clamp(13px,1.35vw,15px);color:#bdc6d8;letter-spacing:.015em;line-height:1.65;
-      margin:17px auto 0;max-width:560px;}
-    .garden-wrap {position:absolute;inset:0;z-index:2;pointer-events:none;}
-    .garden {position:absolute;bottom:-18px;left:50%;width:min(1450px,116vw);height:auto;
-      max-height:88vh;transform:translateX(-50%);overflow:visible;filter:saturate(1.16);}
-    .flower {cursor:pointer;pointer-events:all;outline:none;}
-    .flower:focus-visible .flower-focus {stroke:#fff;stroke-width:2;opacity:1;}
-    .flower-focus {stroke:transparent;fill:transparent;opacity:0;}
-    .stem {fill:none;stroke:#428f74;stroke-width:6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;
-      animation:growStem 2.1s cubic-bezier(.33,.04,.18,1) forwards;animation-delay:var(--delay);}
-    .stem-glint {fill:none;stroke:#b0f5ae;stroke-width:1.6;stroke-linecap:round;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1;
-      animation:growStem 2.1s cubic-bezier(.33,.04,.18,1) forwards;animation-delay:var(--delay);}
-    .leaf-inner {opacity:0;transform-box:fill-box;transform-origin:0% 100%;
-      animation:openLeaf 1s cubic-bezier(.15,.88,.32,1.25) forwards;
-      animation-delay:calc(var(--delay) + 1.0s);}
-    .leaf-right .leaf-inner {transform-origin:0% 100%;}
-    .glow {opacity:0;animation:glowIn 2s ease-out forwards;animation-delay:calc(var(--delay) + 1.9s);}
-    .sway {animation:sway 6s ease-in-out infinite alternate; transform-origin:0px 0px;animation-delay:calc(var(--delay) + 2.8s);}
-    .petal {opacity:0;transform-box:fill-box;transform-origin:50% 98%;
-      animation:unfurl 1.65s cubic-bezier(.12,.75,.22,1.05) forwards;
-      animation-delay:calc(var(--delay) + 1.75s + var(--i) * .11s);}
-    .flower-centre {opacity:0;animation:centreIn .72s ease-out forwards;
-      animation-delay:calc(var(--delay) + 2.45s);}
-    .twinkle {animation:twinkle var(--duration) ease-in-out var(--twinkle-delay) infinite alternate;}
-    .meteor {opacity:0;animation:meteorFloat var(--duration) linear var(--twinkle-delay) infinite;}
-    .ground-grass {opacity:.58;animation:grassSway 6s ease-in-out infinite alternate;transform-origin:50% 100%;}
-    .controls {position:absolute;z-index:6;bottom:26px;left:50%;transform:translateX(-50%);
-      display:flex;flex-direction:column;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 30px);}
-    .action-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;}
-    .btn {border:1px solid rgba(188,235,220,.28);border-radius:100px;color:#ebfff5;
-      background:rgba(10,25,35,.65);padding:13px 20px;display:inline-flex;align-items:center;
-      gap:10px;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease;
-      box-shadow:0 8px 32px rgba(0,0,0,.16);backdrop-filter:blur(12px);font-size:12px;font-weight:600;letter-spacing:.03em;}
-    .btn:hover,.btn:focus-visible {transform:translateY(-2px);background:rgba(19,51,57,.88);border-color:#a0ffdc;}
-    .btn-primary{background:#baffdf;color:#102a27;border-color:#baffdf;box-shadow:0 5px 28px rgba(140,255,197,.13);}
-    .btn-primary:hover,.btn-primary:focus-visible{background:#dcffed;color:#102a27;}
-    .btn svg{width:14px;height:14px;flex:none;}
-    .hint{font:10px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.065em;color:#aab5c4;
-      text-shadow:0 2px 8px #040b1b;text-align:center;}
-    .corner-code{position:absolute;top:51%;left:clamp(18px,5vw,78px);z-index:3;
-      font:10px/2 ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(153,208,197,.57);
-      letter-spacing:.04em;pointer-events:none;}
-    .corner-code span {color:rgba(254,188,212,.76);}
-    .corner-right {position:absolute;right:clamp(18px,5vw,78px);top:49%;writing-mode:vertical-rl;
-      font:10px ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(172,198,216,.52);
-      letter-spacing:.23em;z-index:3;pointer-events:none;}
-    .bottom-line{position:absolute;left:clamp(20px,5vw,80px);right:clamp(20px,5vw,80px);bottom:22px;z-index:3;
-      display:flex;align-items:center;justify-content:space-between;color:rgba(180,201,208,.5);
-      font:9px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;pointer-events:none;}
-    @keyframes growStem {to {stroke-dashoffset:0;}}
-    @keyframes openLeaf {0%{opacity:0;transform:rotate(-22deg) scale(.1,.08)} 100%{opacity:1;transform:rotate(0) scale(1)}}
-    @keyframes unfurl {0%{opacity:0;transform:scale(.08,.14) rotate(-32deg)} 25%{opacity:.93} 68%{transform:scale(1.06,1.03) rotate(4deg)} 100%{opacity:1;transform:scale(1) rotate(0)}}
-    @keyframes centreIn {from{opacity:0;transform:scale(.15)} to{opacity:1;transform:scale(1)}}
-    @keyframes glowIn {0%{opacity:0} 100%{opacity:.55}}
-    @keyframes sway {0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
-    @keyframes twinkle{0%{opacity:.12;transform:scale(.7)}100%{opacity:.9;transform:scale(1.45)}}
-    @keyframes meteorFloat{0%{opacity:0;transform:translateY(24px)}25%{opacity:.55}85%{opacity:.32}100%{opacity:0;transform:translateY(-52px)}}
-    @keyframes pulse{0%,100%{opacity:.5;transform:scale(.88)}50%{opacity:1;transform:scale(1.2)}}
-    @keyframes floatAura{from{transform:translate(0,0)}to{transform:translate(7%, -8%)}}
-    @keyframes grassSway{0%{transform:skewX(-2deg)}100%{transform:skewX(2deg)}}
-    @media (max-width:650px){
-      .topbar{padding:20px 18px;}
-      .top-note{letter-spacing:.04em;font-size:9px;}
-      .brand{font-size:11px;}
-      .hero{margin-top:30px;}
-      h1{font-size:clamp(40px,10vw,60px);}
-      .subtitle{font-size:13px;padding:0 14px;max-width:370px;}
-      .garden{width:200vw;max-width:none;max-height:70vh;bottom:35px;}
-      .corner-code,.corner-right,.bottom-line{display:none;}
-      .controls{bottom:22px;}
-      .hint{font-size:9px;}
-      .btn{padding:12px 16px;font-size:11px;}
-    }
-    @media (max-height:720px) and (min-width:651px){
-      .hero{margin-top:0;}
-      h1{font-size:clamp(42px,5vw,63px)}
-      .subtitle{margin-top:9px;}
-      .garden{max-height:85vh;}
-      .controls{bottom:16px;}
-    }
-    @media (prefers-reduced-motion:reduce){
-      *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;}
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#060816">
+<meta name="description" content="A little universe of neon lilies, love letters, and a soundtrack. For ente Mariamme.">
+<title>For Ente Mariamme · Neon Lily Love Letter</title>
+<link rel="preconnect" href="https://open.spotify.com">
+<style>
+:root{color-scheme:dark;--glass:rgba(15,17,39,.55);--stroke:rgba(212,200,255,.18);--white:#fff6ff;--sub:#d1cbde;--pink:#ff95df;--aqua:#80eaff;--hue:308}
+*,*:before,*:after{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden}body{background:#050613;color:var(--white);font-family:'Segoe UI',Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a7eaff;outline-offset:3px}
+#scene{position:fixed;inset:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 90%,#1e123a 0%,#080a1e 55%,#040614 100%)}
+.sky,.nebula,.veil,.petals,.stars,.fireflies,.horizon,.flowers,.lightbeams{position:absolute;inset:0;pointer-events:none}
+.sky{background:radial-gradient(ellipse 45% 34% at 75% 24%,rgba(34,95,150,.22),transparent),radial-gradient(ellipse 48% 36% at 20% 36%,rgba(135,34,132,.18),transparent),radial-gradient(ellipse 70% 60% at 55% 96%,rgba(109,23,144,.29),transparent)}
+.nebula{inset:-25%;background:radial-gradient(ellipse 25% 25% at 38% 40%,rgba(143,37,214,.12),transparent 70%),radial-gradient(ellipse 27% 30% at 72% 52%,rgba(28,172,230,.12),transparent 70%);filter:blur(36px);animation:nebula 27s ease-in-out infinite alternate}
+.lightbeams:before,.lightbeams:after{content:"";position:absolute;inset:-30% auto 0;top:-40%;width:30vw;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(130,90,247,.055),transparent);filter:blur(20px);animation:beam 24s ease-in-out infinite alternate}.lightbeams:before{left:10%}.lightbeams:after{right:5%;animation-delay:-9s;background:linear-gradient(90deg,transparent,rgba(54,214,241,.058),transparent)}
+.horizon{top:auto;height:39%;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(217,51,171,.18),transparent 74%),linear-gradient(0deg,rgba(3,4,13,.82),transparent 70%)}
+.stars .star{position:absolute;width:var(--s);height:var(--s);left:var(--x);top:var(--y);border-radius:50%;background:#fff;box-shadow:0 0 7px 1px rgba(210,207,255,.45);opacity:var(--o);animation:twinkle var(--d) ease-in-out infinite alternate}
+.fireflies .fly{position:absolute;left:var(--x);bottom:var(--b);width:var(--s);height:var(--s);border-radius:50%;background:hsla(var(--h),100%,79%,.95);box-shadow:0 0 9px 3px hsla(var(--h),100%,70%,.43),0 0 28px hsla(var(--h),100%,65%,.3);animation:fly var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+.petals .fall{position:absolute;left:var(--x);top:-12%;width:var(--s);height:calc(var(--s)*1.6);border-radius:85% 4% 80% 15%;transform:rotate(36deg);background:linear-gradient(140deg,hsla(var(--h),100%,89%,.94),hsla(var(--h),95%,69%,.53));box-shadow:0 0 11px hsla(var(--h),100%,68%,.54);filter:blur(.15px);animation:fall var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+.flowers{inset:0;z-index:2;filter:saturate(1.13) brightness(calc(1 + var(--reactive,0) * .26));transform:translate3d(var(--mouse-x,0px),var(--mouse-y,0px),0);transition:transform 1.4s ease-out;mask-image:linear-gradient(to bottom,transparent 1%,#000 12%,#000 100%)}
+.flower{position:absolute;left:var(--x);bottom:var(--bottom);height:var(--height);width:calc(var(--height)*.52);transform-origin:50% 100%;animation:flowerSway var(--speed) ease-in-out infinite alternate;animation-delay:var(--delay);opacity:var(--op);will-change:transform;filter:drop-shadow(0 0 12px hsla(var(--h),100%,65%,.25))}
+.flower svg{height:100%;width:100%;overflow:visible}.flower .bud{transform-origin:120px 145px;animation:flowerBreath 5.5s ease-in-out infinite alternate;animation-delay:var(--delay)}
+.flower .petal{transform-origin:0 0;animation:bloomIn 2.2s cubic-bezier(.19,.9,.23,1) both;animation-delay:calc(var(--index)*.11s + var(--start))}
+.flower .stem{stroke-dasharray:480;stroke-dashoffset:480;animation:stemGrow 3s ease-out forwards;animation-delay:var(--start)}
+.flower .leaf{transform-box:fill-box;transform-origin:center bottom;animation:leafGrow 1.7s ease-out both;animation-delay:calc(var(--start) + 1.2s)}
+.flower .bloom-halo{animation:halo 4s ease-in-out infinite alternate}
+.veil{z-index:3;background:linear-gradient(to bottom,rgba(2,3,12,.60) 0%,rgba(2,3,12,.07) 26%,rgba(4,3,13,.07) 63%,rgba(1,2,9,.66) 100%),radial-gradient(ellipse at center,transparent 33%,rgba(0,0,0,.33) 100%)}
+.grain{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
+.interface{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding:clamp(18px,3.2vw,45px)}.interface>*{pointer-events:auto}
+.top{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}.brand{max-width:min(490px,75vw)}.eyebrow{font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:#e0c7ed;opacity:.85;font-weight:700}.brand h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-style:italic;font-size:clamp(25px,3.2vw,47px);margin:8px 0 0;letter-spacing:-.025em;text-shadow:0 0 28px rgba(232,135,218,.32)}.brand h1 em{font-style:italic;color:#ffc2eb}.status{display:flex;gap:7px;align-items:center;margin-top:11px;color:#c1aec9;font-size:11px;letter-spacing:.13em;text-transform:uppercase}.status i{width:5px;height:5px;background:#ff95d7;border-radius:50%;box-shadow:0 0 10px #ff95d7;animation:twinkle 1.5s ease-in-out infinite alternate}
+.top-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:9px}.icon-btn,.pill-btn{min-height:38px;border-radius:100px;background:rgba(16,14,35,.50);color:#fcf2ff;border:1px solid rgba(238,214,255,.24);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px rgba(255,255,255,.08);transition:background .2s,transform .2s}.icon-btn:hover,.pill-btn:hover{background:rgba(121,56,134,.32);transform:translateY(-2px)}.pill-btn{padding:0 17px;font-size:11px;letter-spacing:.10em;text-transform:uppercase}.icon-btn{width:39px;display:grid;place-items:center;font-size:19px}
+.center-stage{position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);width:min(900px,92vw);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;min-height:170px;pointer-events:none}.stage-super{font-size:10px;text-transform:uppercase;letter-spacing:.38em;color:#ffb5e7;text-shadow:0 0 15px rgba(255,95,196,.5);margin:0 0 19px}.lyric{font-family:Georgia,'Times New Roman',serif;font-size:clamp(27px,4.5vw,65px);font-weight:400;font-style:italic;line-height:1.19;letter-spacing:-.035em;margin:0;max-width:900px;text-wrap:balance;text-shadow:0 3px 25px rgba(5,1,14,.7),0 0 36px rgba(253,135,211,.27);transition:opacity .43s ease,transform .43s ease,filter .43s ease;filter:drop-shadow(0 0 8px rgba(247,139,229,.18))}.lyric.is-changing{opacity:0;transform:translateY(18px) scale(.97);filter:blur(6px)}.lyric-sub{font-size:clamp(11px,1.2vw,14px);line-height:1.6;max-width:710px;letter-spacing:.12em;color:#e2cce8;margin:17px 0 0;text-transform:uppercase;opacity:.76}.timeline{display:flex;gap:6px;margin-top:24px}.timeline span{height:2px;width:24px;background:rgba(255,255,255,.26);border-radius:10px;transition:background .6s,width .6s}.timeline span.on{width:48px;background:#ffc0e4;box-shadow:0 0 12px #ff8dd9}
+.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.love-note{max-width:490px;padding:20px 24px;border:1px solid rgba(255,211,244,.17);background:rgba(8,7,23,.36);backdrop-filter:blur(16px);border-radius:19px;box-shadow:0 6px 35px rgba(5,0,18,.19)}.note-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#ffb5db;margin:0 0 8px}.love-note p{font-family:Georgia,'Times New Roman',serif;font-size:clamp(16px,1.5vw,20px);line-height:1.45;font-style:italic;margin:0;color:#fff1fb}.love-note small{display:block;margin-top:10px;color:#eac7e4;font-size:11px;letter-spacing:.035em}
+.player-shell{width:min(366px,100%);background:rgba(10,9,27,.73);border:1px solid rgba(220,201,255,.22);border-radius:20px;padding:13px;box-shadow:0 18px 55px rgba(0,0,0,.35);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}.player-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 4px 10px}.player-kicker{font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:#efaddc}.player-head b{font-size:12px;font-weight:500;color:#e7e0ed}.equaliser{display:flex;align-items:flex-end;height:14px;gap:3px}.equaliser i{width:2px;height:6px;background:#fba4d8;border-radius:10px;animation:equalize 1s ease-in-out infinite alternate}.equaliser i:nth-child(2){animation-delay:-.4s}.equaliser i:nth-child(3){animation-delay:-.7s}.equaliser i:nth-child(4){animation-delay:-.2s}#spotify-player{width:100%;min-height:80px}#spotify-player iframe{display:block;max-width:100%;border-radius:12px}.player-hint{font-size:10px;line-height:1.6;color:#cfc2d6;margin:9px 5px 3px}.mini-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.mini-controls button,.mini-controls label{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,216,239,.20);background:rgba(148,73,145,.14);color:#ffeaf9;padding:9px 11px;border-radius:10px;font-size:11px;line-height:1.25;cursor:pointer}.mini-controls button:hover,.mini-controls label:hover{background:rgba(187,78,153,.29)}.mini-controls input{position:absolute;opacity:0;width:1px;height:1px}audio{display:none;width:100%;height:35px;margin:10px 0 0}audio.loaded{display:block}
+.modal{position:fixed;z-index:30;inset:0;background:rgba(3,3,14,.80);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-content{width:min(850px,100%);padding:16px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:#10102b;box-shadow:0 40px 110px rgba(0,0,0,.65)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;gap:15px}.modal-head strong{font:italic 19px Georgia,serif;color:#fff1ff}.close{background:transparent;color:#fff;font-size:22px;border:1px solid rgba(255,255,255,.3);width:34px;height:34px;border-radius:50%}.video-wrap{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}.video-wrap iframe{width:100%;height:100%;border:0}.modal-foot{margin:12px 5px 0;font-size:12px;line-height:1.5;color:#cfc4dc}.modal-foot a{color:#ffc5ec}
+.help-panel{position:fixed;z-index:18;right:22px;top:78px;width:min(370px,calc(100vw - 44px));background:rgba(12,11,31,.96);border:1px solid rgba(255,210,246,.23);backdrop-filter:blur(20px);border-radius:19px;padding:21px;display:none;box-shadow:0 24px 80px rgba(0,0,0,.5)}.help-panel.open{display:block}.help-panel h2{font:italic 24px Georgia,serif;margin:0 0 8px}.help-panel p{font-size:12px;color:#d5c6dc;line-height:1.6;margin:0 0 12px}.help-panel textarea{display:block;width:100%;height:100px;resize:vertical;background:#090b20;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;line-height:1.5;padding:10px;font-size:12px}.help-panel button{margin-top:10px;border:none;border-radius:12px;padding:10px 14px;background:linear-gradient(120deg,#a951c2,#d355a0);color:#fff}.help-panel .example{font-family:monospace;font-size:11px;color:#f2c5df}
+.no-player .player-shell{display:none}.no-player .love-note{max-width:540px}
+@keyframes flowerSway{0%{transform:rotate(-4deg) translateY(0)}100%{transform:rotate(4deg) translateY(-8px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
+@media(max-width:820px){.center-stage{top:34%;width:92vw;min-height:130px}.lyric{font-size:clamp(28px,6vw,45px)}.bottom{align-items:center;flex-direction:column;gap:10px}.love-note{max-width:100%;width:min(560px,100%);padding:13px 16px}.love-note p{font-size:15px}.player-shell{width:min(560px,100%);padding:10px}.player-hint{display:none}.mini-controls{margin-top:6px}.interface{padding:17px}.eyebrow{font-size:8px}.brand h1{font-size:25px}.top-actions{gap:5px}.pill-btn{font-size:9px;padding:0 11px;min-height:34px}.icon-btn{width:35px;min-height:35px}.status{display:none}.flower{height:calc(var(--height) * .75);width:calc(var(--height) * .39)} }
+@media(max-width:520px){.brand{max-width:54vw}.brand h1{font-size:22px}.top-actions{max-width:44vw}.top-actions .pill-btn:first-of-type{display:inline-flex;font-size:0}.top-actions .pill-btn:first-of-type:after{content:"♫ Video";font-size:10px}.center-stage{top:34%}.stage-super{margin-bottom:12px;font-size:9px}.lyric{font-size:clamp(26px,6.9vw,37px)}.lyric-sub{font-size:9px;letter-spacing:.08em;margin-top:11px}.timeline{margin-top:15px}.love-note small{font-size:10px}.love-note{padding:12px 15px}.love-note p{font-size:14px}.player-shell{padding:9px}.player-head{margin-bottom:5px}.player-kicker{font-size:9px}.mini-controls button,.mini-controls label{font-size:10px;padding:7px 9px}}
+@media(max-height:650px){.center-stage{top:32%}.love-note{display:none}.bottom{align-items:flex-end}.player-shell{width:min(350px,100%)}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}.flower .stem{stroke-dashoffset:0}.fireflies,.petals{display:none}}
+</style>
 </head>
 <body>
-  <main class="site">
-    <div class="aura aura-one" aria-hidden="true"></div><div class="aura aura-two" aria-hidden="true"></div>
-    <header class="topbar">
-      <a class="brand" href="#home" aria-label="Bloom home"><span class="brand-mark">✳</span><span>the bloom lab<span style="color:#69dcae">.</span></span></a>
-      <div class="top-note"><span class="live-dot"></span> a living canvas / 001</div>
-    </header>
-    <section class="hero" id="home">
-      <p class="eyebrow">an experiment in wonder</p>
-      <h1>Every little thing<br><em>can bloom.</em></h1>
-      <p class="subtitle">A garden written in code. Watch each lily rise from the earth, unfold its petals, and paint the night with colour.</p>
-    </section>
-    <div class="corner-code" aria-hidden="true">
-      <div><span>01</span> const garden = new Wonder();</div>
-      <div><span>02</span> garden.plant("lilies");</div>
-      <div><span>03</span> garden.bloom();</div>
-      <div><span>04</span> <span>// made to make you smile</span></div>
-    </div>
-    <div class="corner-right" aria-hidden="true">GROWTH SEQUENCE // IN PROGRESS</div>
-    <div class="garden-wrap">
-      <svg class="garden" id="garden" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A colourful animated garden of eight lilies growing from stems and blooming with glowing petals">
-        <defs>
-          <linearGradient id="stemGradient" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2b654f"/><stop offset=".58" stop-color="#41876c"/><stop offset="1" stop-color="#8dddac"/></linearGradient>
-          <linearGradient id="leafGradient" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#245847"/><stop offset=".55" stop-color="#3f9f7c"/><stop offset="1" stop-color="#86d99b"/></linearGradient>
-          <radialGradient id="petal-pink" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff0f6"/><stop offset=".27" stop-color="#ffc3df"/><stop offset=".74" stop-color="#f376b6"/><stop offset="1" stop-color="#a63880"/></radialGradient>
-          <radialGradient id="petal-purple" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f9edff"/><stop offset=".27" stop-color="#e1baff"/><stop offset=".7" stop-color="#ab82ef"/><stop offset="1" stop-color="#654bb2"/></radialGradient>
-          <radialGradient id="petal-coral" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff3e5"/><stop offset=".27" stop-color="#ffc3aa"/><stop offset=".7" stop-color="#ff886f"/><stop offset="1" stop-color="#c94b71"/></radialGradient>
-          <radialGradient id="petal-gold" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fffce1"/><stop offset=".3" stop-color="#ffefae"/><stop offset=".75" stop-color="#f8bd57"/><stop offset="1" stop-color="#d87d46"/></radialGradient>
-          <radialGradient id="petal-blue" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f1ffff"/><stop offset=".27" stop-color="#b5f6ff"/><stop offset=".7" stop-color="#76bbe8"/><stop offset="1" stop-color="#4b70bb"/></radialGradient>
-          <radialGradient id="petal-mint" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f6fff4"/><stop offset=".27" stop-color="#d3ffda"/><stop offset=".7" stop-color="#82e9bc"/><stop offset="1" stop-color="#3c9e9c"/></radialGradient>
-          <radialGradient id="petal-rose" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff5ef"/><stop offset=".27" stop-color="#ffd4dc"/><stop offset=".75" stop-color="#fa9cab"/><stop offset="1" stop-color="#be5d92"/></radialGradient>
-          <radialGradient id="petal-ice" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fffafd"/><stop offset=".3" stop-color="#e7e7ff"/><stop offset=".75" stop-color="#bdc7ff"/><stop offset="1" stop-color="#798bd6"/></radialGradient>
-          <radialGradient id="flowerHalo"><stop offset="0" stop-color="#d6b2ff" stop-opacity=".32"/><stop offset=".45" stop-color="#8bded9" stop-opacity=".15"/><stop offset="1" stop-color="#aaffde" stop-opacity="0"/></radialGradient>
-          <radialGradient id="pollen" cx="30%" cy="25%"><stop stop-color="#fffce2"/><stop offset=".65" stop-color="#ffdc87"/><stop offset="1" stop-color="#db9853"/></radialGradient>
-          <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="12"/></filter>
-          <filter id="tinyGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5"/></filter>
-        </defs>
-        <g id="fireflies" aria-hidden="true"></g>
-        <g id="flowers"></g>
-        <g aria-hidden="true" class="ground-grass" stroke="#387761" stroke-linecap="round" fill="none" stroke-width="3" opacity=".7">
-          <path d="M0 752 Q12 727 12 718 M24 756 Q20 728 7 705 M102 755 Q111 733 110 718 M197 756 Q184 734 183 721 M233 752 Q238 721 251 710 M305 759 Q291 732 295 719 M345 752 Q353 725 366 716 M430 755 Q418 729 414 716 M485 757 Q481 727 491 708 M567 757 Q559 735 544 717 M616 752 Q627 719 630 710 M706 754 Q701 732 693 713 M771 759 Q778 728 791 712 M834 759 Q830 731 817 715 M901 755 Q905 728 913 710 M984 759 Q976 739 962 721 M1037 752 Q1043 724 1056 708 M1121 756 Q1116 725 1107 708 M1170 759 Q1175 724 1187 713" />
-        </g>
-      </svg>
-    </div>
-    <div class="controls">
-      <div class="action-row">
-        <button class="btn btn-primary" id="rebloom" type="button" aria-label="Replay the lilies growing and blooming animation">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>
-          Bloom again
-        </button>
-        <button class="btn" id="shuffle" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3c5 0 5 10 10 10h3m-4-4 4 4-4 4M4 17h3c2 0 3-2 4-4m2-3c1-2 2-3 4-3h3m-4-4 4 4-4 4"/></svg>
-          New colours
-        </button>
-      </div>
-      <div class="hint" id="hint" aria-live="polite">✦ tap any lily to change its colour ✦</div>
-    </div>
-    <div class="bottom-line" aria-hidden="true"><span>HANDCRAFTED WITH &lt;CSS&gt; + HEART</span><span>FLOWERS DON'T NEED A REASON.</span></div>
-  </main>
-  <script>
-    // No frameworks, image files, sign-ups or paid services required.
-    // Each lily is drawn with SVG, grown with CSS and made interactive with JS.
-    const flowersEl = document.getElementById('flowers');
-    const firefliesEl = document.getElementById('fireflies');
-    const hintEl = document.getElementById('hint');
-    const colours = ['coral','pink','purple','gold','blue','mint','rose','ice'];
-    const presets = [
-      { x:135, y:390, base:42, size:.82, delay:.2, colour:'coral' },
-      { x:273, y:294, base:224, size:.98, delay:.6, colour:'pink' },
-      { x:419, y:415, base:391, size:.79, delay:1.0, colour:'purple' },
-      { x:557, y:238, base:563, size:1.01, delay:.1, colour:'gold' },
-      { x:712, y:350, base:706, size:.92, delay:.85, colour:'blue' },
-      { x:837, y:245, base:844, size:1.02, delay:.4, colour:'mint' },
-      { x:987, y:387, base:1000, size:.84, delay:1.25, colour:'rose' },
-      { x:1116, y:284, base:1180, size:.9, delay:.7, colour:'ice' }
-    ];
-    let assignedColours = presets.map(p => p.colour);
-
-    function pointOnCurve(p0,p1,p2,p3,t) {
-      const m=1-t;
-      return {x:m*m*m*p0.x+3*m*m*t*p1.x+3*m*t*t*p2.x+t*t*t*p3.x,
-              y:m*m*m*p0.y+3*m*m*t*p1.y+3*m*t*t*p2.y+t*t*t*p3.y};
-    }
-    function leafMarkup(pt, side, degree, id) {
-      const flip = side === 'left' ? 'scale(-1 1)' : '';
-      return `<g class="leaf ${side==='left'?'leaf-left':'leaf-right'}" transform="translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)}) rotate(${degree}) ${flip}">
-        <g class="leaf-inner"><path d="M0 0 C10 -27 37 -38 67 -52 C63 -22 42 -3 0 0Z" fill="url(#leafGradient)" stroke="#8bd5a2" stroke-opacity=".26" stroke-width="1"/>
-        <path d="M0 0 Q31 -24 63 -49" stroke="#c1edb4" stroke-opacity=".55" stroke-width="1.1" fill="none"/></g></g>`;
-    }
-    function bloomMarkup(colour) {
-      // A lily has six individual, tapering petals and golden stamens.
-      const angles = [60,180,300,0,120,240];
-      const petals = angles.map((angle,i) =>
-        `<g transform="rotate(${angle})"><g class="petal" style="--i:${i}">
-          <path class="petal-shape" d="M0 6 C-11 -8 -32 -43 -15 -76 C-11 -86 -4 -97 0 -99 C4 -97 11 -86 15 -76 C32 -43 11 -8 0 6Z"
-            fill="url(#petal-${colour})" stroke="#fff" stroke-opacity=".14" stroke-width="1"/>
-          <path d="M0 -1 C-3 -27 -7 -57 0 -87" fill="none" stroke="#fffefa" stroke-opacity=".46" stroke-width="1.15"/>
-          <path d="M-4 -24 Q-13 -48 -10 -70" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1"/>
-        </g></g>`
-      ).join('');
-      const stamens = [-62,-38,-13,15,42,67].map((angle,i) =>
-        `<g transform="rotate(${angle})"><path d="M0 1 Q${i%2?8:-7} -24 0 -45" fill="none" stroke="#f9d49c" stroke-width="1.85" stroke-linecap="round"/>
-        <ellipse cx="0" cy="-46" rx="3.8" ry="7" fill="url(#pollen)" transform="rotate(${i%2?-15:13} 0 -46)"/></g>`
-      ).join('');
-      return `<circle class="glow" r="127" fill="url(#flowerHalo)" filter="url(#softGlow)"/>
-        <g class="sway">${petals}<g class="flower-centre">${stamens}
-          <circle r="9" fill="#ffe7a5"/><circle r="4.5" fill="#fff4c8"/>
-          <circle cx="-3" cy="-3" r="1.8" fill="#fff" opacity=".9"/></g></g>`;
-    }
-    function renderGarden() {
-      flowersEl.innerHTML = presets.map((p,i) => {
-        const p0 = {x:p.base,y:763}, p1={x:p.base+(p.x-p.base)*.06,y:602},
-          p2={x:p.x+(p.base-p.x)*.28,y:p.y+142},p3={x:p.x,y:p.y+3};
-        const d = `M${p0.x} ${p0.y} C${p1.x} ${p1.y},${p2.x} ${p2.y},${p3.x} ${p3.y}`;
-        const pt1=pointOnCurve(p0,p1,p2,p3,.48),pt2=pointOnCurve(p0,p1,p2,p3,.68);
-        const css = `--delay:${p.delay}s`;
-        return `<g style="${css}">
-          <path class="stem" pathLength="1" d="${d}" stroke="url(#stemGradient)" style="stroke:url(#stemGradient)"/>
-          <path class="stem-glint" pathLength="1" d="${d}"/>
-          ${leafMarkup(pt1,i%2?'left':'right',-16,i)}
-          ${leafMarkup(pt2,i%2?'right':'left',22,i)}
-          <g class="flower" data-id="${i}" tabindex="0" role="button" aria-label="Change colour of lily ${i+1}" transform="translate(${p.x} ${p.y}) scale(${p.size})">
-            ${bloomMarkup(assignedColours[i])}
-            <circle class="flower-focus" r="95"/>
-            <circle r="85" fill="transparent"/>
-            <title>Tap to change my colour</title>
-          </g>
-        </g>`;
-      }).join('');
-    }
-    function makeFireflies(){
-      // Deterministic placement gives every reload the same peaceful composition.
-      let seed=1408;
-      function rand(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
-      firefliesEl.innerHTML=Array.from({length:67},(_,i)=>{
-        const x=(rand()*1200).toFixed(0),y=(110+rand()*565).toFixed(0),r=(.6+rand()*2).toFixed(1);
-        const duration=(2.2+rand()*4.4).toFixed(1),delay=(-rand()*6).toFixed(1);
-        const hue=i%4===0?'#ffd5b3':i%5===0?'#fab4e3':'#c1ffea';
-        return `<circle class="${i%3?'twinkle':'meteor'}" cx="${x}" cy="${y}" r="${r}" fill="${hue}" style="--duration:${duration}s;--twinkle-delay:${delay}s"/>`;
-      }).join('');
-    }
-    function colourNext(el){
-      const idx=Number(el.dataset.id);
-      const current=colours.indexOf(assignedColours[idx]);
-      const next=colours[(current+1)%colours.length];
-      assignedColours[idx]=next;
-      el.querySelectorAll('.petal-shape').forEach(shape=>shape.setAttribute('fill',`url(#petal-${next})`));
-      hintEl.textContent=`✦ lily ${idx+1} is now ${next} ✦`;
-    }
-    document.getElementById('garden').addEventListener('click',event=>{
-      const flower=event.target.closest('.flower');if(flower) colourNext(flower);
-    });
-    document.getElementById('garden').addEventListener('keydown',event=>{
-      if(event.key==='Enter'||event.key===' '){const flower=event.target.closest('.flower');if(flower){event.preventDefault();colourNext(flower);}}
-    });
-    document.getElementById('rebloom').addEventListener('click',()=>{
-      renderGarden();hintEl.textContent='✦ tap any lily to change its colour ✦';
-    });
-    document.getElementById('shuffle').addEventListener('click',()=>{
-      // Shuffle colours in place using Fisher–Yates.
-      assignedColours=colours.slice();
-      for(let i=assignedColours.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[assignedColours[i],assignedColours[j]]=[assignedColours[j],assignedColours[i]];}
-      renderGarden();hintEl.textContent='✦ your garden has a fresh palette ✦';
-    });
-    makeFireflies();renderGarden();
-  </script>
+<div id="scene" aria-hidden="true"><div class="sky"></div><div class="nebula"></div><div class="lightbeams"></div><div class="stars" id="stars"></div><div class="fireflies" id="fireflies"></div><div class="petals" id="petals"></div><div class="horizon"></div><div class="flowers" id="flowers"></div><div class="veil"></div><div class="grain"></div></div>
+<div class="interface" id="interface">
+  <div class="top"><div class="brand"><div class="eyebrow">a little universe, just for you</div><h1>For <em>ente Mariamme</em> ♡</h1><div class="status"><i></i> a love letter written in light</div></div>
+    <div class="top-actions"><button class="pill-btn" id="video-btn" type="button" title="Open Adele’s official lyric video">♫ Lyric video</button><button class="pill-btn" id="custom-btn" type="button">✧ Sync lyrics</button><button class="icon-btn" id="full-btn" type="button" title="Fullscreen" aria-label="Toggle fullscreen">⛶</button><button class="icon-btn" id="hide-btn" type="button" title="Hide or show music panel" aria-label="Hide or show music player">♪</button></div>
+  </div>
+  <div class="center-stage" aria-live="polite" aria-atomic="true"><div class="stage-super" id="mode-caption">a song of flowers & forever</div><h2 class="lyric" id="lyric">Flowers don’t need a reason to bloom.</h2><p class="lyric-sub" id="lyric-sub">Some feelings are meant to grow forever</p><div class="timeline" id="timeline"></div></div>
+  <div class="bottom"><div class="love-note"><div class="note-label">✧ a love note for you</div><p>“I’ll love you until even our graves bloom with lilies.”</p><small>Enikku ninne othiri, othiri, othiri ishtamaa, ente Mariamme… ♡</small></div>
+    <div class="player-shell"><div class="player-head"><span class="player-kicker">♫ your soundtrack</span><b>Lovesong · Adele</b><span class="equaliser" aria-hidden="true"><i></i><i></i><i></i><i></i></span></div><div id="spotify-player" aria-label="Spotify player for Lovesong by Adele"><p class="player-hint">Loading the official Spotify player…</p></div><p class="player-hint">Tap play above. If the player is unavailable, <a href="https://open.spotify.com/track/1KpLYVqnB135VCNbdLymNx" target="_blank" rel="noopener noreferrer" style="color:#ffc6e7">open Lovesong on Spotify ↗</a>. Browsers may block autoplay.</p><audio id="local-audio" controls preload="metadata"></audio><div class="mini-controls"><label for="audio-file">♬ Use your own audio<input id="audio-file" type="file" accept="audio/*"></label><button id="replay-btn" type="button">↻ Replay captions</button><button id="lrc-btn" type="button">✎ Add synced lines</button></div></div>
+  </div>
+</div>
+<div class="help-panel" id="help-panel" role="dialog" aria-label="Import time-stamped lyric lines"><h2>Your words, in time</h2><p>Paste your own permitted lyrics as an LRC transcript. Each <strong>[mm:ss.xx]</strong> timestamp displays its line as the music reaches that moment. These lines stay in your browser and are not uploaded or published.</p><p class="example">[00:12.50] Your first line<br>[00:18.00] Your next line</p><textarea id="lrc-input" placeholder="[00:12.50] Your first line&#10;[00:18.00] Your next line"></textarea><button id="apply-lrc" type="button">Use my synced lines</button> <button id="reset-lrc" type="button">Restore love notes</button><p id="lrc-status" aria-live="polite"></p></div>
+<div class="modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Official Adele Lovesong lyric video"><div class="modal-content"><div class="modal-head"><strong>Lovesong — Adele · official lyric video</strong><button class="close" id="close-video" title="Close video" type="button">×</button></div><div class="video-wrap" id="video-wrap"></div><p class="modal-foot">This YouTube video is served by its official provider. <a href="https://www.youtube.com/watch?v=0wPhbmeNSOs" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>. Full Adele lyrics are displayed by the video provider rather than copied onto this site.</p></div></div>
+<script>
+(()=>{
+'use strict';
+const scene=document.getElementById('scene'),flowers=document.getElementById('flowers');
+const lyricEl=document.getElementById('lyric'),subEl=document.getElementById('lyric-sub'),modeEl=document.getElementById('mode-caption'),timeline=document.getElementById('timeline');
+const audio=document.getElementById('local-audio');
+const duration=316;let spotifyController=null,spotifyActive=false,spotifyPaused=true,spotifyPosition=0,spotifyUpdatedAt=0,localUrl=null;
+let activeIndex=-1,currentCues=null,previewStart=performance.now(),lastTime=0,analyser=null,frequencyData=null,ctx=null;
+const notes=[
+ {t:0,text:'Flowers don’t need a reason to bloom.',sub:'Some feelings are meant to grow forever'},
+ {t:22,text:'And I’ll love you…',sub:'With every sunrise · with every season'},
+ {t:45,text:'Until even our graves bloom with lilies.',sub:'Beyond time · beyond forever'},
+ {t:75,text:'Enikku ninne…',sub:'I have something beautiful to tell you'},
+ {t:98,text:'Othiri, othiri, othiri ishtamaa…',sub:'More than words could ever say'},
+ {t:120,text:'Ente Mariamme. ♡',sub:'My heart knows only you'},
+ {t:150,text:'In every lifetime, I’d find you.',sub:'Again · and again · and again'},
+ {t:185,text:'Let the whole universe bloom for you.',sub:'A thousand neon lilies in your name'},
+ {t:224,text:'I’ll love you in every season.',sub:'Even when the stars forget to shine'},
+ {t:263,text:'Othiri, othiri, othiri… ♡',sub:'Always yours, ente Mariamme'},
+ {t:296,text:'For you, my forever flower.',sub:'A little universe, just for you'}
+];
+const palettes=[315,280,190,336,208,295,170,320,270,189,344,306];
+const layouts=[
+[1,76,580,.68,0.5],[10,62,680,.88,0],[18,50,460,.56,1.3],[27,82,560,.72,.8],[37,44,740,.92,0.9],[49,55,710,.83,.1],[59,76,660,.78,1.3],[69,43,760,.95,.4],[77,60,500,.7,.8],[87,50,600,.85,1.2],[96,75,520,.68,.3],
+[7,95,360,.43,2.2],[23,100,410,.55,2.6],[43,105,455,.5,2.8],[64,103,380,.47,1.9],[81,101,340,.48,2.6]
+];
+const svgNS='http://www.w3.org/2000/svg';
+function lilyMarkup(h,i){const id='lily'+i;
+ const petals=Array.from({length:6},(_,j)=>{const angle=j*60+(i%3)*7;const wide=j%2===0?1:.87;return `<g transform="translate(120 146) rotate(${angle})"><g class="petal" style="--index:${j}"><path d="M0 10 C-28 -11 -42 -66 -12 -105 Q0 -126 12 -105 C42 -66 28 -11 0 10 Z" transform="scale(${wide})" fill="url(#petal-${id})" stroke="hsla(${h},100%,90%,.68)" stroke-width="1.3"/><path d="M0 -5 C-3 -32 -5 -68 0 -99" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/><path d="M-11 -38 Q-2 -51 0 -78 M11 -34 Q2 -55 0 -78" fill="none" stroke="rgba(255,225,255,.28)" stroke-width=".9"/></g></g>`}).join('');
+ const stamens=Array.from({length:6},(_,j)=>`<g transform="translate(120 146) rotate(${j*60})"><path d="M0 0 Q-3 -16 0 -29" fill="none" stroke="url(#stamen-${id})" stroke-width="2.2"/><ellipse cy="-30" rx="2.8" ry="5.5" fill="#ffedaa" filter="url(#blur-${id})"/></g>`).join('');
+ return `<svg viewBox="0 0 240 530" role="presentation" xmlns="${svgNS}"><defs>
+ <linearGradient id="stem-${id}" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#007f68"/><stop offset=".43" stop-color="#6cffe8"/><stop offset=".72" stop-color="#0bcba8"/><stop offset="1" stop-color="#095c62"/></linearGradient>
+ <radialGradient id="petal-${id}" cx=".46" cy=".2" r=".9"><stop stop-color="#fff8fd"/><stop offset=".25" stop-color="hsl(${h},100%,87%)"/><stop offset=".59" stop-color="hsl(${h},97%,70%)"/><stop offset=".83" stop-color="hsl(${h},95%,52%)"/><stop offset="1" stop-color="hsl(${h},90%,26%)"/></radialGradient>
+ <linearGradient id="leaf-${id}" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#d1ffef"/><stop offset=".22" stop-color="#57fcd2"/><stop offset=".75" stop-color="#008f83"/><stop offset="1" stop-color="#063f56"/></linearGradient>
+ <linearGradient id="stamen-${id}" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#ffdd6b"/><stop offset="1" stop-color="#f0b9ec"/></linearGradient>
+ <filter id="blur-${id}" x="-200%" y="-200%" width="500%" height="500%"><feGaussianBlur stdDeviation="1.3"/></filter>
+ <radialGradient id="halo-${id}"><stop stop-color="hsla(${h},100%,72%,.65)"/><stop offset="1" stop-color="hsla(${h},100%,65%,0)"/></radialGradient>
+ </defs><path class="stem" d="M120 510 C105 414 148 330 119 145" stroke="url(#stem-${id})" stroke-width="8" fill="none" stroke-linecap="round"/>
+ <path class="leaf" d="M121 354 C85 327 59 322 39 287 Q89 279 121 354" fill="url(#leaf-${id})" stroke="#77f9dd" stroke-width="1.1"/>
+ <path class="leaf" d="M133 294 C167 254 202 246 214 251 Q202 290 133 294" fill="url(#leaf-${id})" stroke="#77f9dd" stroke-width="1.1"/>
+ <path class="leaf" d="M122 440 Q160 393 184 391 Q170 424 122 440" fill="url(#leaf-${id})" stroke="#7cf6d5" stroke-width="1"/>
+ <g class="bud"><ellipse class="bloom-halo" cx="120" cy="146" rx="95" ry="95" fill="url(#halo-${id})"/>
+ ${petals}
+ <circle cx="120" cy="146" r="13" fill="#fff6ce" opacity=".8" filter="url(#blur-${id})"/>${stamens}
+ <circle cx="120" cy="146" r="7" fill="#ffe3a2"/><circle cx="119" cy="144" r="3" fill="white" opacity=".9"/>
+ </g></svg>`;}
+ layouts.forEach(([x,b,height,op,del],i)=>{
+  const flower=document.createElement('div');flower.className='flower';flower.style.cssText=`--x:${x}%;--bottom:${-b/4}px;--height:${height}px;--op:${op};--h:${palettes[i%palettes.length]};--delay:${-del}s;--start:${Math.max(0,i*.2)}s;--speed:${(7+i%6*1.8).toFixed(1)}s;z-index:${i<11?i+10:i+2};`;
+  flower.innerHTML=lilyMarkup(palettes[i%palettes.length],i);flowers.appendChild(flower);
+ });
+ let seed=742337;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
+ function makeParticles(parent,cl,n,html){const el=document.getElementById(parent);for(let i=0;i<n;i++){const x=document.createElement('span');x.className=cl;const d=html(i);for(const [key,value] of Object.entries(d))x.style.setProperty(key,value);el.appendChild(x)}}
+ makeParticles('stars','star',125,()=>({'--x':(rand()*100)+'%','--y':(rand()*90)+'%','--s':(.5+rand()*1.7)+'px','--o':(.2+rand()*.72).toFixed(2),'--d':(1.3+rand()*4)+'s'}));
+ makeParticles('fireflies','fly',64,()=>({'--x':(rand()*100)+'%','--b':(-rand()*30)+'vh','--s':(2+rand()*4)+'px','--h':(rand()>.55?315:190),'--dx':((rand()-.5)*160)+'px','--d':(9+rand()*19)+'s','--delay':(-rand()*25)+'s'}));
+ makeParticles('petals','fall',26,()=>({'--x':(rand()*100)+'%','--s':(6+rand()*9)+'px','--h':(rand()>.5?315:285),'--dx':((rand()-.5)*280)+'px','--d':(13+rand()*21)+'s','--delay':(-rand()*30)+'s'}));
+ const localStatus={loaded:false};
+ function getCurrentTime(){if(localStatus.loaded&&!audio.paused)return audio.currentTime;if(spotifyActive&&!spotifyPaused)return Math.min(duration,spotifyPosition+(performance.now()-spotifyUpdatedAt)/1000);if(spotifyActive)return spotifyPosition;if(localStatus.loaded)return audio.currentTime;return ((performance.now()-previewStart)/1000)%duration}
+ function renderTimeline(cues,index){timeline.replaceChildren();const n=Math.min(cues.length,9);for(let i=0;i<n;i++){const s=document.createElement('span');if(Math.floor(index/cues.length*n)===i)s.className='on';timeline.appendChild(s)}}
+ function displayCue(i,cues){if(i===activeIndex)return;activeIndex=i;const cue=cues[i]||cues[0];lyricEl.classList.add('is-changing');setTimeout(()=>{lyricEl.textContent=cue.text;subEl.textContent=cue.sub||'';lyricEl.classList.remove('is-changing');},220);renderTimeline(cues,i)}
+ function animate(){const t=getCurrentTime();if(currentCues?.length){let i=0;for(let j=0;j<currentCues.length;j++){if(currentCues[j].t<=t)i=j;else break}displayCue(i,currentCues)}else{let i=0;for(let j=0;j<notes.length;j++){if(notes[j].t<=t)i=j;else break}displayCue(i,notes)}lastTime=t;if(analyser&&frequencyData){analyser.getByteFrequencyData(frequencyData);let sum=0;for(let k=2;k<Math.min(36,frequencyData.length);k++)sum+=frequencyData[k];let lvl=Math.min(1,(sum/34)/135);document.documentElement.style.setProperty('--reactive',lvl.toFixed(3))}requestAnimationFrame(animate)}
+ setTimeout(()=>{activeIndex=-1;renderTimeline(notes,0)},0);requestAnimationFrame(animate);
+ window.onSpotifyIframeApiReady=api=>{
+  api.createController(document.getElementById('spotify-player'),{width:'100%',height:80,uri:'spotify:track:1KpLYVqnB135VCNbdLymNx'},c=>{
+   spotifyController=c;
+   c.addListener('playback_update',e=>{if(!e?.data)return;spotifyPosition=(e.data.position||0)/1000;spotifyUpdatedAt=performance.now();spotifyPaused=!!e.data.isPaused;spotifyActive=true;if(!spotifyPaused&&localStatus.loaded&&!audio.paused)audio.pause()});
+   c.addListener('playback_started',()=>{spotifyActive=true;spotifyPaused=false;spotifyUpdatedAt=performance.now()});
+  });
+ };
+ const file=document.getElementById('audio-file');file.addEventListener('change',()=>{const f=file.files?.[0];if(!f)return;if(localUrl)URL.revokeObjectURL(localUrl);localUrl=URL.createObjectURL(f);audio.src=localUrl;audio.classList.add('loaded');localStatus.loaded=true;spotifyController?.pause?.();spotifyPaused=true;audio.play().catch(()=>{});activeIndex=-1});
+ audio.addEventListener('play',()=>{spotifyController?.pause?.();spotifyPaused=true;try{if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=256;frequencyData=new Uint8Array(analyser.frequencyBinCount);source.connect(analyser);analyser.connect(ctx.destination)}ctx.resume?.()}catch(err){console.info('Audio-reactive visualisation unavailable:',err.message)}});
+ document.getElementById('replay-btn').addEventListener('click',()=>{if(localStatus.loaded){audio.currentTime=0;audio.play().catch(()=>{})}else if(spotifyController&&spotifyActive){spotifyController.seek(0);spotifyPosition=0;spotifyUpdatedAt=performance.now()}else previewStart=performance.now();activeIndex=-1});
+ const help=document.getElementById('help-panel');function toggleHelp(){help.classList.toggle('open')}document.getElementById('lrc-btn').addEventListener('click',toggleHelp);document.getElementById('custom-btn').addEventListener('click',toggleHelp);
+ function parseLRC(src){const parsed=[];for(const ln of src.split(/\r?\n/)){const times=[...ln.matchAll(/\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g)];const text=ln.replace(/\[[^\]]*\]/g,'').trim();if(!text)continue;for(const t of times){let frac=t[3]||'0';parsed.push({t:Number(t[1])*60+Number(t[2])+Number(frac.padEnd(3,'0'))/1000,text,sub:''})}}return parsed.sort((a,b)=>a.t-b.t)}
+ document.getElementById('apply-lrc').addEventListener('click',()=>{const p=parseLRC(document.getElementById('lrc-input').value);const status=document.getElementById('lrc-status');if(!p.length){status.textContent='Please enter at least one timestamped line, e.g. [00:12.50] My line';return}currentCues=p;activeIndex=-1;modeEl.textContent='words in time with your music';status.textContent=`${p.length} timed line(s) loaded in this browser.`;help.classList.remove('open')});
+ document.getElementById('reset-lrc').addEventListener('click',()=>{currentCues=null;activeIndex=-1;modeEl.textContent='a song of flowers & forever';document.getElementById('lrc-status').textContent='Restored original love notes.';help.classList.remove('open')});
+ const modal=document.getElementById('video-modal'),videoWrap=document.getElementById('video-wrap');document.getElementById('video-btn').addEventListener('click',()=>{spotifyController?.pause?.();if(localStatus.loaded)audio.pause();videoWrap.innerHTML='<iframe title="Adele Lovesong official lyric video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/0wPhbmeNSOs?autoplay=1&rel=0"></iframe>';modal.classList.add('open')});
+ function closeVideo(){modal.classList.remove('open');videoWrap.replaceChildren()}document.getElementById('close-video').addEventListener('click',closeVideo);modal.addEventListener('click',e=>{if(e.target===modal)closeVideo()});document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeVideo();help.classList.remove('open')}});
+ document.getElementById('hide-btn').addEventListener('click',()=>document.getElementById('interface').classList.toggle('no-player'));
+ document.getElementById('full-btn').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{})});
+ if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){scene.addEventListener('pointermove',e=>{let x=(e.clientX/innerWidth-.5)*9,y=(e.clientY/innerHeight-.5)*5;flowers.style.setProperty('--mouse-x',x+'px');flowers.style.setProperty('--mouse-y',y+'px')})}
+ window.addEventListener('pagehide',()=>{if(localUrl)URL.revokeObjectURL(localUrl)});
+})();
+</script>
+<script src="https://open.spotify.com/embed/iframe-api/v1" async></script>
 </body>
 </html>
