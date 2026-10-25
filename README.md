@@ -1,34 +1,26 @@
-# For Ente Mariamme — neon lily love letter 🌸
+# For Ente Mariamme ♡ — Full Lovesong Lyric Garden
 
-An atmospheric, single-file GitHub Pages website with sixteen layered neon lilies, floating petals, glowing particles, gently animated personal love notes and an official soundtrack player.
+A romantic, full-screen neon lily love letter with **line-synchronized captions for Adele's Lovesong**, glowing moving flowers, falling petals, stardust, and personal messages during instrumental passages.
 
-## Visit
-
+## Visit the website
 https://jithinpatrick05.github.io/lily-garden-for-ente-Mariamma/
 
-## Music and lyric video
+## Play and sync
 
-- The Spotify embed plays **Lovesong — Adele** when available to the visitor. Visitors must generally press Play, and full playback may depend on their account and region.
-- **♫ Lyric video** opens an official YouTube-hosted lyric video, so the song and its lyrics remain on the official service instead of being copied to GitHub.
-- The default center captions are **original love notes**, not Adele's lyrics. They animate with Spotify playback position if available, or as a cinematic preview.
-- **✧ Sync lyrics / ✎ Add synced lines** accepts user-provided, time-coded LRC lines. Example:
+1. Press **Play Lovesong & watch the lilies glow**. This opens the official YouTube video in a visible embedded player.
+2. If the browser blocks autoplay, click Play inside the YouTube embed.
+3. The on-page lyrics synchronize to the actual playback time from YouTube's IFrame Player API. This is not merely a timed animation.
+4. Alternatively, select **Play MP3 from this device**; the MP3 is read locally and never uploaded to GitHub.
+5. Lyric timestamps match the user-provided recording of approximately **5:19.97**, with vocals beginning about **0:26**. The **Lyrics settings** panel offers ±0.5 second adjustment and custom LRC import.
 
-  ```text
-  [00:12.50] Your first line
-  [00:17.00] Your second line
-  ```
+Captions fade in and have a karaoke-style progress highlight. During musical breaks, romantic messages appear, including the user's Malayalam note.
 
-  Typed LRC text is browser-local and not uploaded to the repository.
-- **♬ Use your own audio** selects a file directly from the visitor's device. The file is not uploaded. When playing locally, captions can sync and flower brightness responds to audio frequency levels.
+## Privacy and permissions
 
-## Design
+- No audio file was uploaded to the public repository. Audio comes from an official video embed or a local file chosen by the visitor.
+- Lyrics were supplied by the site owner. Public republication of copyrighted lyrics requires appropriate rights or permission. Please verify your publication rights before sharing widely.
+- YouTube may be blocked by network/region restrictions or browser settings.
 
-The whole experience is in `index.html`. Includes responsive layered SVG lilies, petal and stem animations, parallax, bloom glow, dreamy background, stardust, falling petals, a fullscreen button and reduced-motion support. No build tools needed.
+## Repository
 
-## Deployment
-
-GitHub Pages uses `main` branch `/(root)`. Any update to `index.html` automatically triggers a new Pages deployment.
-
-## Rights
-
-The site contains **no bundled Adele audio or song lyrics**. Music and lyric-video playback are provided by third-party embeds, subject to their availability and terms.
+A single HTML file; no frameworks or paid services. GitHub Pages deploys from `main` / `(root)`. The site honours reduced-motion preferences.
