@@ -16,18 +16,18 @@ button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:tran
 .flowers{z-index:2;filter:saturate(1.25) brightness(calc(1 + var(--reactive,0)*.26));transform:translate3d(var(--mouse-x,0px),var(--mouse-y,0px),0);transition:transform 1.3s ease-out;mask-image:linear-gradient(to bottom,transparent 1%,#000 13%,#000 100%)}
 .flower{position:absolute;left:var(--x);bottom:var(--bottom);height:var(--height);width:calc(var(--height)*.52);transform-origin:50% 100%;animation:flowerSway var(--speed) ease-in-out infinite alternate;animation-delay:var(--delay);opacity:var(--op);will-change:transform;filter:drop-shadow(0 0 13px hsla(var(--h),100%,70%,.35))}
 .flower svg{height:100%;width:100%;overflow:visible}.flower .bud{transform-origin:120px 145px;animation:flowerBreath 5.5s ease-in-out infinite alternate;animation-delay:var(--delay)}
-.flower .petal{transform-origin:0 0;animation:bloomIn 2.2s cubic-bezier(.19,.9,.23,1) both;animation-delay:calc(var(--index)*.11s + var(--start))}
+.flower .petal{transform-origin:0 0;animation:bloomIn 2.2s cubic-bezier(.19,.9,.23,1) both;animation-delay:calc(var(--index)*.11s + var(--start));filter:drop-shadow(0 0 4px rgba(255,235,244,.38))}
 .flower .stem{stroke-dasharray:480;stroke-dashoffset:480;animation:stemGrow 3s ease-out forwards;animation-delay:var(--start)}
 .flower .leaf{transform-box:fill-box;transform-origin:center bottom;animation:leafGrow 1.7s ease-out both;animation-delay:calc(var(--start) + 1.2s)}.flower .bloom-halo{animation:halo 4s ease-in-out infinite alternate}
 .veil{z-index:3;background:linear-gradient(to bottom,rgba(2,2,12,.55),rgba(4,3,13,.06) 24%,rgba(4,3,13,.15) 72%,rgba(1,2,9,.69)),radial-gradient(ellipse 55% 38% at 50% 47%,rgba(3,2,15,.45),transparent 91%)}
 .grain{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
 .brand{position:fixed;z-index:8;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:96vw;text-align:center;pointer-events:none}
-.brand h1{font-family:Georgia,serif;font-style:italic;font-size:clamp(26px,5.3vw,43px);font-weight:400;letter-spacing:-.037em;white-space:nowrap;margin:0;color:#ffe6f9;text-shadow:0 0 16px rgba(245,97,221,.38),0 0 44px rgba(115,188,255,.22)}
-.brand em{font-style:italic;background:linear-gradient(115deg,#ffc4ed,#a4f3ff 53%,#ffbcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.brand h1{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-style:normal;font-size:clamp(24px,5.1vw,38px);font-weight:700;letter-spacing:-.03em;white-space:nowrap;margin:0;color:#ffe6f9;text-shadow:0 0 16px rgba(245,97,221,.38),0 0 44px rgba(115,188,255,.22)}
+
 .stage{position:fixed;top:46%;left:50%;transform:translate(-50%,-50%);z-index:10;width:min(835px,90vw);min-height:230px;max-height:60dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:23px 15px;pointer-events:none}
-.stage:before{content:"";inset:-19px -11px;position:absolute;z-index:-1;border-radius:28px;border:1px solid rgba(255,202,246,.16);background:radial-gradient(ellipse at center,rgba(25,9,48,.79),rgba(14,9,35,.53) 64%,rgba(14,7,32,.38));box-shadow:0 0 73px rgba(232,52,199,.14),inset 0 1px rgba(255,255,255,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.stage:before{content:"";inset:-19px -11px;position:absolute;z-index:-1;border-radius:28px;border:1px solid rgba(255,202,246,.16);background:linear-gradient(140deg,rgba(36,15,62,.80),rgba(8,12,38,.66) 51%,rgba(38,12,61,.65)),radial-gradient(ellipse at 50% 20%,rgba(248,141,220,.16),transparent 70%);box-shadow:0 0 90px rgba(236,45,198,.22),0 0 48px rgba(16,219,245,.10),inset 0 1px rgba(255,255,255,.20),inset 0 0 28px rgba(255,183,231,.05);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 .lyric{font:italic 400 clamp(30px,5.35vw,58px)/1.23 Georgia,serif;letter-spacing:-.035em;margin:0;width:100%;white-space:normal;overflow-wrap:break-word;text-wrap:balance;text-shadow:0 2px 25px rgba(6,1,18,.95);color:#fce8ff}
-.lyric.glow{background:linear-gradient(110deg,#ffb6e5 0%,#fff9ff 24%,#9efcff 49%,#d5acff 71%,#ff93d0 87%,#fff4ff 100%);background-size:260% 260%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(255,105,206,.53)) drop-shadow(0 0 25px rgba(64,226,255,.19));animation:glowFlow 8s ease-in-out infinite alternate,softHalo 3s ease-in-out infinite alternate}
+.lyric.glow{background:linear-gradient(110deg,#ffb6e5 0%,#fff9ff 24%,#9efcff 49%,#d5acff 71%,#ff93d0 87%,#fff4ff 100%);background-size:260% 260%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 10px rgba(255,120,216,.46)) drop-shadow(0 0 19px rgba(64,226,255,.17));animation:glowFlow 13s ease-in-out infinite alternate,softHalo 5s ease-in-out infinite alternate}
 .start-btn{pointer-events:auto;border:1px solid rgba(255,223,248,.64);border-radius:99px;background:linear-gradient(112deg,rgba(212,71,193,.88),rgba(82,157,248,.83));box-shadow:0 0 28px rgba(255,61,183,.4),inset 0 1px rgba(255,255,255,.23);margin-top:29px;padding:13px 23px;color:#fff;font-size:12px;font-weight:650;letter-spacing:.07em}
 body.has-song .start-btn{display:none}
 .dock{position:fixed;z-index:16;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:min(320px,calc(100vw - 32px));padding:12px 13px 10px;display:flex;flex-direction:column;gap:8px;border-radius:20px;border:1px solid rgba(255,203,248,.34);background:rgba(11,9,34,.82);box-shadow:0 15px 48px rgba(0,0,0,.43),0 0 28px rgba(234,83,206,.14);backdrop-filter:blur(23px);-webkit-backdrop-filter:blur(23px)}
@@ -44,34 +44,34 @@ body.has-song .start-btn{display:none}
 @media(max-height:665px){.stage{top:39%;max-height:60dvh}.lyric{font-size:clamp(25px,7vw,38px)}.dock{bottom:7px}.brand{top:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}.flower .stem{stroke-dashoffset:0}.fireflies,.petals{display:none}}
 
-@keyframes flowerSway{0%{transform:rotate(-4deg) translateY(0)}100%{transform:rotate(4deg) translateY(-8px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
+@keyframes flowerSway{0%{transform:rotate(-7deg) translate(-7px,5px)}50%{transform:rotate(.5deg) translate(0,-12px)}100%{transform:rotate(7deg) translate(8px,4px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
 
-/* Official YouTube player: fully visible and at least 200x200 per embed requirements. */
-.yt-shell{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));width:216px;height:205px;z-index:18;border:1px solid rgba(255,211,243,.34);border-radius:12px;overflow:hidden;background:#080918;box-shadow:0 0 26px rgba(249,100,205,.27),0 18px 48px rgba(0,0,0,.50)}
-.yt-shell iframe,.yt-shell #youtube-player{display:block;width:216px!important;height:205px!important;border:0;background:#070715}
-.dock{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 216px);right:max(12px,env(safe-area-inset-right));width:216px;padding:10px 9px 8px;gap:5px;border-radius:15px}
-.controls{gap:6px}.ctrl{min-width:34px;height:34px;padding:0 5px}.ctrl.play{height:38px;min-width:38px}
-.song-name{font-size:11px}.yt-link{text-decoration:none;display:grid;place-items:center;font-size:21px}
+/* Smallest compliant YouTube player: 200 by 200 px, unobstructed and interactive. */
+.yt-shell{position:fixed;right:max(8px,env(safe-area-inset-right));bottom:max(8px,env(safe-area-inset-bottom));width:200px;height:200px;z-index:18;border:1px solid rgba(255,211,243,.18);border-radius:12px;overflow:hidden;background:#080918;box-shadow:0 0 18px rgba(249,100,205,.18),0 12px 28px rgba(0,0,0,.36);transform:none;opacity:1;filter:none}
+.yt-shell iframe,.yt-shell #youtube-player{display:block;width:200px!important;height:200px!important;border:0;background:#070715}
+.dock{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 92px);right:max(10px,env(safe-area-inset-right));width:198px;padding:9px 8px 8px;gap:5px;border-radius:15px}
+.controls{gap:6px}.ctrl{min-width:32px;height:32px;padding:0 4px}.ctrl.play{height:36px;min-width:36px}
+.song-name{font-size:11px}.yt-link{text-decoration:none;display:grid;place-items:center;font-size:18px}
 .time{font-size:9px}.progress{gap:5px}.progress input{min-width:0}
-.toast{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 310px)}
+.toast{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 180px)}
 @media(max-width:720px){
- .stage{top:35%;max-height:51dvh;width:92vw;min-height:175px;padding:12px 9px}
- .lyric{font-size:clamp(27px,7.5vw,41px)}
+ .stage{top:40%;max-height:53dvh;width:92vw;min-height:190px;padding:14px 9px}
+ .lyric{font-size:clamp(28px,8vw,43px)}
  .start-btn{margin-top:19px}
- .dock{width:216px;bottom:calc(max(9px,env(safe-area-inset-bottom)) + 216px);right:max(9px,env(safe-area-inset-right))}
+ .dock{width:192px;bottom:calc(max(9px,env(safe-area-inset-bottom)) + 92px);right:max(9px,env(safe-area-inset-right))}
  .yt-shell{right:max(9px,env(safe-area-inset-right));bottom:max(9px,env(safe-area-inset-bottom))}
 }
 @media(max-height:740px) and (max-width:720px){
- .brand{top:9px}.stage{top:30%;max-height:42dvh;min-height:155px;padding:8px 9px}
- .lyric{font-size:clamp(23px,6.5vw,35px);line-height:1.16}
+ .brand{top:9px}.stage{top:31%;max-height:45dvh;min-height:155px;padding:10px 9px}
+ .lyric{font-size:clamp(23px,7vw,36px);line-height:1.18}
  .start-btn{margin-top:12px;padding:10px 18px}
 }
-@media(max-width:350px){.yt-shell,.yt-shell iframe,.yt-shell #youtube-player{width:206px!important;height:205px!important}.dock{width:206px}}
+@media(max-width:350px){.yt-shell,.yt-shell iframe,.yt-shell #youtube-player{width:200px!important;height:200px!important}.dock{width:188px}}
 </style></head>
 <body><div id="scene" aria-hidden="true"><div class="sky"></div><div class="nebula"></div><div class="lightbeams"></div><div class="stars" id="stars"></div><div class="fireflies" id="fireflies"></div><div class="petals" id="petals"></div><div class="horizon"></div><div class="flowers" id="flowers"></div><div class="veil"></div><div class="grain"></div></div>
-<header class="brand"><h1><em>Ente Mariammekku</em> 🌸💗</h1></header>
+<header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don&#x27;t need a reason to bloom, I will love you till our graves bloom with lillies</h2><button id="start-btn" class="start-btn" type="button">▶ Play Lovesong</button></main>
-<section class="dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" title="Rewind 10 seconds" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" title="Play" aria-label="Play Lovesong">▶</button><span class="song-name">♫ Lovesong</span><a class="ctrl yt-link" href="https://www.youtube.com/watch?v=0wPhbmeNSOs" target="_blank" rel="noopener noreferrer" title="Open Lovesong on YouTube" aria-label="Open Lovesong on YouTube">↗</a></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
+<section class="dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" title="Rewind 10 seconds" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" title="Play" aria-label="Play Lovesong">▶</button><span class="song-name">♫ Lovesong</span><a class="ctrl yt-link" href="https://www.youtube.com/watch?v=NSec3LfUWxE" target="_blank" rel="noopener noreferrer" title="Open Adele’s official audio on YouTube" aria-label="Open Lovesong on YouTube">↗</a></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
 <div class="yt-shell" id="yt-shell" aria-label="Lovesong by Adele on YouTube"><div id="youtube-player"></div></div><div id="toast" class="toast" role="status" hidden></div><script>
 (()=>{'use strict';
 const flowers=document.getElementById('flowers'),scene=document.getElementById('scene');
@@ -92,14 +92,21 @@ const breaks=[
  {start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]},
  {start:284.85,end:319.97,lines:[{at:284.85,text:q1},{at:302,text:q2}]}
 ];
-const palettes=[315,280,190,336,208,295,170,320,270,189,344,306];
+const palettes=[336,327,340,334,321,342,334,348,335,320,342,333,336,330,349,325,335,338,327,342,334,339,328,346,337,323,340,333];
 const layouts=[
-[1,76,580,.68,0.5],[10,62,680,.88,0],[18,50,460,.56,1.3],[27,82,560,.72,.8],[37,44,740,.92,0.9],[49,55,710,.83,.1],[59,76,660,.78,1.3],[69,43,760,.95,.4],[77,60,500,.7,.8],[87,50,600,.85,1.2],[96,75,520,.68,.3],
-[7,95,360,.43,2.2],[23,100,410,.55,2.6],[43,105,455,.5,2.8],[64,103,380,.47,1.9],[81,101,340,.48,2.6]
+[-7,6,300,.40,.3], [2,21,350,.55,1.1],[-4,37,420,.67,2.2],[7,51,370,.65,3.0],[1,67,310,.54,.8],[13,77,268,.45,2.5],
+[93,7,330,.49,.6],[99,21,365,.60,1.4],[91,37,410,.69,2.0],[97,52,340,.63,2.7],[88,67,300,.52,1.8],[95,79,260,.40,3.3],
+[11,-11,380,.51,2.7],[24,-15,335,.50,1.1],[37,-12,295,.43,3.0],[51,-17,315,.49,.5],[65,-12,335,.50,1.8],[81,-10,365,.53,3.3],
+[22,83,250,.38,.6],[38,87,220,.35,2.7],[53,86,255,.38,1.4],[70,84,235,.37,3.2],
+[13,47,265,.34,2.0],[85,48,260,.34,.4],[4,83,235,.38,2.4],[90,86,230,.36,1.6],
+[28,71,235,.32,1.2],[72,72,230,.34,2.8]
 ];
 const svgNS='http://www.w3.org/2000/svg';
 function lilyMarkup(h,i){const id='lily'+i;
- const petals=Array.from({length:6},(_,j)=>{const angle=j*60+(i%3)*7;const wide=j%2===0?1:.87;return `<g transform="translate(120 146) rotate(${angle})"><g class="petal" style="--index:${j}"><path d="M0 10 C-28 -11 -42 -66 -12 -105 Q0 -126 12 -105 C42 -66 28 -11 0 10 Z" transform="scale(${wide})" fill="url(#petal-${id})" stroke="hsla(${h},100%,90%,.68)" stroke-width="1.3"/><path d="M0 -5 C-3 -32 -5 -68 0 -99" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/><path d="M-11 -38 Q-2 -51 0 -78 M11 -34 Q2 -55 0 -78" fill="none" stroke="rgba(255,225,255,.28)" stroke-width=".9"/></g></g>`}).join('');
+ const speckles=[[-11,-46,2.1],[8,-48,1.8],[-15,-59,1.4],[13,-64,1.2],[-8,-74,1.55],[6,-81,1.4],[0,-56,1.15],[-6,-87,1.1]];
+ const petals=Array.from({length:6},(_,j)=>{const angle=j*60+(i%3)*7;const wide=j%2===0?1:.87;return `<g transform="translate(120 146) rotate(${angle})"><g class="petal" style="--index:${j}"><path d="M0 10 C-28 -11 -42 -66 -12 -105 Q0 -126 12 -105 C42 -66 28 -11 0 10 Z" transform="scale(${wide})" fill="url(#petal-${id})" stroke="hsla(${h},100%,90%,.68)" stroke-width="1.3"/><path d="M0 -5 C-3 -32 -5 -68 0 -99" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/><path d="M-11 -38 Q-2 -51 0 -78 M11 -34 Q2 -55 0 -78" fill="none" stroke="rgba(255,225,255,.28)" stroke-width=".9"/>
+ ${speckles.map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#8e0755" opacity=".69" />`).join('')}
+ </g></g>`}).join('');
  const stamens=Array.from({length:6},(_,j)=>`<g transform="translate(120 146) rotate(${j*60})"><path d="M0 0 Q-3 -16 0 -29" fill="none" stroke="url(#stamen-${id})" stroke-width="2.2"/><ellipse cy="-30" rx="2.8" ry="5.5" fill="#ffedaa" filter="url(#blur-${id})"/></g>`).join('');
  return `<svg viewBox="0 0 240 530" role="presentation" xmlns="${svgNS}"><defs>
  <linearGradient id="stem-${id}" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#007f68"/><stop offset=".43" stop-color="#6cffe8"/><stop offset=".72" stop-color="#0bcba8"/><stop offset="1" stop-color="#095c62"/></linearGradient>
@@ -118,7 +125,7 @@ function lilyMarkup(h,i){const id='lily'+i;
  <circle cx="120" cy="146" r="7" fill="#ffe3a2"/><circle cx="119" cy="144" r="3" fill="white" opacity=".9"/>
  </g></svg>`;}
  layouts.forEach(([x,b,height,op,del],i)=>{
-  const flower=document.createElement('div');flower.className='flower';flower.style.cssText=`--x:${x}%;--bottom:${-b/4}px;--height:${height}px;--op:${op};--h:${palettes[i%palettes.length]};--delay:${-del}s;--start:${Math.max(0,i*.2)}s;--speed:${(7+i%6*1.8).toFixed(1)}s;z-index:${i<11?i+10:i+2};`;
+  const flower=document.createElement('div');flower.className='flower';flower.style.cssText=`--x:${x}%;--bottom:${b}%;--height:${height}px;--op:${op};--h:${palettes[i%palettes.length]};--delay:${-del}s;--start:${Math.max(0,i*.17)}s;--speed:${(7.8+i%6*1.35).toFixed(1)}s;z-index:${20+i};`;
   flower.innerHTML=lilyMarkup(palettes[i%palettes.length],i);flowers.appendChild(flower);
  });
  let seed=742337;function rand(){seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;}
@@ -145,7 +152,7 @@ function displayLyric(t){
  lyricEl.textContent=item.text;
  if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
   lyricEl.getAnimations().filter(a=>a.effect && a.effect.getKeyframes().some(f=>f.opacity===0)).forEach(a=>a.cancel());
-  lyricEl.animate([{opacity:0,transform:'translateY(15px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:610,easing:'cubic-bezier(.16,.84,.24,1)'});
+  lyricEl.animate([{opacity:0,transform:'translateY(22px) scale(.965)',filter:'blur(6px)'},{opacity:.5,transform:'translateY(8px) scale(.99)',filter:'blur(2px)',offset:.6},{opacity:1,transform:'translateY(0) scale(1)',filter:'blur(0px)'}],{duration:1020,easing:'cubic-bezier(.18,.8,.2,1)'});
  }
 }
 function message(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,3200)}
@@ -202,8 +209,8 @@ function initYoutube(){
  script.onerror=()=>{message('YouTube unavailable. Tap ↗ to open the song.')};
  window.onYouTubeIframeAPIReady=()=>{
   ytPlayer=new YT.Player('youtube-player',{
-   width:'216',height:'205',videoId:'0wPhbmeNSOs',
-   playerVars:{playsinline:1,controls:1,rel:0,iv_load_policy:3},
+   width:'200',height:'200',videoId:'NSec3LfUWxE',
+   playerVars:{playsinline:1,controls:0,rel:0,modestbranding:1,iv_load_policy:3},
    events:{
     onReady:()=>{
       ytReady=true;updatePlay();
