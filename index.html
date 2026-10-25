@@ -89,6 +89,64 @@ body.yt-collapsed .yt-shell{
  transform:translateX(-50%)!important;
  opacity:1!important;visibility:visible!important;display:grid!important;
 }
+
+/* Keep all lyric content above the 200x200 YouTube panel when it is expanded. */
+body:not(.yt-collapsed) .stage {
+  position:fixed!important;
+  left:50%!important;
+  top:max(68px,calc(22px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(265px + env(safe-area-inset-bottom,0px))!important;
+  width:min(94vw,740px)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:none!important;
+  transform:translateX(-50%)!important;
+  justify-content:center!important;
+  padding:4px 8px!important;
+  overflow:visible!important;
+}
+body:not(.yt-collapsed) .stage .lyric {
+  font-size:clamp(20px,5.7vw,34px)!important;
+  line-height:1.16!important;
+  max-width:100%!important;
+  max-height:calc(100% - 78px)!important;
+  flex:0 1 auto!important;
+  overflow-wrap:break-word;
+}
+body:not(.yt-collapsed) .stage .controls-dock {
+  margin-top:10px!important;
+  padding:6px 9px!important;
+  width:min(280px,84vw)!important;
+  flex-shrink:0!important;
+}
+body:not(.yt-collapsed) .stage .controls-dock .progress{margin-top:5px!important;}
+body:not(.yt-collapsed) .yt-shell {
+  bottom:calc(48px + env(safe-area-inset-bottom,0px))!important;
+}
+body:not(.yt-collapsed) .reveal-player {
+  bottom:calc(7px + env(safe-area-inset-bottom,0px))!important;
+}
+@media(max-height:680px){
+  body:not(.yt-collapsed) .stage {
+    top:max(56px,calc(14px + env(safe-area-inset-top,0px)))!important;
+    bottom:calc(257px + env(safe-area-inset-bottom,0px))!important;
+  }
+  body:not(.yt-collapsed) .stage .lyric {
+    font-size:clamp(18px,5.2vw,25px)!important;
+    line-height:1.12!important;
+  }
+  body:not(.yt-collapsed) .stage .controls-dock {
+    margin-top:5px!important;
+    padding:2px 8px!important;
+  }
+  body:not(.yt-collapsed) .stage .controls-dock .controls .ctrl{
+    height:32px!important;min-width:32px!important;
+  }
+  body:not(.yt-collapsed) .stage .controls-dock .controls .ctrl.play{
+    height:38px!important;min-width:38px!important;
+  }
+  body:not(.yt-collapsed) .stage .controls-dock .progress{margin-top:2px!important;}
+}
 </style></head><body class="yt-collapsed">
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
