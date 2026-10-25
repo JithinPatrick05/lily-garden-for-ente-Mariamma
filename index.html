@@ -284,11 +284,92 @@ body {background:#000!important}
     line-height:1.08!important;
   }
 }
+
+/* v10: SoundCloud audio, lyrics-first composition. The official widget is only shown on request. */
+.stage,body:not(.yt-collapsed) .stage{
+  top:max(62px,calc(46px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(100px + env(safe-area-inset-bottom,0px))!important;
+  width:min(96vw,930px)!important;max-width:930px!important;
+  min-height:0!important;padding:8px 16px!important;overflow:visible!important;
+  justify-content:center!important;align-items:center!important;
+}
+.stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(38px,7.5vw,78px)!important;line-height:1.14!important;
+  max-width:100%!important;max-height:100%!important;
+  letter-spacing:-.035em!important;text-align:center!important;text-wrap:balance;
+}
+.controls-dock{
+  position:fixed!important;left:50%!important;top:auto!important;
+  bottom:calc(29px + env(safe-area-inset-bottom,0px))!important;
+  width:min(196px,68vw)!important;
+  padding:3px 8px 4px!important;margin:0!important;
+  background:rgba(11,4,19,.26)!important;
+  border:1px solid rgba(255,210,241,.07)!important;
+  border-radius:16px!important;z-index:24!important;
+  transform:translateX(-50%)!important;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+}
+.controls-dock .controls{gap:10px!important}
+.controls-dock .ctrl{width:31px!important;min-width:31px!important;height:31px!important}
+.controls-dock .ctrl.play{width:36px!important;min-width:36px!important;height:36px!important}
+.controls-dock .progress{margin-top:1px!important}
+.audio-source{
+  position:fixed;left:50%;bottom:calc(5px + env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);z-index:26;
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  white-space:nowrap;font-family:Inter,system-ui,sans-serif;
+}
+.audio-source a{color:rgba(249,220,241,.47);font-size:9px;letter-spacing:.02em;text-decoration:none}
+.audio-source a:hover,.audio-source a:focus-visible{color:rgba(255,235,248,.9)}
+.source-toggle{
+  width:20px;height:19px;display:grid;place-items:center;padding:0;
+  border:1px solid rgba(255,214,242,.12);border-radius:50%;line-height:1;
+  background:rgba(255,255,255,.035);color:rgba(255,220,240,.68);font-size:15px;
+}
+.soundcloud-drawer{
+ position:fixed;left:50%;bottom:calc(111px + env(safe-area-inset-bottom,0px));
+ transform:translate(-50%,12px);z-index:23;width:min(360px,92vw);
+ height:166px;border:1px solid rgba(255,214,239,.13);border-radius:13px;
+ background:rgba(15,8,21,.94);overflow:hidden;
+ opacity:0;visibility:hidden;pointer-events:none;
+ transition:opacity .24s ease,transform .24s ease,visibility .24s ease;
+ box-shadow:0 10px 32px rgba(0,0,0,.6);
+}
+.soundcloud-drawer iframe{display:block;width:100%;height:166px;border:0}
+body.sc-open .soundcloud-drawer{
+ opacity:1;visibility:visible;pointer-events:auto;transform:translate(-50%,0);
+}
+body.sc-open .source-toggle{transform:rotate(180deg)}
+@media(max-width:720px){
+ .stage,body:not(.yt-collapsed) .stage{
+  top:max(54px,calc(46px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(100px + env(safe-area-inset-bottom,0px))!important;
+  width:96vw!important;padding:6px 10px!important;
+ }
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(31px,9.4vw,53px)!important;line-height:1.12!important;
+ }
+}
+@media(max-height:650px){
+ .stage,body:not(.yt-collapsed) .stage{
+  top:max(46px,calc(36px + env(safe-area-inset-top,0px)))!important;
+  bottom:calc(96px + env(safe-area-inset-bottom,0px))!important;
+ }
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(24px,7.4vw,44px)!important;line-height:1.09!important;
+ }
+}
+@media(max-height:480px){.stage .lyric,body:not(.yt-collapsed) .stage .lyric{font-size:clamp(20px,6vw,32px)!important}}
+@media(prefers-reduced-motion:reduce){.soundcloud-drawer{transition:none}}
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2></main><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
-<div class="yt-shell" id="yt-shell"><div id="youtube-player"></div></div><div id="toast" class="toast" hidden></div>
+<div class="soundcloud-drawer" id="soundcloud-drawer" aria-label="Official SoundCloud player">
+<iframe id="soundcloud-player" title="Adele — Lovesong on SoundCloud" scrolling="no" frameborder="0" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fadelemusic%2Flovesong&color=%23f19acb&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
+</div>
+<div class="audio-source"><a href="https://soundcloud.com/adelemusic/lovesong" target="_blank" rel="noopener noreferrer" title="Listen to Lovesong by Adele on SoundCloud">Adele · Lovesong <span class="source-name">on SoundCloud ↗</span></a><button id="source-toggle" class="source-toggle" type="button" aria-label="Show SoundCloud player" aria-expanded="false" aria-controls="soundcloud-drawer">⌃</button></div>
+<div id="toast" class="toast" hidden></div>
 <script>
 (()=>{
 'use strict';
@@ -298,23 +379,105 @@ const timedLrc = "[00:00.00] \n[00:26.13] Whenever I'm alone with you\n[00:32.05
 function parseLRC(src){const parsed=[];for(const ln of src.split(/\r?\n/)){const times=[...ln.matchAll(/\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g)];const text=ln.replace(/\[[^\]]*\]/g,'').trim();for(const m of times){const millis=Number((m[3]||'0').padEnd(3,'0'));parsed.push({t:Number(m[1])*60+Number(m[2])+millis/1000,text,sub:''})}}return parsed.sort((a,b)=>a.t-b.t)}
 const cues=parseLRC(timedLrc);const breaks=[{start:57.25,end:75.44,lines:[{at:57.25,text:'In every season, I would choose you.'}]},{start:139.06,end:152.63,lines:[{at:139.06,text:'For every lifetime, a thousand lilies.'}]},{start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]},{start:284.85,end:319.97,lines:[{at:284.85,text:q1},{at:302,text:q2}]}];
 const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getElementById('particles'),lyricEl=document.getElementById('lyric'),playBtn=document.getElementById('play'),pauseBtn=document.getElementById('pause'),rewindBtn=document.getElementById('rewind'),seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
-let ytPlayer=null,ytReady=false,ytState=-1,queuedPlay=false,lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;
+let scWidget=null,scReady=false,scPlaying=false,queuedPlay=false,lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;let positionSeconds=0,durationSeconds=approxDuration,lastPositionRead=0,lastSeek=0,readingPosition=false;
 const positions=[{x:6,y:14,w:190,r:-20,s:0.92,o:0.46,d:8.2},{x:8,y:28,w:215,r:-12,s:0.99,o:0.55,d:8.7},{x:8,y:42,w:245,r:-10,s:1.08,o:0.62,d:8.3},{x:7,y:58,w:240,r:-16,s:1.05,o:0.62,d:8.1},{x:8,y:74,w:220,r:-18,s:0.96,o:0.53,d:8.0},{x:13,y:86,w:175,r:-18,s:0.80,o:0.36,d:8.8},{x:20,y:12,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:20,y:86,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:31,y:10,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:31,y:88,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:50,y:7,w:160,r:0,s:0.70,o:0.22,d:10.4},{x:50,y:90,w:165,r:0,s:0.72,o:0.22,d:10.2},{x:69,y:10,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:69,y:88,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:80,y:12,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:80,y:86,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:94,y:14,w:190,r:20,s:0.92,o:0.46,d:8.2},{x:92,y:28,w:215,r:12,s:0.99,o:0.55,d:8.7},{x:92,y:42,w:245,r:10,s:1.08,o:0.62,d:8.3},{x:93,y:58,w:240,r:16,s:1.05,o:0.62,d:8.1},{x:92,y:74,w:220,r:18,s:0.96,o:0.53,d:8.0},{x:87,y:86,w:175,r:18,s:0.80,o:0.36,d:8.8},{x:16,y:22,w:142,r:-22,s:0.62,o:0.22,d:10.8},{x:16,y:66,w:142,r:-24,s:0.62,o:0.22,d:10.7},{x:84,y:22,w:142,r:22,s:0.62,o:0.22,d:10.8},{x:84,y:66,w:142,r:24,s:0.62,o:0.22,d:10.7},{x:38,y:16,w:128,r:-3,s:0.56,o:0.16,d:10.9},{x:62,y:16,w:128,r:3,s:0.56,o:0.16,d:10.9}];
 positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,s:0.91,o:0.46,d:9.5},{x:97,y:32,w:185,r:18,s:0.84,o:0.38,d:9},{x:99,y:63,w:200,r:24,s:0.91,o:0.46,d:9.4},{x:11,y:95,w:235,r:-12,s:0.99,o:0.46,d:8.7},{x:23,y:98,w:212,r:8,s:0.9,o:0.43,d:9.2},{x:35,y:99,w:168,r:-9,s:0.79,o:0.35,d:10.3},{x:49,y:101,w:188,r:0,s:0.89,o:0.32,d:9.9},{x:64,y:99,w:168,r:9,s:0.79,o:0.35,d:10.1},{x:77,y:98,w:212,r:-8,s:0.9,o:0.43,d:9},{x:90,y:95,w:235,r:12,s:0.99,o:0.46,d:8.8},{x:16,y:45,w:156,r:-25,s:0.73,o:0.24,d:10.7},{x:84,y:45,w:156,r:25,s:0.73,o:0.24,d:10.6},{x:4,y:84,w:160,r:-19,s:0.78,o:0.37,d:10.1},{x:96,y:84,w:160,r:19,s:0.78,o:0.37,d:10.3});positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
 function displayLyric(t){const item=getCaption(t);if(item.key===lastCue&&!(lastTime>=0&&t<lastTime-1))return;lastCue=item.key;lyricEl.classList.add('switching');const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>{lyricEl.textContent=item.text;lyricEl.classList.remove('switching');if(!reduced)lyricEl.animate([{opacity:0,transform:'translateY(14px) scale(.987)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:820,easing:'cubic-bezier(.18,.84,.24,1)'})},reduced?0:180)}
-function youtubeTime(){if(!ytReady||!ytPlayer)return 0;try{const n=ytPlayer.getCurrentTime();return Number.isFinite(n)?Math.max(0,n):0}catch(e){return 0}}
-function youtubeDuration(){if(!ytReady||!ytPlayer)return approxDuration;try{const n=ytPlayer.getDuration();return Number.isFinite(n)&&n>0?n:approxDuration}catch(e){return approxDuration}}
-function isPlaying(){return ytReady&&ytState===YT.PlayerState.PLAYING}
-function playSong(){if(!ytReady||!ytPlayer){queuedPlay=true;showMessage('Preparing Lovesong…');return}try{ytPlayer.playVideo();document.body.classList.add('has-song')}catch(e){showMessage('Tap Play in YouTube player ♡')}}
-function pauseSong(){if(ytReady&&ytPlayer)try{ytPlayer.pauseVideo()}catch(e){}}
-playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pauseSong);rewindBtn.addEventListener('click',()=>{if(!ytReady||!ytPlayer){showMessage('Loading the song…');return}const next=Math.max(0,youtubeTime()-10);ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});seek.addEventListener('input',()=>{if(!ytReady||!ytPlayer)return;const next=Number(seek.value)/1000*youtubeDuration();ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});
+
+function playbackTime(){return Math.max(0,positionSeconds)}
+function playbackDuration(){return Math.max(1,durationSeconds)}
+function isPlaying(){return scPlaying}
+const scDrawer=document.getElementById('soundcloud-drawer');
+const scToggle=document.getElementById('source-toggle');
+scToggle.addEventListener('click',()=>{
+ const open=!document.body.classList.contains('sc-open');
+ document.body.classList.toggle('sc-open',open);
+ scToggle.setAttribute('aria-expanded',String(open));
+ scToggle.setAttribute('aria-label',open?'Hide SoundCloud player':'Show SoundCloud player');
+});
+function revealSoundcloud(message){
+ document.body.classList.add('sc-open');
+ scToggle.setAttribute('aria-expanded','true');
+ scToggle.setAttribute('aria-label','Hide SoundCloud player');
+ if(message)showMessage(message);
+}
+function playSong(){
+ if(!scReady||!scWidget){queuedPlay=true;showMessage('Preparing Lovesong…');return}
+ try{
+  scWidget.play();
+  // Some mobile browsers require a direct tap on the embedded player.
+  setTimeout(()=>{if(!scPlaying&&scReady){
+   scWidget.isPaused(paused=>{if(paused)revealSoundcloud('Tap play in the SoundCloud player ♡')});
+  }},2600);
+ }catch(e){revealSoundcloud('Tap play in the SoundCloud player ♡')}
+}
+function pauseSong(){
+ queuedPlay=false;
+ if(scReady&&scWidget){scWidget.pause();scPlaying=false;updateButtons()}
+}
+function seekSong(t){
+ const seconds=Math.max(0,Math.min(playbackDuration(),t));
+ positionSeconds=seconds;lastSeek=performance.now();
+ if(scReady&&scWidget)scWidget.seekTo(Math.round(seconds*1000));
+ lastCue='';displayLyric(seconds);
+}
+playBtn.addEventListener('click',playSong);
+pauseBtn.addEventListener('click',pauseSong);
+rewindBtn.addEventListener('click',()=>seekSong(playbackTime()-10));
+seek.addEventListener('input',()=>seekSong(Number(seek.value)/1000*playbackDuration()));
 function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
-function updateButtons(){playBtn.style.opacity=isPlaying()?'.65':'1';pauseBtn.style.opacity=isPlaying()?'1':'.65'}
-let lastFrame=0;function frame(now){requestAnimationFrame(frame);if(now-lastFrame<85)return;lastFrame=now;const t=youtubeTime(),d=youtubeDuration();displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));lastTime=t;updateButtons()};
-function initYoutube(){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;script.onerror=()=>showMessage('YouTube unavailable.');window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('youtube-player',{width:'200',height:'200',videoId:'naUqWQ-of6o',playerVars:{playsinline:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{ytReady=true;if(queuedPlay){queuedPlay=false;playSong()}},onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}if(e.data===YT.PlayerState.ENDED)showMessage('For you, always ♡');updateButtons()},onError:()=>showMessage('YouTube playback unavailable here.')}})};document.head.appendChild(script)}
-requestAnimationFrame(frame);initYoutube();
+function updateButtons(){
+ playBtn.style.opacity=isPlaying()?'.62':'1';
+ pauseBtn.style.opacity=isPlaying()?'1':'.65';
+}
+let lastFrame=0;
+function frame(now){
+ requestAnimationFrame(frame);
+ if(now-lastFrame<110)return;lastFrame=now;
+ if(scReady&&scWidget&&now-lastPositionRead>160&&!readingPosition){
+  readingPosition=true;lastPositionRead=now;
+  scWidget.getPosition(ms=>{
+   readingPosition=false;
+   if(Number.isFinite(ms)&&performance.now()-lastSeek>450)positionSeconds=Math.max(0,ms/1000);
+  });
+ }
+ const t=playbackTime(),d=playbackDuration();
+ displayLyric(t);
+ timeEl.textContent=formatTime(t)+' / '+formatTime(d);
+ seek.value=String(Math.min(1000,Math.round(t/d*1000)));
+ lastTime=t;updateButtons();
+}
+function initSoundcloud(){
+ const script=document.createElement('script');
+ script.src='https://w.soundcloud.com/player/api.js';
+ script.async=true;
+ script.onerror=()=>revealSoundcloud('SoundCloud could not load. Try the song link below ♡');
+ script.onload=()=>{
+  if(!window.SC||!SC.Widget){revealSoundcloud('SoundCloud is unavailable in this browser');return}
+  scWidget=SC.Widget('soundcloud-player');
+  scWidget.bind(SC.Widget.Events.READY,()=>{
+   scReady=true;
+   scWidget.getDuration(ms=>{
+    if(Number.isFinite(ms)&&ms>0)durationSeconds=ms/1000;
+   });
+   if(queuedPlay){queuedPlay=false;playSong()}
+  });
+  scWidget.bind(SC.Widget.Events.PLAY,()=>{scPlaying=true;document.body.classList.add('has-song');toast.hidden=true;updateButtons()});
+  scWidget.bind(SC.Widget.Events.PAUSE,()=>{scPlaying=false;updateButtons()});
+  scWidget.bind(SC.Widget.Events.FINISH,()=>{
+   scPlaying=false;positionSeconds=0;lastCue='';updateButtons();
+   showMessage('For you, always ♡');
+  });
+  scWidget.bind(SC.Widget.Events.PLAY_PROGRESS,e=>{
+   if(e&&Number.isFinite(e.currentPosition)&&performance.now()-lastSeek>450)positionSeconds=e.currentPosition/1000;
+  });
+  scWidget.bind(SC.Widget.Events.ERROR,()=>revealSoundcloud('Play the song from its official SoundCloud player'));
+ };
+ document.head.appendChild(script);
+}
+requestAnimationFrame(frame);initSoundcloud();
 })();
 </script></body></html>
