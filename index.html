@@ -218,6 +218,72 @@ body {background:#000!important}
  }
  .controls-dock{bottom:calc(205px + env(safe-area-inset-bottom,0px))!important}
 }
+
+/* v9: narrow translucent control strip; the full-height stage belongs to the lyrics */
+.stage,body:not(.yt-collapsed) .stage{
+  bottom:calc(271px + env(safe-area-inset-bottom,0px))!important;
+}
+.stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+  font-size:clamp(39px,7.3vw,71px)!important;
+  line-height:1.13!important;
+}
+.controls-dock{
+  width:min(193px,69vw)!important;
+  bottom:calc(206px + env(safe-area-inset-bottom,0px))!important;
+  padding:3px 7px 4px!important;
+  background:rgba(13,6,16,.24)!important;
+  border:1px solid rgba(255,208,241,.055)!important;
+  border-radius:16px!important;
+  box-shadow:none!important;
+  backdrop-filter:blur(5px)!important;
+  -webkit-backdrop-filter:blur(5px)!important;
+}
+.controls-dock .controls{gap:10px!important}
+.controls-dock .ctrl{
+  width:31px!important;min-width:31px!important;height:31px!important;
+  border:1px solid rgba(255,215,247,.11)!important;
+  background:rgba(255,255,255,.035)!important;
+  font-size:14px!important
+}
+.controls-dock .ctrl.play{
+  width:36px!important;min-width:36px!important;height:36px!important;
+  font-size:16px!important;
+  background:rgba(241,101,193,.46)!important;
+  box-shadow:0 0 12px rgba(255,74,186,.11)!important;
+}
+.controls-dock .progress{margin-top:1px!important;gap:4px!important}
+.controls-dock #seek{height:11px!important;accent-color:#f19acb}
+.controls-dock .time{font-size:9px!important;color:rgba(255,230,246,.64)!important}
+@media(max-width:720px){
+  .stage,body:not(.yt-collapsed) .stage{
+    bottom:calc(271px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+    font-size:clamp(32px,10.15vw,47px)!important;
+    line-height:1.12!important;
+  }
+}
+@media(max-height:720px){
+  .stage,body:not(.yt-collapsed) .stage{
+    bottom:calc(268px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+    font-size:clamp(26px,8.2vw,41px)!important;
+    line-height:1.09!important;
+  }
+  .controls-dock{
+    bottom:calc(205px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+@media(max-height:590px){
+  .stage,body:not(.yt-collapsed) .stage{
+    bottom:calc(264px + env(safe-area-inset-bottom,0px))!important;
+  }
+  .stage .lyric,body:not(.yt-collapsed) .stage .lyric{
+    font-size:clamp(24px,7.7vw,32px)!important;
+    line-height:1.08!important;
+  }
+}
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
