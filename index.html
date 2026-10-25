@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1023" />
+  <meta name="description" content="A magical digital garden where colourful lilies grow, bloom and glow. Built with HTML, CSS and JavaScript." />
+  <title>Bloom — A Little Digital Garden</title>
+  <style>
+    :root { color-scheme: dark; --ink:#eff5ff; --muted:#a3b0ca; --aqua:#a0ffdf; --line:rgba(197,225,255,.16); }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; margin:0; }
+    body {
+      overflow-x:hidden; background:#090d20; color:var(--ink);
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    button { font:inherit; }
+    .site {
+      min-height:100svh; position:relative; isolation:isolate; overflow:hidden;
+      background:
+        radial-gradient(ellipse at 53% 71%,rgba(30,64,97,.52), transparent 48%),
+        radial-gradient(ellipse at 89% 34%,rgba(64,39,101,.3),transparent 42%),
+        radial-gradient(ellipse at 12% 28%,rgba(20,76,79,.3),transparent 40%),
+        linear-gradient(180deg,#090d1f 0%,#0c1630 54%,#091b26 100%);
+    }
+    .site::before {
+      content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+      background-image:radial-gradient(rgba(195,230,255,.29) .8px,transparent 1px);
+      background-size:31px 31px; opacity:.16;
+      mask-image:linear-gradient(180deg,transparent 5%,black 44%,transparent 92%);
+    }
+    .site::after { content:""; position:absolute; left:-10%; right:-10%; bottom:-88px;
+      height:240px; background:radial-gradient(ellipse,rgba(71,181,133,.17),transparent 66%);
+      z-index:1; pointer-events:none;
+    }
+    .aura {position:absolute; width:44vw; aspect-ratio:1; border-radius:50%; filter:blur(80px); opacity:.18; pointer-events:none;}
+    .aura-one {top:10%;left:-25%;background:#33c1a9;animation:floatAura 15s ease-in-out infinite alternate;}
+    .aura-two {right:-23%;bottom:1%;background:#b75bc9;animation:floatAura 17s ease-in-out -5s infinite alternate-reverse;}
+    .topbar {position:relative;z-index:5;display:flex;justify-content:space-between;align-items:center;gap:20px;
+      padding:27px clamp(22px,5vw,80px);}
+    .brand {display:flex;align-items:center;gap:12px;color:#d5fce9;text-decoration:none;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+      font-size:12px;letter-spacing:.065em;font-weight:650;}
+    .brand-mark {width:30px;height:30px;display:grid;place-items:center;border:1px solid rgba(152,250,213,.55);
+      border-radius:9px;box-shadow:0 0 19px rgba(113,238,189,.13) inset;font-size:17px;}
+    .top-note {font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase;
+      font-size:10px;letter-spacing:.17em;color:#9daac6;display:flex;align-items:center;gap:9px;}
+    .live-dot{height:6px;width:6px;border-radius:50%;background:#82ffd0;box-shadow:0 0 11px #7bffc8;animation:pulse 2.4s ease-in-out infinite;}
+    .hero {position:relative;z-index:4;text-align:center;max-width:850px;margin:clamp(4px,2.5vh,24px) auto 0;
+      padding:0 20px;pointer-events:none;}
+    .eyebrow {display:flex;justify-content:center;align-items:center;gap:12px;color:#a7f8d6;
+      text-transform:uppercase;letter-spacing:.31em;font:10px ui-monospace,SFMono-Regular,Consolas,monospace;margin:0 0 16px;}
+    .eyebrow::before,.eyebrow::after {content:"";width:29px;height:1px;background:rgba(167,248,214,.6);}
+    h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-size:clamp(42px,6.5vw,82px);
+      letter-spacing:-.052em;line-height:1.04;text-shadow:0 5px 40px rgba(6,11,26,.8);}
+    h1 em{font-style:italic;background:linear-gradient(110deg,#c9d9ff 5%,#fcafcf 35%,#fbe8b3 64%,#b7ffda);
+      -webkit-background-clip:text;background-clip:text;color:transparent;padding-right:.11em;}
+    .subtitle{font-size:clamp(13px,1.35vw,15px);color:#bdc6d8;letter-spacing:.015em;line-height:1.65;
+      margin:17px auto 0;max-width:560px;}
+    .garden-wrap {position:absolute;inset:0;z-index:2;pointer-events:none;}
+    .garden {position:absolute;bottom:-18px;left:50%;width:min(1450px,116vw);height:auto;
+      max-height:88vh;transform:translateX(-50%);overflow:visible;filter:saturate(1.16);}
+    .flower {cursor:pointer;pointer-events:all;outline:none;}
+    .flower:focus-visible .flower-focus {stroke:#fff;stroke-width:2;opacity:1;}
+    .flower-focus {stroke:transparent;fill:transparent;opacity:0;}
+    .stem {fill:none;stroke:#428f74;stroke-width:6;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;
+      animation:growStem 2.1s cubic-bezier(.33,.04,.18,1) forwards;animation-delay:var(--delay);}
+    .stem-glint {fill:none;stroke:#b0f5ae;stroke-width:1.6;stroke-linecap:round;opacity:.5;stroke-dasharray:1;stroke-dashoffset:1;
+      animation:growStem 2.1s cubic-bezier(.33,.04,.18,1) forwards;animation-delay:var(--delay);}
+    .leaf-inner {opacity:0;transform-box:fill-box;transform-origin:0% 100%;
+      animation:openLeaf 1s cubic-bezier(.15,.88,.32,1.25) forwards;
+      animation-delay:calc(var(--delay) + 1.0s);}
+    .leaf-right .leaf-inner {transform-origin:0% 100%;}
+    .glow {opacity:0;animation:glowIn 2s ease-out forwards;animation-delay:calc(var(--delay) + 1.9s);}
+    .sway {animation:sway 6s ease-in-out infinite alternate; transform-origin:0px 0px;animation-delay:calc(var(--delay) + 2.8s);}
+    .petal {opacity:0;transform-box:fill-box;transform-origin:50% 98%;
+      animation:unfurl 1.65s cubic-bezier(.12,.75,.22,1.05) forwards;
+      animation-delay:calc(var(--delay) + 1.75s + var(--i) * .11s);}
+    .flower-centre {opacity:0;animation:centreIn .72s ease-out forwards;
+      animation-delay:calc(var(--delay) + 2.45s);}
+    .twinkle {animation:twinkle var(--duration) ease-in-out var(--twinkle-delay) infinite alternate;}
+    .meteor {opacity:0;animation:meteorFloat var(--duration) linear var(--twinkle-delay) infinite;}
+    .ground-grass {opacity:.58;animation:grassSway 6s ease-in-out infinite alternate;transform-origin:50% 100%;}
+    .controls {position:absolute;z-index:6;bottom:26px;left:50%;transform:translateX(-50%);
+      display:flex;flex-direction:column;align-items:center;gap:14px;width:max-content;max-width:calc(100% - 30px);}
+    .action-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:10px;}
+    .btn {border:1px solid rgba(188,235,220,.28);border-radius:100px;color:#ebfff5;
+      background:rgba(10,25,35,.65);padding:13px 20px;display:inline-flex;align-items:center;
+      gap:10px;cursor:pointer;transition:transform .2s ease,background .2s ease,border-color .2s ease;
+      box-shadow:0 8px 32px rgba(0,0,0,.16);backdrop-filter:blur(12px);font-size:12px;font-weight:600;letter-spacing:.03em;}
+    .btn:hover,.btn:focus-visible {transform:translateY(-2px);background:rgba(19,51,57,.88);border-color:#a0ffdc;}
+    .btn-primary{background:#baffdf;color:#102a27;border-color:#baffdf;box-shadow:0 5px 28px rgba(140,255,197,.13);}
+    .btn-primary:hover,.btn-primary:focus-visible{background:#dcffed;color:#102a27;}
+    .btn svg{width:14px;height:14px;flex:none;}
+    .hint{font:10px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.065em;color:#aab5c4;
+      text-shadow:0 2px 8px #040b1b;text-align:center;}
+    .corner-code{position:absolute;top:51%;left:clamp(18px,5vw,78px);z-index:3;
+      font:10px/2 ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(153,208,197,.57);
+      letter-spacing:.04em;pointer-events:none;}
+    .corner-code span {color:rgba(254,188,212,.76);}
+    .corner-right {position:absolute;right:clamp(18px,5vw,78px);top:49%;writing-mode:vertical-rl;
+      font:10px ui-monospace,SFMono-Regular,Consolas,monospace;color:rgba(172,198,216,.52);
+      letter-spacing:.23em;z-index:3;pointer-events:none;}
+    .bottom-line{position:absolute;left:clamp(20px,5vw,80px);right:clamp(20px,5vw,80px);bottom:22px;z-index:3;
+      display:flex;align-items:center;justify-content:space-between;color:rgba(180,201,208,.5);
+      font:9px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.16em;pointer-events:none;}
+    @keyframes growStem {to {stroke-dashoffset:0;}}
+    @keyframes openLeaf {0%{opacity:0;transform:rotate(-22deg) scale(.1,.08)} 100%{opacity:1;transform:rotate(0) scale(1)}}
+    @keyframes unfurl {0%{opacity:0;transform:scale(.08,.14) rotate(-32deg)} 25%{opacity:.93} 68%{transform:scale(1.06,1.03) rotate(4deg)} 100%{opacity:1;transform:scale(1) rotate(0)}}
+    @keyframes centreIn {from{opacity:0;transform:scale(.15)} to{opacity:1;transform:scale(1)}}
+    @keyframes glowIn {0%{opacity:0} 100%{opacity:.55}}
+    @keyframes sway {0%{transform:rotate(-3deg)}100%{transform:rotate(3deg)}}
+    @keyframes twinkle{0%{opacity:.12;transform:scale(.7)}100%{opacity:.9;transform:scale(1.45)}}
+    @keyframes meteorFloat{0%{opacity:0;transform:translateY(24px)}25%{opacity:.55}85%{opacity:.32}100%{opacity:0;transform:translateY(-52px)}}
+    @keyframes pulse{0%,100%{opacity:.5;transform:scale(.88)}50%{opacity:1;transform:scale(1.2)}}
+    @keyframes floatAura{from{transform:translate(0,0)}to{transform:translate(7%, -8%)}}
+    @keyframes grassSway{0%{transform:skewX(-2deg)}100%{transform:skewX(2deg)}}
+    @media (max-width:650px){
+      .topbar{padding:20px 18px;}
+      .top-note{letter-spacing:.04em;font-size:9px;}
+      .brand{font-size:11px;}
+      .hero{margin-top:30px;}
+      h1{font-size:clamp(40px,10vw,60px);}
+      .subtitle{font-size:13px;padding:0 14px;max-width:370px;}
+      .garden{width:200vw;max-width:none;max-height:70vh;bottom:35px;}
+      .corner-code,.corner-right,.bottom-line{display:none;}
+      .controls{bottom:22px;}
+      .hint{font-size:9px;}
+      .btn{padding:12px 16px;font-size:11px;}
+    }
+    @media (max-height:720px) and (min-width:651px){
+      .hero{margin-top:0;}
+      h1{font-size:clamp(42px,5vw,63px)}
+      .subtitle{margin-top:9px;}
+      .garden{max-height:85vh;}
+      .controls{bottom:16px;}
+    }
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;}
+    }
+  </style>
+</head>
+<body>
+  <main class="site">
+    <div class="aura aura-one" aria-hidden="true"></div><div class="aura aura-two" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Bloom home"><span class="brand-mark">✳</span><span>the bloom lab<span style="color:#69dcae">.</span></span></a>
+      <div class="top-note"><span class="live-dot"></span> a living canvas / 001</div>
+    </header>
+    <section class="hero" id="home">
+      <p class="eyebrow">an experiment in wonder</p>
+      <h1>Every little thing<br><em>can bloom.</em></h1>
+      <p class="subtitle">A garden written in code. Watch each lily rise from the earth, unfold its petals, and paint the night with colour.</p>
+    </section>
+    <div class="corner-code" aria-hidden="true">
+      <div><span>01</span> const garden = new Wonder();</div>
+      <div><span>02</span> garden.plant("lilies");</div>
+      <div><span>03</span> garden.bloom();</div>
+      <div><span>04</span> <span>// made to make you smile</span></div>
+    </div>
+    <div class="corner-right" aria-hidden="true">GROWTH SEQUENCE // IN PROGRESS</div>
+    <div class="garden-wrap">
+      <svg class="garden" id="garden" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A colourful animated garden of eight lilies growing from stems and blooming with glowing petals">
+        <defs>
+          <linearGradient id="stemGradient" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2b654f"/><stop offset=".58" stop-color="#41876c"/><stop offset="1" stop-color="#8dddac"/></linearGradient>
+          <linearGradient id="leafGradient" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#245847"/><stop offset=".55" stop-color="#3f9f7c"/><stop offset="1" stop-color="#86d99b"/></linearGradient>
+          <radialGradient id="petal-pink" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff0f6"/><stop offset=".27" stop-color="#ffc3df"/><stop offset=".74" stop-color="#f376b6"/><stop offset="1" stop-color="#a63880"/></radialGradient>
+          <radialGradient id="petal-purple" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f9edff"/><stop offset=".27" stop-color="#e1baff"/><stop offset=".7" stop-color="#ab82ef"/><stop offset="1" stop-color="#654bb2"/></radialGradient>
+          <radialGradient id="petal-coral" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff3e5"/><stop offset=".27" stop-color="#ffc3aa"/><stop offset=".7" stop-color="#ff886f"/><stop offset="1" stop-color="#c94b71"/></radialGradient>
+          <radialGradient id="petal-gold" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fffce1"/><stop offset=".3" stop-color="#ffefae"/><stop offset=".75" stop-color="#f8bd57"/><stop offset="1" stop-color="#d87d46"/></radialGradient>
+          <radialGradient id="petal-blue" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f1ffff"/><stop offset=".27" stop-color="#b5f6ff"/><stop offset=".7" stop-color="#76bbe8"/><stop offset="1" stop-color="#4b70bb"/></radialGradient>
+          <radialGradient id="petal-mint" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#f6fff4"/><stop offset=".27" stop-color="#d3ffda"/><stop offset=".7" stop-color="#82e9bc"/><stop offset="1" stop-color="#3c9e9c"/></radialGradient>
+          <radialGradient id="petal-rose" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fff5ef"/><stop offset=".27" stop-color="#ffd4dc"/><stop offset=".75" stop-color="#fa9cab"/><stop offset="1" stop-color="#be5d92"/></radialGradient>
+          <radialGradient id="petal-ice" cx="40%" cy="31%" r="83%"><stop offset="0" stop-color="#fffafd"/><stop offset=".3" stop-color="#e7e7ff"/><stop offset=".75" stop-color="#bdc7ff"/><stop offset="1" stop-color="#798bd6"/></radialGradient>
+          <radialGradient id="flowerHalo"><stop offset="0" stop-color="#d6b2ff" stop-opacity=".32"/><stop offset=".45" stop-color="#8bded9" stop-opacity=".15"/><stop offset="1" stop-color="#aaffde" stop-opacity="0"/></radialGradient>
+          <radialGradient id="pollen" cx="30%" cy="25%"><stop stop-color="#fffce2"/><stop offset=".65" stop-color="#ffdc87"/><stop offset="1" stop-color="#db9853"/></radialGradient>
+          <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="12"/></filter>
+          <filter id="tinyGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5"/></filter>
+        </defs>
+        <g id="fireflies" aria-hidden="true"></g>
+        <g id="flowers"></g>
+        <g aria-hidden="true" class="ground-grass" stroke="#387761" stroke-linecap="round" fill="none" stroke-width="3" opacity=".7">
+          <path d="M0 752 Q12 727 12 718 M24 756 Q20 728 7 705 M102 755 Q111 733 110 718 M197 756 Q184 734 183 721 M233 752 Q238 721 251 710 M305 759 Q291 732 295 719 M345 752 Q353 725 366 716 M430 755 Q418 729 414 716 M485 757 Q481 727 491 708 M567 757 Q559 735 544 717 M616 752 Q627 719 630 710 M706 754 Q701 732 693 713 M771 759 Q778 728 791 712 M834 759 Q830 731 817 715 M901 755 Q905 728 913 710 M984 759 Q976 739 962 721 M1037 752 Q1043 724 1056 708 M1121 756 Q1116 725 1107 708 M1170 759 Q1175 724 1187 713" />
+        </g>
+      </svg>
+    </div>
+    <div class="controls">
+      <div class="action-row">
+        <button class="btn btn-primary" id="rebloom" type="button" aria-label="Replay the lilies growing and blooming animation">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>
+          Bloom again
+        </button>
+        <button class="btn" id="shuffle" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3c5 0 5 10 10 10h3m-4-4 4 4-4 4M4 17h3c2 0 3-2 4-4m2-3c1-2 2-3 4-3h3m-4-4 4 4-4 4"/></svg>
+          New colours
+        </button>
+      </div>
+      <div class="hint" id="hint" aria-live="polite">✦ tap any lily to change its colour ✦</div>
+    </div>
+    <div class="bottom-line" aria-hidden="true"><span>HANDCRAFTED WITH &lt;CSS&gt; + HEART</span><span>FLOWERS DON'T NEED A REASON.</span></div>
+  </main>
+  <script>
+    // No frameworks, image files, sign-ups or paid services required.
+    // Each lily is drawn with SVG, grown with CSS and made interactive with JS.
+    const flowersEl = document.getElementById('flowers');
+    const firefliesEl = document.getElementById('fireflies');
+    const hintEl = document.getElementById('hint');
+    const colours = ['coral','pink','purple','gold','blue','mint','rose','ice'];
+    const presets = [
+      { x:135, y:390, base:42, size:.82, delay:.2, colour:'coral' },
+      { x:273, y:294, base:224, size:.98, delay:.6, colour:'pink' },
+      { x:419, y:415, base:391, size:.79, delay:1.0, colour:'purple' },
+      { x:557, y:238, base:563, size:1.01, delay:.1, colour:'gold' },
+      { x:712, y:350, base:706, size:.92, delay:.85, colour:'blue' },
+      { x:837, y:245, base:844, size:1.02, delay:.4, colour:'mint' },
+      { x:987, y:387, base:1000, size:.84, delay:1.25, colour:'rose' },
+      { x:1116, y:284, base:1180, size:.9, delay:.7, colour:'ice' }
+    ];
+    let assignedColours = presets.map(p => p.colour);
+
+    function pointOnCurve(p0,p1,p2,p3,t) {
+      const m=1-t;
+      return {x:m*m*m*p0.x+3*m*m*t*p1.x+3*m*t*t*p2.x+t*t*t*p3.x,
+              y:m*m*m*p0.y+3*m*m*t*p1.y+3*m*t*t*p2.y+t*t*t*p3.y};
+    }
+    function leafMarkup(pt, side, degree, id) {
+      const flip = side === 'left' ? 'scale(-1 1)' : '';
+      return `<g class="leaf ${side==='left'?'leaf-left':'leaf-right'}" transform="translate(${pt.x.toFixed(1)} ${pt.y.toFixed(1)}) rotate(${degree}) ${flip}">
+        <g class="leaf-inner"><path d="M0 0 C10 -27 37 -38 67 -52 C63 -22 42 -3 0 0Z" fill="url(#leafGradient)" stroke="#8bd5a2" stroke-opacity=".26" stroke-width="1"/>
+        <path d="M0 0 Q31 -24 63 -49" stroke="#c1edb4" stroke-opacity=".55" stroke-width="1.1" fill="none"/></g></g>`;
+    }
+    function bloomMarkup(colour) {
+      // A lily has six individual, tapering petals and golden stamens.
+      const angles = [60,180,300,0,120,240];
+      const petals = angles.map((angle,i) =>
+        `<g transform="rotate(${angle})"><g class="petal" style="--i:${i}">
+          <path class="petal-shape" d="M0 6 C-11 -8 -32 -43 -15 -76 C-11 -86 -4 -97 0 -99 C4 -97 11 -86 15 -76 C32 -43 11 -8 0 6Z"
+            fill="url(#petal-${colour})" stroke="#fff" stroke-opacity=".14" stroke-width="1"/>
+          <path d="M0 -1 C-3 -27 -7 -57 0 -87" fill="none" stroke="#fffefa" stroke-opacity=".46" stroke-width="1.15"/>
+          <path d="M-4 -24 Q-13 -48 -10 -70" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1"/>
+        </g></g>`
+      ).join('');
+      const stamens = [-62,-38,-13,15,42,67].map((angle,i) =>
+        `<g transform="rotate(${angle})"><path d="M0 1 Q${i%2?8:-7} -24 0 -45" fill="none" stroke="#f9d49c" stroke-width="1.85" stroke-linecap="round"/>
+        <ellipse cx="0" cy="-46" rx="3.8" ry="7" fill="url(#pollen)" transform="rotate(${i%2?-15:13} 0 -46)"/></g>`
+      ).join('');
+      return `<circle class="glow" r="127" fill="url(#flowerHalo)" filter="url(#softGlow)"/>
+        <g class="sway">${petals}<g class="flower-centre">${stamens}
+          <circle r="9" fill="#ffe7a5"/><circle r="4.5" fill="#fff4c8"/>
+          <circle cx="-3" cy="-3" r="1.8" fill="#fff" opacity=".9"/></g></g>`;
+    }
+    function renderGarden() {
+      flowersEl.innerHTML = presets.map((p,i) => {
+        const p0 = {x:p.base,y:763}, p1={x:p.base+(p.x-p.base)*.06,y:602},
+          p2={x:p.x+(p.base-p.x)*.28,y:p.y+142},p3={x:p.x,y:p.y+3};
+        const d = `M${p0.x} ${p0.y} C${p1.x} ${p1.y},${p2.x} ${p2.y},${p3.x} ${p3.y}`;
+        const pt1=pointOnCurve(p0,p1,p2,p3,.48),pt2=pointOnCurve(p0,p1,p2,p3,.68);
+        const css = `--delay:${p.delay}s`;
+        return `<g style="${css}">
+          <path class="stem" pathLength="1" d="${d}" stroke="url(#stemGradient)" style="stroke:url(#stemGradient)"/>
+          <path class="stem-glint" pathLength="1" d="${d}"/>
+          ${leafMarkup(pt1,i%2?'left':'right',-16,i)}
+          ${leafMarkup(pt2,i%2?'right':'left',22,i)}
+          <g class="flower" data-id="${i}" tabindex="0" role="button" aria-label="Change colour of lily ${i+1}" transform="translate(${p.x} ${p.y}) scale(${p.size})">
+            ${bloomMarkup(assignedColours[i])}
+            <circle class="flower-focus" r="95"/>
+            <circle r="85" fill="transparent"/>
+            <title>Tap to change my colour</title>
+          </g>
+        </g>`;
+      }).join('');
+    }
+    function makeFireflies(){
+      // Deterministic placement gives every reload the same peaceful composition.
+      let seed=1408;
+      function rand(){seed=(seed*16807)%2147483647;return (seed-1)/2147483646;}
+      firefliesEl.innerHTML=Array.from({length:67},(_,i)=>{
+        const x=(rand()*1200).toFixed(0),y=(110+rand()*565).toFixed(0),r=(.6+rand()*2).toFixed(1);
+        const duration=(2.2+rand()*4.4).toFixed(1),delay=(-rand()*6).toFixed(1);
+        const hue=i%4===0?'#ffd5b3':i%5===0?'#fab4e3':'#c1ffea';
+        return `<circle class="${i%3?'twinkle':'meteor'}" cx="${x}" cy="${y}" r="${r}" fill="${hue}" style="--duration:${duration}s;--twinkle-delay:${delay}s"/>`;
+      }).join('');
+    }
+    function colourNext(el){
+      const idx=Number(el.dataset.id);
+      const current=colours.indexOf(assignedColours[idx]);
+      const next=colours[(current+1)%colours.length];
+      assignedColours[idx]=next;
+      el.querySelectorAll('.petal-shape').forEach(shape=>shape.setAttribute('fill',`url(#petal-${next})`));
+      hintEl.textContent=`✦ lily ${idx+1} is now ${next} ✦`;
+    }
+    document.getElementById('garden').addEventListener('click',event=>{
+      const flower=event.target.closest('.flower');if(flower) colourNext(flower);
+    });
+    document.getElementById('garden').addEventListener('keydown',event=>{
+      if(event.key==='Enter'||event.key===' '){const flower=event.target.closest('.flower');if(flower){event.preventDefault();colourNext(flower);}}
+    });
+    document.getElementById('rebloom').addEventListener('click',()=>{
+      renderGarden();hintEl.textContent='✦ tap any lily to change its colour ✦';
+    });
+    document.getElementById('shuffle').addEventListener('click',()=>{
+      // Shuffle colours in place using Fisher–Yates.
+      assignedColours=colours.slice();
+      for(let i=assignedColours.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[assignedColours[i],assignedColours[j]]=[assignedColours[j],assignedColours[i]];}
+      renderGarden();hintEl.textContent='✦ your garden has a fresh palette ✦';
+    });
+    makeFireflies();renderGarden();
+  </script>
+</body>
+</html>
