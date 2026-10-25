@@ -45,19 +45,41 @@ body.has-song .start-btn{display:none}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}.flower .stem{stroke-dashoffset:0}.fireflies,.petals{display:none}}
 
 @keyframes flowerSway{0%{transform:rotate(-4deg) translateY(0)}100%{transform:rotate(4deg) translateY(-8px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
+
+/* Official YouTube player: fully visible and at least 200x200 per embed requirements. */
+.yt-shell{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));width:216px;height:205px;z-index:18;border:1px solid rgba(255,211,243,.34);border-radius:12px;overflow:hidden;background:#080918;box-shadow:0 0 26px rgba(249,100,205,.27),0 18px 48px rgba(0,0,0,.50)}
+.yt-shell iframe,.yt-shell #youtube-player{display:block;width:216px!important;height:205px!important;border:0;background:#070715}
+.dock{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 216px);right:max(12px,env(safe-area-inset-right));width:216px;padding:10px 9px 8px;gap:5px;border-radius:15px}
+.controls{gap:6px}.ctrl{min-width:34px;height:34px;padding:0 5px}.ctrl.play{height:38px;min-width:38px}
+.song-name{font-size:11px}.yt-link{text-decoration:none;display:grid;place-items:center;font-size:21px}
+.time{font-size:9px}.progress{gap:5px}.progress input{min-width:0}
+.toast{bottom:calc(max(12px,env(safe-area-inset-bottom)) + 310px)}
+@media(max-width:720px){
+ .stage{top:35%;max-height:51dvh;width:92vw;min-height:175px;padding:12px 9px}
+ .lyric{font-size:clamp(27px,7.5vw,41px)}
+ .start-btn{margin-top:19px}
+ .dock{width:216px;bottom:calc(max(9px,env(safe-area-inset-bottom)) + 216px);right:max(9px,env(safe-area-inset-right))}
+ .yt-shell{right:max(9px,env(safe-area-inset-right));bottom:max(9px,env(safe-area-inset-bottom))}
+}
+@media(max-height:740px) and (max-width:720px){
+ .brand{top:9px}.stage{top:30%;max-height:42dvh;min-height:155px;padding:8px 9px}
+ .lyric{font-size:clamp(23px,6.5vw,35px);line-height:1.16}
+ .start-btn{margin-top:12px;padding:10px 18px}
+}
+@media(max-width:350px){.yt-shell,.yt-shell iframe,.yt-shell #youtube-player{width:206px!important;height:205px!important}.dock{width:206px}}
 </style></head>
 <body><div id="scene" aria-hidden="true"><div class="sky"></div><div class="nebula"></div><div class="lightbeams"></div><div class="stars" id="stars"></div><div class="fireflies" id="fireflies"></div><div class="petals" id="petals"></div><div class="horizon"></div><div class="flowers" id="flowers"></div><div class="veil"></div><div class="grain"></div></div>
 <header class="brand"><h1><em>Ente Mariammekku</em> 🌸💗</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don&#x27;t need a reason to bloom, I will love you till our graves bloom with lillies</h2><button id="start-btn" class="start-btn" type="button">▶ Play Lovesong</button></main>
-<section class="dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" title="Rewind 10 seconds" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" title="Play" aria-label="Play Lovesong">▶</button><span class="song-name">♫ Lovesong</span><label class="ctrl load" for="file" title="Choose your MP3" aria-label="Choose MP3">♪<input type="file" accept="audio/*" id="file"></label></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
-<audio id="audio" preload="metadata" playsinline ></audio><div id="toast" class="toast" role="status" hidden></div><script>
+<section class="dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" title="Rewind 10 seconds" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" title="Play" aria-label="Play Lovesong">▶</button><span class="song-name">♫ Lovesong</span><a class="ctrl yt-link" href="https://www.youtube.com/watch?v=0wPhbmeNSOs" target="_blank" rel="noopener noreferrer" title="Open Lovesong on YouTube" aria-label="Open Lovesong on YouTube">↗</a></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
+<div class="yt-shell" id="yt-shell" aria-label="Lovesong by Adele on YouTube"><div id="youtube-player"></div></div><div id="toast" class="toast" role="status" hidden></div><script>
 (()=>{'use strict';
 const flowers=document.getElementById('flowers'),scene=document.getElementById('scene');
-const audio=document.getElementById('audio'),fileInput=document.getElementById('file'),lyricEl=document.getElementById('lyric');
+const lyricEl=document.getElementById('lyric');
 const playBtn=document.getElementById('play'),mainBtn=document.getElementById('start-btn'),rewindBtn=document.getElementById('rewind');
 const seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
 const q1="Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies",q2="Enikku ninnee othiri othiri othiri ishtamaaa ente mariammee .....";
-let localUrl=null,ctx=null,analyser=null,frequencies=null,lastCue='',lastTime=-1,toastTimeout=null;
+let ytPlayer=null,ytReady=false,ytState=-1,queuedPlay=false,lastCue='',lastTime=-1,toastTimeout=null;
 const approxDuration=319.97;
 const timedLrc = "[00:00.00] \n[00:26.13] Whenever I'm alone with you\n[00:32.05] \n[00:34.41] You make me feel like I am home again\n[00:41.87] Whenever I'm alone with you\n[00:48.24] \n[00:50.33] You make me feel like I am whole again\n[00:57.25] \n[01:15.44] Whenever I'm alone with you\n[01:23.34] You make me feel like I am young again\n[01:31.69] Whenever I'm alone with you\n[01:39.35] You make me feel like I am fun again\n[01:47.39] However far away\n[01:52.15] I will always love you\n[01:56.20] However long I stay\n[02:00.37] I will always love you\n[02:04.18] Whatever words I say\n[02:08.98] I will always love you\n[02:13.40] I will always love you\n[02:19.06] \n[02:32.63] Whenever I'm alone with you\n[02:40.67] You make me feel like I am free again\n[02:48.56] Whenever I'm alone with you\n[02:55.23] \n[02:57.66] You make me feel like I am clean again\n[03:05.32] However far away\n[03:10.15] I will always love you\n[03:13.83] However long I stay\n[03:18.37] I will always love you\n[03:21.82] Whatever words I say\n[03:26.66] I will always love you\n[03:30.39] I will always love you\n[03:37.25] \n[04:06.94] However far away\n[04:11.79] I will always love you\n[04:15.25] However long I stay\n[04:19.97] I will always love you\n[04:23.42] Whatever words I say\n[04:28.29] I will always love you\n[04:34.08] I'll always love you\n[04:38.10] I'll always love you\n[04:42.61] 'Cause I love you\n[04:44.85] \n[05:19.97] ";
 
@@ -126,30 +148,80 @@ function displayLyric(t){
   lyricEl.animate([{opacity:0,transform:'translateY(15px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:610,easing:'cubic-bezier(.16,.84,.24,1)'});
  }
 }
-function message(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2200)}
-function updatePlay(){const playing=!!audio.src&&!audio.paused&&!audio.ended;playBtn.textContent=playing?'❚❚':'▶';playBtn.title=playing?'Pause':'Play';playBtn.setAttribute('aria-label',playing?'Pause Lovesong':'Play Lovesong')}
-function playOrLoad(){if(!audio.src){fileInput.click();return}if(audio.paused)audio.play().catch(()=>message('Tap Play once more ♡'));else audio.pause()}
-mainBtn.addEventListener('click',playOrLoad);playBtn.addEventListener('click',playOrLoad);
-rewindBtn.addEventListener('click',()=>{if(!audio.src){fileInput.click();return}audio.currentTime=Math.max(0,audio.currentTime-10);lastCue='';displayLyric(audio.currentTime)});
-fileInput.addEventListener('change',()=>{
- const f=fileInput.files&&fileInput.files[0];if(!f)return;
- if(localUrl)URL.revokeObjectURL(localUrl);localUrl=URL.createObjectURL(f);audio.src=localUrl;audio.load();
- document.body.classList.add('has-song');lastCue='';lastTime=-1;
- audio.play().catch(()=>message('Tap Play to start ♡'));updatePlay();
+function message(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,3200)}
+function youtubeTime(){
+ if(!ytReady||!ytPlayer)return 0;
+ try{const n=ytPlayer.getCurrentTime();return Number.isFinite(n)?Math.max(0,n):0}catch(e){return 0}
+}
+function youtubeDuration(){
+ if(!ytReady||!ytPlayer)return approxDuration;
+ try{const n=ytPlayer.getDuration();return Number.isFinite(n)&&n>0?n:approxDuration}catch(e){return approxDuration}
+}
+function isPlaying(){return ytReady&&ytState===YT.PlayerState.PLAYING}
+function updatePlay(){
+ const playing=isPlaying();playBtn.textContent=playing?'❚❚':'▶';playBtn.title=playing?'Pause':'Play';
+ playBtn.setAttribute('aria-label',playing?'Pause Lovesong':'Play Lovesong');
+ document.body.classList.toggle('is-playing',playing);
+}
+function playOrPause(){
+ if(!ytReady||!ytPlayer){queuedPlay=true;message('Preparing the YouTube song…');return}
+ try{
+  if(isPlaying()){ytPlayer.pauseVideo()}
+  else{ytPlayer.playVideo(); document.body.classList.add('has-song')}
+ }catch(e){message('Tap Play on the YouTube player ♡')}
+}
+mainBtn.addEventListener('click',playOrPause);
+playBtn.addEventListener('click',playOrPause);
+rewindBtn.addEventListener('click',()=>{
+ if(!ytReady||!ytPlayer){message('Loading the YouTube song…');return}
+ const next=Math.max(0,youtubeTime()-10);
+ ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)
 });
-audio.addEventListener('play',()=>{
- updatePlay();try{if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=256;frequencies=new Uint8Array(analyser.frequencyBinCount);source.connect(analyser);analyser.connect(ctx.destination)}ctx.resume()}catch(e){}
+seek.addEventListener('input',()=>{
+ if(!ytReady||!ytPlayer)return;
+ const next=Number(seek.value)/1000*youtubeDuration();
+ ytPlayer.seekTo(next,true);lastCue='';displayLyric(next);
 });
-for(const e of ['pause','ended','loadedmetadata'])audio.addEventListener(e,updatePlay);
-seek.addEventListener('input',()=>{if(!audio.src)return;const len=Number.isFinite(audio.duration)?audio.duration:approxDuration;audio.currentTime=Number(seek.value)/1000*len;lastCue='';displayLyric(audio.currentTime)});
 function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
-function frame(){const t=audio.currentTime||0,d=Number.isFinite(audio.duration)?audio.duration:approxDuration;
- displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));
- if(analyser&&frequencies&&!audio.paused){analyser.getByteFrequencyData(frequencies);let sum=0;for(let i=2;i<Math.min(38,frequencies.length);i++)sum+=frequencies[i];document.documentElement.style.setProperty('--reactive',Math.min(1,(sum/36)/140).toFixed(3))}else document.documentElement.style.setProperty('--reactive','0');
- lastTime=t;requestAnimationFrame(frame)}
-if(audio.src)document.body.classList.add('has-song');
-updatePlay();requestAnimationFrame(frame);
+let lastFrame=0;
+function frame(now){
+ requestAnimationFrame(frame);
+ if(now-lastFrame<85)return;
+ lastFrame=now;
+ const t=youtubeTime(),d=youtubeDuration();
+ displayLyric(t);
+ timeEl.textContent=formatTime(t)+' / '+formatTime(d);
+ seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));
+ const ambient=isPlaying() ? .22+.14*Math.sin(now/740) : 0;
+ document.documentElement.style.setProperty('--reactive',Math.max(0,ambient).toFixed(3));
+ lastTime=t;
+}
+function initYoutube(){
+ const script=document.createElement('script');
+ script.src='https://www.youtube.com/iframe_api'; script.async=true;
+ script.onerror=()=>{message('YouTube unavailable. Tap ↗ to open the song.')};
+ window.onYouTubeIframeAPIReady=()=>{
+  ytPlayer=new YT.Player('youtube-player',{
+   width:'216',height:'205',videoId:'0wPhbmeNSOs',
+   playerVars:{playsinline:1,controls:1,rel:0,iv_load_policy:3},
+   events:{
+    onReady:()=>{
+      ytReady=true;updatePlay();
+      if(queuedPlay){queuedPlay=false;ytPlayer.playVideo();document.body.classList.add('has-song')}
+    },
+    onStateChange:e=>{
+      ytState=e.data;
+      if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}
+      if(e.data===YT.PlayerState.ENDED)message('For you, always ♡');
+      updatePlay();
+    },
+    onError:()=>message('Embedded playback blocked. Tap ↗ to watch on YouTube.')
+   }
+  });
+ };
+ document.head.appendChild(script);
+}
+updatePlay();requestAnimationFrame(frame);initYoutube();
 if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches)scene.addEventListener('pointermove',e=>{flowers.style.setProperty('--mouse-x',((e.clientX/innerWidth-.5)*7)+'px');flowers.style.setProperty('--mouse-y',((e.clientY/innerHeight-.5)*4)+'px')});
-window.addEventListener('pagehide',()=>{if(localUrl)URL.revokeObjectURL(localUrl)});
 })();
 </script></body></html>
