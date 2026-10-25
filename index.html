@@ -591,20 +591,6 @@ body.sc-open .source-toggle{transform:rotate(180deg)}
 .stage .lyric.switching,body:not(.yt-collapsed) .stage .lyric.switching {
  filter:blur(2px) drop-shadow(0 0 8px rgba(255,66,169,.14))!important;
 }
-.touch-ripple{
- position:fixed;z-index:4;pointer-events:none;
- width:140px;height:140px;
- border:1.4px solid rgba(255,167,218,.6);border-radius:50%;
- background:radial-gradient(circle,rgba(255,126,202,.10),transparent 62%);
- box-shadow:0 0 17px rgba(255,113,198,.18),inset 0 0 12px rgba(255,120,204,.14);
- transform:translate(-50%,-50%) scale(.24);
- animation:lilyTouchRipple .94s cubic-bezier(.16,.72,.3,1) forwards;
-}
-@keyframes lilyTouchRipple {
- 0% {opacity:.6;transform:translate(-50%,-50%) scale(.24)}
- 70% {opacity:.33}
- 100% {opacity:0;transform:translate(-50%,-50%) scale(2.05)}
-}
 @media(max-width:720px){
  .brand h1{font-size:clamp(20px,5.5vw,26px)!important}
  .stage .lyric,body:not(.yt-collapsed) .stage .lyric {
@@ -614,8 +600,26 @@ body.sc-open .source-toggle{transform:rotate(180deg)}
 @media(max-height:610px){
  .stage .lyric,body:not(.yt-collapsed) .stage .lyric {font-size:clamp(27px,7.7vw,40px)!important}
 }
-@media(prefers-reduced-motion:reduce){
- .touch-ripple{display:none!important}
+
+
+/* Readable lyrics: render real pink glyphs rather than transparent gradient masking. */
+.stage #lyric.lyric.glow,body:not(.yt-collapsed) .stage #lyric.lyric.glow{
+ background:none!important;
+ background-image:none!important;
+ -webkit-background-clip:border-box!important;
+ background-clip:border-box!important;
+ color:#ffe1f3!important;
+ -webkit-text-fill-color:#ffe1f3!important;
+ opacity:1!important;
+ visibility:visible!important;
+ font-family:"Cormorant Garamond",Baskerville,Georgia,serif!important;
+ text-shadow:0 0 3px rgba(255,183,226,.48),0 0 10px rgba(255,105,187,.25),0 0 20px rgba(255,75,175,.13)!important;
+ filter:none!important;
+ animation:none!important;
+}
+.stage #lyric.lyric.glow .lyric-sentence{
+ display:inline-block;max-width:100%;white-space:normal;overflow-wrap:break-word;
+ will-change:opacity,transform;
 }
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
@@ -665,11 +669,7 @@ function touchLilies(x,y){
      ],{duration:880,delay:Math.min(115,dist*.43),easing:'cubic-bezier(.2,.75,.3,1)'});
    }catch(_){/* Keep the garden animated on older browsers. */}
  });
- const ripple=document.createElement('span');
- ripple.className='touch-ripple';
- ripple.style.left=x+'px';ripple.style.top=y+'px';
- document.getElementById('scene').appendChild(ripple);
- ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});
+
 }
 function onGardenTouch(ev){
  if(ev.target instanceof Element && ev.target.closest('button,input,a,.controls-dock'))return;
@@ -693,24 +693,19 @@ function displayLyric(t,force=false){
  if(!force&&item.key===lastCue)return;
  lastCue=item.key;
  lyricTransitionId++;
- const id=lyricTransitionId;
  clearTimeout(lyricChangeTimer);
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- if(reduced){
-   lyricEl.textContent=item.text;
-   lyricEl.classList.remove('switching');
-   return;
+ lyricEl.classList.remove('switching');
+ const span=document.createElement('span');
+ span.className='lyric-sentence';
+ span.textContent=item.text;
+ lyricEl.replaceChildren(span);
+ if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && span.animate){
+   span.animate([
+     {opacity:.22,transform:'translateY(10px)',filter:'blur(2.5px)'},
+     {opacity:1,transform:'translateY(0px)',filter:'blur(0px)'}
+   ],{duration:760,easing:'cubic-bezier(.20,.79,.25,1)'});
  }
- lyricEl.classList.add('switching');
- lyricChangeTimer=setTimeout(()=>{
-   if(id!==lyricTransitionId)return;
-   lyricEl.textContent=item.text;
-   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-     if(id===lyricTransitionId)lyricEl.classList.remove('switching');
-   }));
- },LYRIC_FADE_OUT_MS);
 }
-
 
 const music=document.getElementById('lovesong-audio');
 function playSong(){
