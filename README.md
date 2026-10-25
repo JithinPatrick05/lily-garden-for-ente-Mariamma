@@ -1,26 +1,22 @@
-# For Ente Mariamme ♡ — Full Lovesong Lyric Garden
+# Ente Mariammekku 🌸💗
 
-A romantic, full-screen neon lily love letter with **line-synchronized captions for Adele's Lovesong**, glowing moving flowers, falling petals, stardust, and personal messages during instrumental passages.
+A mobile-first animated neon lily garden with full-song synchronized lyric captions and smooth whole-line glowing transitions.
 
-## Visit the website
+### Playback
+The public GitHub Pages version does **not** bundle Adele's copyrighted recording and has **no hidden YouTube player**. Tap **Play Lovesong** to choose an MP3 from your own device. It will begin playing immediately. The small music dock provides:
+- Play and pause
+- Rewind by 10 seconds
+- Song progress scrubber and elapsed time
+- ♪ to select a different locally stored audio file
+
+The song and synchronized captions run together using the actual HTML5 audio playback time (approximately 5:20). Audio stays in the visitor's browser and is not uploaded to GitHub.
+
+### Love notes
+The opening quote is kept word-for-word as supplied by the owner. It appears full-size in place of lyrics, followed by the owner's original Malayalam message. Additional romantic notes appear only during longer instrumental breaks. Short musical gaps retain the most recent lyric.
+
+### Private offline version
+The ZIP supplied in the conversation includes a user-uploaded local copy of the recording and an offline `index.html`, allowing direct single-tap playback without selecting the MP3. This personal audio copy must not be added to the public GitHub repository without distribution rights.
+
+### Hosting
+The static site is served from `main` branch `/(root)` on GitHub Pages:
 https://jithinpatrick05.github.io/lily-garden-for-ente-Mariamma/
-
-## Play and sync
-
-1. Press **Play Lovesong & watch the lilies glow**. This opens the official YouTube video in a visible embedded player.
-2. If the browser blocks autoplay, click Play inside the YouTube embed.
-3. The on-page lyrics synchronize to the actual playback time from YouTube's IFrame Player API. This is not merely a timed animation.
-4. Alternatively, select **Play MP3 from this device**; the MP3 is read locally and never uploaded to GitHub.
-5. Lyric timestamps match the user-provided recording of approximately **5:19.97**, with vocals beginning about **0:26**. The **Lyrics settings** panel offers ±0.5 second adjustment and custom LRC import.
-
-Captions fade in and have a karaoke-style progress highlight. During musical breaks, romantic messages appear, including the user's Malayalam note.
-
-## Privacy and permissions
-
-- No audio file was uploaded to the public repository. Audio comes from an official video embed or a local file chosen by the visitor.
-- Lyrics were supplied by the site owner. Public republication of copyrighted lyrics requires appropriate rights or permission. Please verify your publication rights before sharing widely.
-- YouTube may be blocked by network/region restrictions or browser settings.
-
-## Repository
-
-A single HTML file; no frameworks or paid services. GitHub Pages deploys from `main` / `(root)`. The site honours reduced-motion preferences.
