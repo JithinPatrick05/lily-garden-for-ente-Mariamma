@@ -71,6 +71,24 @@ body.yt-collapsed .reveal-player{opacity:1;visibility:visible}
 }
 @media(prefers-reduced-motion:reduce){.yt-shell{transition:none}}
 
+
+/* FINAL BOTTOM YOUTUBE DRAWER: overrides legacy top-positioned styles. */
+.yt-shell{
+ position:fixed!important;left:50%!important;right:auto!important;top:auto!important;
+ bottom:calc(54px + env(safe-area-inset-bottom,0px))!important;
+ transform:translate(-50%,0)!important;
+ width:200px!important;height:200px!important;z-index:15;
+}
+body.yt-collapsed .yt-shell{
+ transform:translate(-50%,30px)!important;
+ opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+}
+.reveal-player{
+ left:50%!important;right:auto!important;top:auto!important;
+ bottom:calc(10px + env(safe-area-inset-bottom,0px))!important;
+ transform:translateX(-50%)!important;
+ opacity:1!important;visibility:visible!important;display:grid!important;
+}
 </style></head><body class="yt-collapsed">
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -102,7 +120,7 @@ playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pau
 function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
 function updateButtons(){playBtn.style.opacity=isPlaying()?'.65':'1';pauseBtn.style.opacity=isPlaying()?'1':'.65'}
 let lastFrame=0;function frame(now){requestAnimationFrame(frame);if(now-lastFrame<85)return;lastFrame=now;const t=youtubeTime(),d=youtubeDuration();displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));lastTime=t;updateButtons()};
-function initYoutube(){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;script.onerror=()=>showMessage('YouTube unavailable.');window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('youtube-player',{width:'200',height:'200',videoId:'0wPhbmeNSOs',playerVars:{playsinline:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{ytReady=true;if(queuedPlay){queuedPlay=false;playSong()}},onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}if(e.data===YT.PlayerState.ENDED)showMessage('For you, always ♡');updateButtons()},onError:()=>showMessage('YouTube playback unavailable here.')}})};document.head.appendChild(script)}
+function initYoutube(){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;script.onerror=()=>showMessage('YouTube unavailable.');window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('youtube-player',{width:'200',height:'200',videoId:'naUqWQ-of6o',playerVars:{playsinline:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{ytReady=true;if(queuedPlay){queuedPlay=false;playSong()}},onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}if(e.data===YT.PlayerState.ENDED)showMessage('For you, always ♡');updateButtons()},onError:()=>showMessage('YouTube playback unavailable here.')}})};document.head.appendChild(script)}
 updateDrawer();requestAnimationFrame(frame);initYoutube();
 })();
 </script></body></html>
