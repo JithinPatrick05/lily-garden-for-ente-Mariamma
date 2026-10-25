@@ -574,6 +574,49 @@ body.sc-open .source-toggle{transform:rotate(180deg)}
 @media(prefers-reduced-motion:reduce){
  .stage .lyric,body:not(.yt-collapsed) .stage .lyric{animation:none!important;}
 }
+
+/* Touch-responsive lily waves and softer rose-pink lyrics (mobile first). */
+.brand h1 {
+ font-size:clamp(24px,3.3vw,32px)!important;
+ text-shadow:0 0 7px rgba(255,113,188,.32),0 0 15px rgba(255,77,163,.15)!important;
+}
+.stage .lyric,body:not(.yt-collapsed) .stage .lyric {
+ font-size:clamp(38px,6.8vw,65px)!important;
+ background:linear-gradient(116deg,#ffe6f5 0%,#ffaddd 15%,#fff5fb 28%,#ff88cd 44%,#ffe0f2 60%,#ff9ad3 77%,#fff0f8 100%)!important;
+ background-size:235% 235%!important;
+ filter:drop-shadow(0 0 2px rgba(255,141,208,.54))
+        drop-shadow(0 0 8px rgba(255,60,171,.37))
+        drop-shadow(0 0 18px rgba(255,48,161,.21))!important;
+}
+.stage .lyric.switching,body:not(.yt-collapsed) .stage .lyric.switching {
+ filter:blur(2px) drop-shadow(0 0 8px rgba(255,66,169,.14))!important;
+}
+.touch-ripple{
+ position:fixed;z-index:4;pointer-events:none;
+ width:140px;height:140px;
+ border:1.4px solid rgba(255,167,218,.6);border-radius:50%;
+ background:radial-gradient(circle,rgba(255,126,202,.10),transparent 62%);
+ box-shadow:0 0 17px rgba(255,113,198,.18),inset 0 0 12px rgba(255,120,204,.14);
+ transform:translate(-50%,-50%) scale(.24);
+ animation:lilyTouchRipple .94s cubic-bezier(.16,.72,.3,1) forwards;
+}
+@keyframes lilyTouchRipple {
+ 0% {opacity:.6;transform:translate(-50%,-50%) scale(.24)}
+ 70% {opacity:.33}
+ 100% {opacity:0;transform:translate(-50%,-50%) scale(2.05)}
+}
+@media(max-width:720px){
+ .brand h1{font-size:clamp(20px,5.5vw,26px)!important}
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric {
+   font-size:clamp(34px,9.2vw,49px)!important;
+ }
+}
+@media(max-height:610px){
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric {font-size:clamp(27px,7.7vw,40px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .touch-ripple{display:none!important}
+}
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -592,6 +635,50 @@ const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getEl
 let lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;let positionSeconds=0,durationSeconds=approxDuration;
 const positions=[{x:6,y:14,w:190,r:-20,s:0.92,o:0.46,d:8.2},{x:8,y:28,w:215,r:-12,s:0.99,o:0.55,d:8.7},{x:8,y:42,w:245,r:-10,s:1.08,o:0.62,d:8.3},{x:7,y:58,w:240,r:-16,s:1.05,o:0.62,d:8.1},{x:8,y:74,w:220,r:-18,s:0.96,o:0.53,d:8.0},{x:13,y:86,w:175,r:-18,s:0.80,o:0.36,d:8.8},{x:20,y:12,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:20,y:86,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:31,y:10,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:31,y:88,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:50,y:7,w:160,r:0,s:0.70,o:0.22,d:10.4},{x:50,y:90,w:165,r:0,s:0.72,o:0.22,d:10.2},{x:69,y:10,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:69,y:88,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:80,y:12,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:80,y:86,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:94,y:14,w:190,r:20,s:0.92,o:0.46,d:8.2},{x:92,y:28,w:215,r:12,s:0.99,o:0.55,d:8.7},{x:92,y:42,w:245,r:10,s:1.08,o:0.62,d:8.3},{x:93,y:58,w:240,r:16,s:1.05,o:0.62,d:8.1},{x:92,y:74,w:220,r:18,s:0.96,o:0.53,d:8.0},{x:87,y:86,w:175,r:18,s:0.80,o:0.36,d:8.8},{x:16,y:22,w:142,r:-22,s:0.62,o:0.22,d:10.8},{x:16,y:66,w:142,r:-24,s:0.62,o:0.22,d:10.7},{x:84,y:22,w:142,r:22,s:0.62,o:0.22,d:10.8},{x:84,y:66,w:142,r:24,s:0.62,o:0.22,d:10.7},{x:38,y:16,w:128,r:-3,s:0.56,o:0.16,d:10.9},{x:62,y:16,w:128,r:3,s:0.56,o:0.16,d:10.9}];
 positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,s:0.91,o:0.46,d:9.5},{x:97,y:32,w:185,r:18,s:0.84,o:0.38,d:9},{x:99,y:63,w:200,r:24,s:0.91,o:0.46,d:9.4},{x:11,y:95,w:235,r:-12,s:0.99,o:0.46,d:8.7},{x:23,y:98,w:212,r:8,s:0.9,o:0.43,d:9.2},{x:35,y:99,w:168,r:-9,s:0.79,o:0.35,d:10.3},{x:49,y:101,w:188,r:0,s:0.89,o:0.32,d:9.9},{x:64,y:99,w:168,r:9,s:0.79,o:0.35,d:10.1},{x:77,y:98,w:212,r:-8,s:0.9,o:0.43,d:9},{x:90,y:95,w:235,r:12,s:0.99,o:0.46,d:8.8},{x:16,y:45,w:156,r:-25,s:0.73,o:0.24,d:10.7},{x:84,y:45,w:156,r:25,s:0.73,o:0.24,d:10.6},{x:4,y:84,w:160,r:-19,s:0.78,o:0.37,d:10.1},{x:96,y:84,w:160,r:19,s:0.78,o:0.37,d:10.3});positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
+
+/* The animated flower images respond independently of their idle sway.
+   Touch events are observed on the page, so music controls remain usable. */
+const touchMotionReduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+const interactiveBlooms=[...bouquetLayer.querySelectorAll('.bouquet')];
+let previousTouch=0,previousX=NaN,previousY=NaN;
+function touchLilies(x,y){
+ if(touchMotionReduced.matches)return;
+ const now=performance.now();
+ // Let a drag make a series of flowing waves without overloading mobile GPUs.
+ if(now-previousTouch<105 && Math.hypot(x-previousX,y-previousY)<85)return;
+ previousTouch=now;previousX=x;previousY=y;
+ const radius=Math.min(275,Math.max(158,window.innerWidth*.48));
+ interactiveBlooms.forEach((flower,i)=>{
+   const origin=positions[i];
+   const fx=origin.x/100*window.innerWidth;
+   const fy=origin.y/100*window.innerHeight;
+   const dx=fx-x,dy=fy-y,dist=Math.hypot(dx,dy);
+   if(dist>radius)return;
+   const response=Math.pow(1-dist/radius,1.4);
+   const maxMove=14*response,angle=Math.atan2(dy,dx);
+   const tx=Math.cos(angle)*maxMove,ty=Math.sin(angle)*maxMove-5*response;
+   try{
+     flower.animate([
+       {translate:'0px 0px',scale:'1',offset:0},
+       {translate:tx.toFixed(2)+'px '+ty.toFixed(2)+'px',scale:(1+.095*response).toFixed(3),offset:.38},
+       {translate:'0px 0px',scale:'1',offset:1}
+     ],{duration:880,delay:Math.min(115,dist*.43),easing:'cubic-bezier(.2,.75,.3,1)'});
+   }catch(_){/* Keep the garden animated on older browsers. */}
+ });
+ const ripple=document.createElement('span');
+ ripple.className='touch-ripple';
+ ripple.style.left=x+'px';ripple.style.top=y+'px';
+ document.getElementById('scene').appendChild(ripple);
+ ripple.addEventListener('animationend',()=>ripple.remove(),{once:true});
+}
+function onGardenTouch(ev){
+ if(ev.target instanceof Element && ev.target.closest('button,input,a,.controls-dock'))return;
+ if(ev.type==='pointermove' && (!ev.buttons || ev.pointerType==='mouse' && ev.buttons!==1))return;
+ touchLilies(ev.clientX,ev.clientY);
+}
+window.addEventListener('pointerdown',onGardenTouch,{passive:true});
+window.addEventListener('pointermove',onGardenTouch,{passive:true});
+
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
