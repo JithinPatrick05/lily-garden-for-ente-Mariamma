@@ -397,6 +397,47 @@ body.sc-open .source-toggle{transform:rotate(180deg)}
   font-size:clamp(25px,8.2vw,38px)!important;
  }
 }
+
+/* 2026-10-26: cinematic, smooth, colourful sentence transitions. */
+#scene > .glow {
+ background:
+ radial-gradient(ellipse 36% 32% at 14% 28%,rgba(245,52,156,.115),transparent 74%),
+ radial-gradient(ellipse 30% 37% at 87% 28%,rgba(122,109,255,.12),transparent 73%),
+ radial-gradient(ellipse 40% 27% at 50% 84%,rgba(255,89,189,.13),transparent 75%),
+ radial-gradient(ellipse 25% 30% at 50% 47%,rgba(56,188,255,.055),transparent 80%)!important;
+ filter:blur(28px);
+}
+.bouquet {
+ filter:drop-shadow(0 0 16px rgba(255,91,197,.24)) saturate(1.2) contrast(1.04)!important;
+}
+.stage .lyric,body:not(.yt-collapsed) .stage .lyric {
+ background:linear-gradient(112deg,
+   #fff7fe 0%,#ffc8ee 16%,#fef7ff 28%,#ff9ad7 44%,
+   #d6adff 59%,#a6edff 71%,#f8b3f1 85%,#fff5fd 100%)!important;
+ background-size:250% 250%!important;
+ color:transparent!important;
+ -webkit-background-clip:text!important;background-clip:text!important;
+ animation:lyricColorDrift 12s ease-in-out infinite alternate!important;
+ filter:drop-shadow(0 0 8px rgba(255,103,208,.28))
+        drop-shadow(0 0 19px rgba(157,115,255,.14))!important;
+ text-shadow:none!important;
+ transition:opacity .62s cubic-bezier(.22,.78,.25,1),
+            transform .62s cubic-bezier(.22,.78,.25,1),
+            filter .62s ease!important;
+}
+.stage .lyric.switching,body:not(.yt-collapsed) .stage .lyric.switching{
+ opacity:0!important;
+ transform:translateY(8px) scale(.993)!important;
+ filter:blur(4px) drop-shadow(0 0 5px rgba(255,90,205,.16))!important;
+}
+@keyframes lyricColorDrift {
+  0%{background-position:0% 48%}
+  42%{background-position:54% 51%}
+  100%{background-position:100% 53%}
+}
+@media(prefers-reduced-motion:reduce){
+ .stage .lyric,body:not(.yt-collapsed) .stage .lyric{animation:none!important;transition:none!important}
+}
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -418,7 +459,34 @@ positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
-function displayLyric(t){const item=getCaption(t);if(item.key===lastCue&&!(lastTime>=0&&t<lastTime-1))return;lastCue=item.key;lyricEl.classList.add('switching');const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>{lyricEl.textContent=item.text;lyricEl.classList.remove('switching');if(!reduced)lyricEl.animate([{opacity:0,transform:'translateY(14px) scale(.987)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:820,easing:'cubic-bezier(.18,.84,.24,1)'})},reduced?0:180)}
+// Aligned to the supplied recording. Updates at each sentence boundary,
+// with a short fade-out and slow, luminous fade-in.
+const LYRIC_OFFSET_SECONDS=0.10;
+const LYRIC_FADE_OUT_MS=105;
+let lyricTransitionId=0;
+let lyricChangeTimer=null;
+function displayLyric(t,force=false){
+ const item=getCaption(Math.max(0,t+LYRIC_OFFSET_SECONDS));
+ if(!force&&item.key===lastCue)return;
+ lastCue=item.key;
+ lyricTransitionId++;
+ const id=lyricTransitionId;
+ clearTimeout(lyricChangeTimer);
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(reduced){
+   lyricEl.textContent=item.text;
+   lyricEl.classList.remove('switching');
+   return;
+ }
+ lyricEl.classList.add('switching');
+ lyricChangeTimer=setTimeout(()=>{
+   if(id!==lyricTransitionId)return;
+   lyricEl.textContent=item.text;
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{
+     if(id===lyricTransitionId)lyricEl.classList.remove('switching');
+   }));
+ },LYRIC_FADE_OUT_MS);
+}
 
 
 const music=document.getElementById('lovesong-audio');
@@ -431,7 +499,7 @@ function pauseSong(){music.pause()}
 function seekSong(value){
  const next=Math.max(0,Math.min(Number.isFinite(music.duration)?music.duration:durationSeconds,value));
  if(music.readyState>0)music.currentTime=next;
- positionSeconds=next;lastCue='';displayLyric(next);
+ positionSeconds=next;lastCue='';displayLyric(next,true);
 }
 playBtn.addEventListener('click',playSong);
 pauseBtn.addEventListener('click',pauseSong);
@@ -448,6 +516,7 @@ music.addEventListener('loadedmetadata',()=>{
  if(Number.isFinite(music.duration)&&music.duration>0)durationSeconds=music.duration;
 });
 music.addEventListener('timeupdate',()=>{positionSeconds=music.currentTime||0});
+music.addEventListener('seeked',()=>displayLyric(music.currentTime||0,true));
 music.addEventListener('play',()=>{document.body.classList.add('has-song');updateButtons()});
 music.addEventListener('pause',updateButtons);
 music.addEventListener('ended',()=>{showMessage('For you, always ♡');updateButtons()});
