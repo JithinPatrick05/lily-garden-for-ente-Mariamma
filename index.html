@@ -1,298 +1,75 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#060816">
-<meta name="description" content="A romantic neon lily garden with synchronized lyrics, an official Lovesong video player and a love letter for ente Mariamme.">
-<title>Ente Mariammekku 🌸💗 · Lovesong Lyric Garden</title>
-<link rel="preconnect" href="https://www.youtube.com">
-<style>
-:root{color-scheme:dark;--glass:rgba(15,17,39,.55);--stroke:rgba(212,200,255,.18);--white:#fff6ff;--sub:#d1cbde;--pink:#ff95df;--aqua:#80eaff;--hue:308}
-*,*:before,*:after{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden}body{background:#050613;color:var(--white);font-family:'Segoe UI',Inter,ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #a7eaff;outline-offset:3px}
-#scene{position:fixed;inset:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 50% 90%,#1e123a 0%,#080a1e 55%,#040614 100%)}
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#080618"><meta name="description" content="Ente Mariammekku — neon lilies and synchronized love-song lyrics."><title>Ente Mariammekku 🌸💗</title><style>
+:root{color-scheme:dark;--white:#fff4ff;--pink:#ff81d6;--cyan:#91fbff}
+*,:before,:after{box-sizing:border-box}
+html,body{height:100%;height:100dvh;width:100%;overflow:hidden;margin:0}
+body{background:#050615;color:var(--white);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+button,input{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,.load:focus-within{outline:2px solid #98fbff;outline-offset:3px}
+#scene{position:fixed;inset:0;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 52% 92%,#361263,#0c0b2d 44%,#030512 100%)}
 .sky,.nebula,.veil,.petals,.stars,.fireflies,.horizon,.flowers,.lightbeams{position:absolute;inset:0;pointer-events:none}
-.sky{background:radial-gradient(ellipse 45% 34% at 75% 24%,rgba(34,95,150,.22),transparent),radial-gradient(ellipse 48% 36% at 20% 36%,rgba(135,34,132,.18),transparent),radial-gradient(ellipse 70% 60% at 55% 96%,rgba(109,23,144,.29),transparent)}
-.nebula{inset:-25%;background:radial-gradient(ellipse 25% 25% at 38% 40%,rgba(143,37,214,.12),transparent 70%),radial-gradient(ellipse 27% 30% at 72% 52%,rgba(28,172,230,.12),transparent 70%);filter:blur(36px);animation:nebula 27s ease-in-out infinite alternate}
-.lightbeams:before,.lightbeams:after{content:"";position:absolute;inset:-30% auto 0;top:-40%;width:30vw;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(130,90,247,.055),transparent);filter:blur(20px);animation:beam 24s ease-in-out infinite alternate}.lightbeams:before{left:10%}.lightbeams:after{right:5%;animation-delay:-9s;background:linear-gradient(90deg,transparent,rgba(54,214,241,.058),transparent)}
-.horizon{top:auto;height:39%;background:radial-gradient(ellipse 50% 60% at 50% 100%,rgba(217,51,171,.18),transparent 74%),linear-gradient(0deg,rgba(3,4,13,.82),transparent 70%)}
-.stars .star{position:absolute;width:var(--s);height:var(--s);left:var(--x);top:var(--y);border-radius:50%;background:#fff;box-shadow:0 0 7px 1px rgba(210,207,255,.45);opacity:var(--o);animation:twinkle var(--d) ease-in-out infinite alternate}
-.fireflies .fly{position:absolute;left:var(--x);bottom:var(--b);width:var(--s);height:var(--s);border-radius:50%;background:hsla(var(--h),100%,79%,.95);box-shadow:0 0 9px 3px hsla(var(--h),100%,70%,.43),0 0 28px hsla(var(--h),100%,65%,.3);animation:fly var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
-.petals .fall{position:absolute;left:var(--x);top:-12%;width:var(--s);height:calc(var(--s)*1.6);border-radius:85% 4% 80% 15%;transform:rotate(36deg);background:linear-gradient(140deg,hsla(var(--h),100%,89%,.94),hsla(var(--h),95%,69%,.53));box-shadow:0 0 11px hsla(var(--h),100%,68%,.54);filter:blur(.15px);animation:fall var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
-.flowers{inset:0;z-index:2;filter:saturate(1.13) brightness(calc(1 + var(--reactive,0) * .26));transform:translate3d(var(--mouse-x,0px),var(--mouse-y,0px),0);transition:transform 1.4s ease-out;mask-image:linear-gradient(to bottom,transparent 1%,#000 12%,#000 100%)}
-.flower{position:absolute;left:var(--x);bottom:var(--bottom);height:var(--height);width:calc(var(--height)*.52);transform-origin:50% 100%;animation:flowerSway var(--speed) ease-in-out infinite alternate;animation-delay:var(--delay);opacity:var(--op);will-change:transform;filter:drop-shadow(0 0 12px hsla(var(--h),100%,65%,.25))}
+.sky{background:radial-gradient(ellipse 47% 35% at 78% 26%,rgba(5,217,255,.32),transparent 72%),radial-gradient(ellipse 48% 32% at 19% 40%,rgba(255,31,177,.34),transparent 73%),radial-gradient(ellipse 62% 55% at 52% 87%,rgba(163,55,255,.43),transparent 80%)}
+.nebula{inset:-22%;background:radial-gradient(ellipse 28% 30% at 36% 42%,rgba(253,44,197,.25),transparent 76%),radial-gradient(ellipse 33% 34% at 72% 53%,rgba(11,224,255,.22),transparent 78%);filter:blur(40px);animation:nebula 24s ease-in-out infinite alternate}
+.lightbeams:before,.lightbeams:after{content:"";position:absolute;top:-40%;height:150%;width:28vw;transform:rotate(25deg);background:linear-gradient(90deg,transparent,rgba(147,99,255,.066),transparent);filter:blur(25px);animation:beam 20s ease-in-out infinite alternate}.lightbeams:before{left:8%}.lightbeams:after{right:6%;animation-delay:-8s;background:linear-gradient(90deg,transparent,rgba(76,231,245,.07),transparent)}
+.horizon{top:auto;height:44%;background:radial-gradient(ellipse 50% 58% at 50% 96%,rgba(237,45,178,.28),transparent 72%),linear-gradient(0deg,rgba(3,3,13,.82),transparent 70%)}
+.stars .star{position:absolute;width:var(--s);height:var(--s);left:var(--x);top:var(--y);border-radius:50%;background:#fff;opacity:var(--o);box-shadow:0 0 7px rgba(232,216,255,.54);animation:twinkle var(--d) ease-in-out infinite alternate}
+.fireflies .fly{position:absolute;left:var(--x);bottom:var(--b);width:var(--s);height:var(--s);border-radius:50%;background:hsla(var(--h),100%,79%,.96);box-shadow:0 0 10px 3px hsla(var(--h),100%,70%,.48),0 0 29px hsla(var(--h),100%,65%,.3);animation:fly var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+.petals .fall{position:absolute;left:var(--x);top:-12%;width:var(--s);height:calc(var(--s)*1.6);border-radius:85% 4% 80% 15%;transform:rotate(36deg);background:linear-gradient(140deg,hsla(var(--h),100%,89%,.96),hsla(var(--h),95%,69%,.56));box-shadow:0 0 12px hsla(var(--h),100%,68%,.55);animation:fall var(--d) linear infinite;animation-delay:var(--delay);opacity:0}
+.flowers{z-index:2;filter:saturate(1.25) brightness(calc(1 + var(--reactive,0)*.26));transform:translate3d(var(--mouse-x,0px),var(--mouse-y,0px),0);transition:transform 1.3s ease-out;mask-image:linear-gradient(to bottom,transparent 1%,#000 13%,#000 100%)}
+.flower{position:absolute;left:var(--x);bottom:var(--bottom);height:var(--height);width:calc(var(--height)*.52);transform-origin:50% 100%;animation:flowerSway var(--speed) ease-in-out infinite alternate;animation-delay:var(--delay);opacity:var(--op);will-change:transform;filter:drop-shadow(0 0 13px hsla(var(--h),100%,70%,.35))}
 .flower svg{height:100%;width:100%;overflow:visible}.flower .bud{transform-origin:120px 145px;animation:flowerBreath 5.5s ease-in-out infinite alternate;animation-delay:var(--delay)}
 .flower .petal{transform-origin:0 0;animation:bloomIn 2.2s cubic-bezier(.19,.9,.23,1) both;animation-delay:calc(var(--index)*.11s + var(--start))}
 .flower .stem{stroke-dasharray:480;stroke-dashoffset:480;animation:stemGrow 3s ease-out forwards;animation-delay:var(--start)}
-.flower .leaf{transform-box:fill-box;transform-origin:center bottom;animation:leafGrow 1.7s ease-out both;animation-delay:calc(var(--start) + 1.2s)}
-.flower .bloom-halo{animation:halo 4s ease-in-out infinite alternate}
-.veil{z-index:3;background:linear-gradient(to bottom,rgba(2,3,12,.60) 0%,rgba(2,3,12,.07) 26%,rgba(4,3,13,.07) 63%,rgba(1,2,9,.66) 100%),radial-gradient(ellipse at center,transparent 33%,rgba(0,0,0,.33) 100%)}
-.grain{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
-.interface{position:fixed;inset:0;z-index:8;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none;padding:clamp(18px,3.2vw,45px)}.interface>*{pointer-events:auto}
-.top{display:flex;gap:20px;align-items:flex-start;justify-content:space-between}.brand{max-width:min(490px,75vw)}.eyebrow{font-size:10px;letter-spacing:.38em;text-transform:uppercase;color:#e0c7ed;opacity:.85;font-weight:700}.brand h1{font-family:Georgia,'Times New Roman',serif;font-weight:400;font-style:italic;font-size:clamp(25px,3.2vw,47px);margin:8px 0 0;letter-spacing:-.025em;text-shadow:0 0 28px rgba(232,135,218,.32)}.brand h1 em{font-style:italic;color:#ffc2eb}.status{display:flex;gap:7px;align-items:center;margin-top:11px;color:#c1aec9;font-size:11px;letter-spacing:.13em;text-transform:uppercase}.status i{width:5px;height:5px;background:#ff95d7;border-radius:50%;box-shadow:0 0 10px #ff95d7;animation:twinkle 1.5s ease-in-out infinite alternate}
-.top-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:9px}.icon-btn,.pill-btn{min-height:38px;border-radius:100px;background:rgba(16,14,35,.50);color:#fcf2ff;border:1px solid rgba(238,214,255,.24);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px rgba(255,255,255,.08);transition:background .2s,transform .2s}.icon-btn:hover,.pill-btn:hover{background:rgba(121,56,134,.32);transform:translateY(-2px)}.pill-btn{padding:0 17px;font-size:11px;letter-spacing:.10em;text-transform:uppercase}.icon-btn{width:39px;display:grid;place-items:center;font-size:19px}
-.center-stage{position:absolute;top:36%;left:50%;transform:translate(-50%,-50%);width:min(900px,92vw);display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;min-height:170px;pointer-events:none}.stage-super{font-size:10px;text-transform:uppercase;letter-spacing:.38em;color:#ffb5e7;text-shadow:0 0 15px rgba(255,95,196,.5);margin:0 0 19px}.lyric{font-family:Georgia,'Times New Roman',serif;font-size:clamp(27px,4.5vw,65px);font-weight:400;font-style:italic;line-height:1.19;letter-spacing:-.035em;margin:0;max-width:900px;text-wrap:balance;text-shadow:0 3px 25px rgba(5,1,14,.7),0 0 36px rgba(253,135,211,.27);transition:opacity .43s ease,transform .43s ease,filter .43s ease;filter:drop-shadow(0 0 8px rgba(247,139,229,.18))}.lyric.is-changing{opacity:0;transform:translateY(18px) scale(.97);filter:blur(6px)}.lyric-sub{font-size:clamp(11px,1.2vw,14px);line-height:1.6;max-width:710px;letter-spacing:.12em;color:#e2cce8;margin:17px 0 0;text-transform:uppercase;opacity:.76}.timeline{display:flex;gap:6px;margin-top:24px}.timeline span{height:2px;width:24px;background:rgba(255,255,255,.26);border-radius:10px;transition:background .6s,width .6s}.timeline span.on{width:48px;background:#ffc0e4;box-shadow:0 0 12px #ff8dd9}
-.bottom{display:flex;align-items:flex-end;justify-content:space-between;gap:20px}.love-note{max-width:490px;padding:20px 24px;border:1px solid rgba(255,211,244,.17);background:rgba(8,7,23,.36);backdrop-filter:blur(16px);border-radius:19px;box-shadow:0 6px 35px rgba(5,0,18,.19)}.note-label{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#ffb5db;margin:0 0 8px}.love-note p{font-family:Georgia,'Times New Roman',serif;font-size:clamp(16px,1.5vw,20px);line-height:1.45;font-style:italic;margin:0;color:#fff1fb}.love-note small{display:block;margin-top:10px;color:#eac7e4;font-size:11px;letter-spacing:.035em}
-.player-shell{width:min(366px,100%);background:rgba(10,9,27,.73);border:1px solid rgba(220,201,255,.22);border-radius:20px;padding:13px;box-shadow:0 18px 55px rgba(0,0,0,.35);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px)}.player-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:2px 4px 10px}.player-kicker{font-size:10px;letter-spacing:.20em;text-transform:uppercase;color:#efaddc}.player-head b{font-size:12px;font-weight:500;color:#e7e0ed}.equaliser{display:flex;align-items:flex-end;height:14px;gap:3px}.equaliser i{width:2px;height:6px;background:#fba4d8;border-radius:10px;animation:equalize 1s ease-in-out infinite alternate}.equaliser i:nth-child(2){animation-delay:-.4s}.equaliser i:nth-child(3){animation-delay:-.7s}.equaliser i:nth-child(4){animation-delay:-.2s}#spotify-player{width:100%;min-height:80px}#spotify-player iframe{display:block;max-width:100%;border-radius:12px}.player-hint{font-size:10px;line-height:1.6;color:#cfc2d6;margin:9px 5px 3px}.mini-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.mini-controls button,.mini-controls label{display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(255,216,239,.20);background:rgba(148,73,145,.14);color:#ffeaf9;padding:9px 11px;border-radius:10px;font-size:11px;line-height:1.25;cursor:pointer}.mini-controls button:hover,.mini-controls label:hover{background:rgba(187,78,153,.29)}.mini-controls input{position:absolute;opacity:0;width:1px;height:1px}audio{display:none;width:100%;height:35px;margin:10px 0 0}audio.loaded{display:block}
-.modal{position:fixed;z-index:30;inset:0;background:rgba(3,3,14,.80);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px}.modal.open{display:flex}.modal-content{width:min(850px,100%);padding:16px;border:1px solid rgba(255,255,255,.2);border-radius:20px;background:#10102b;box-shadow:0 40px 110px rgba(0,0,0,.65)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;gap:15px}.modal-head strong{font:italic 19px Georgia,serif;color:#fff1ff}.close{background:transparent;color:#fff;font-size:22px;border:1px solid rgba(255,255,255,.3);width:34px;height:34px;border-radius:50%}.video-wrap{aspect-ratio:16/9;background:#000;border-radius:12px;overflow:hidden}.video-wrap iframe{width:100%;height:100%;border:0}.modal-foot{margin:12px 5px 0;font-size:12px;line-height:1.5;color:#cfc4dc}.modal-foot a{color:#ffc5ec}
-.help-panel{position:fixed;z-index:18;right:22px;top:78px;width:min(370px,calc(100vw - 44px));background:rgba(12,11,31,.96);border:1px solid rgba(255,210,246,.23);backdrop-filter:blur(20px);border-radius:19px;padding:21px;display:none;box-shadow:0 24px 80px rgba(0,0,0,.5)}.help-panel.open{display:block}.help-panel h2{font:italic 24px Georgia,serif;margin:0 0 8px}.help-panel p{font-size:12px;color:#d5c6dc;line-height:1.6;margin:0 0 12px}.help-panel textarea{display:block;width:100%;height:100px;resize:vertical;background:#090b20;border:1px solid rgba(255,255,255,.2);border-radius:10px;color:#fff;line-height:1.5;padding:10px;font-size:12px}.help-panel button{margin-top:10px;border:none;border-radius:12px;padding:10px 14px;background:linear-gradient(120deg,#a951c2,#d355a0);color:#fff}.help-panel .example{font-family:monospace;font-size:11px;color:#f2c5df}
-.no-player .player-shell{display:none}.no-player .love-note{max-width:540px}
-@keyframes flowerSway{0%{transform:rotate(-4deg) translateY(0)}100%{transform:rotate(4deg) translateY(-8px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
-@media(max-width:820px){.center-stage{top:34%;width:92vw;min-height:130px}.lyric{font-size:clamp(28px,6vw,45px)}.bottom{align-items:center;flex-direction:column;gap:10px}.love-note{max-width:100%;width:min(560px,100%);padding:13px 16px}.love-note p{font-size:15px}.player-shell{width:min(560px,100%);padding:10px}.player-hint{display:none}.mini-controls{margin-top:6px}.interface{padding:17px}.eyebrow{font-size:8px}.brand h1{font-size:25px}.top-actions{gap:5px}.pill-btn{font-size:9px;padding:0 11px;min-height:34px}.icon-btn{width:35px;min-height:35px}.status{display:none}.flower{height:calc(var(--height) * .75);width:calc(var(--height) * .39)} }
-@media(max-width:520px){.brand{max-width:54vw}.brand h1{font-size:22px}.top-actions{max-width:44vw}.top-actions .pill-btn:first-of-type{display:inline-flex;font-size:0}.top-actions .pill-btn:first-of-type:after{content:"♫ Video";font-size:10px}.center-stage{top:34%}.stage-super{margin-bottom:12px;font-size:9px}.lyric{font-size:clamp(26px,6.9vw,37px)}.lyric-sub{font-size:9px;letter-spacing:.08em;margin-top:11px}.timeline{margin-top:15px}.love-note small{font-size:10px}.love-note{padding:12px 15px}.love-note p{font-size:14px}.player-shell{padding:9px}.player-head{margin-bottom:5px}.player-kicker{font-size:9px}.mini-controls button,.mini-controls label{font-size:10px;padding:7px 9px}}
-@media(max-height:650px){.center-stage{top:32%}.love-note{display:none}.bottom{align-items:flex-end}.player-shell{width:min(350px,100%)}}
+.flower .leaf{transform-box:fill-box;transform-origin:center bottom;animation:leafGrow 1.7s ease-out both;animation-delay:calc(var(--start) + 1.2s)}.flower .bloom-halo{animation:halo 4s ease-in-out infinite alternate}
+.veil{z-index:3;background:linear-gradient(to bottom,rgba(2,2,12,.55),rgba(4,3,13,.06) 24%,rgba(4,3,13,.15) 72%,rgba(1,2,9,.69)),radial-gradient(ellipse 55% 38% at 50% 47%,rgba(3,2,15,.45),transparent 91%)}
+.grain{position:absolute;inset:0;z-index:4;pointer-events:none;opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E")}
+.brand{position:fixed;z-index:8;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);width:96vw;text-align:center;pointer-events:none}
+.brand h1{font-family:Georgia,serif;font-style:italic;font-size:clamp(26px,5.3vw,43px);font-weight:400;letter-spacing:-.037em;white-space:nowrap;margin:0;color:#ffe6f9;text-shadow:0 0 16px rgba(245,97,221,.38),0 0 44px rgba(115,188,255,.22)}
+.brand em{font-style:italic;background:linear-gradient(115deg,#ffc4ed,#a4f3ff 53%,#ffbcff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stage{position:fixed;top:46%;left:50%;transform:translate(-50%,-50%);z-index:10;width:min(835px,90vw);min-height:230px;max-height:60dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:23px 15px;pointer-events:none}
+.stage:before{content:"";inset:-19px -11px;position:absolute;z-index:-1;border-radius:28px;border:1px solid rgba(255,202,246,.16);background:radial-gradient(ellipse at center,rgba(25,9,48,.79),rgba(14,9,35,.53) 64%,rgba(14,7,32,.38));box-shadow:0 0 73px rgba(232,52,199,.14),inset 0 1px rgba(255,255,255,.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.lyric{font:italic 400 clamp(30px,5.35vw,58px)/1.23 Georgia,serif;letter-spacing:-.035em;margin:0;width:100%;white-space:normal;overflow-wrap:break-word;text-wrap:balance;text-shadow:0 2px 25px rgba(6,1,18,.95);color:#fce8ff}
+.lyric.glow{background:linear-gradient(110deg,#ffb6e5 0%,#fff9ff 24%,#9efcff 49%,#d5acff 71%,#ff93d0 87%,#fff4ff 100%);background-size:260% 260%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 12px rgba(255,105,206,.53)) drop-shadow(0 0 25px rgba(64,226,255,.19));animation:glowFlow 8s ease-in-out infinite alternate,softHalo 3s ease-in-out infinite alternate}
+.start-btn{pointer-events:auto;border:1px solid rgba(255,223,248,.64);border-radius:99px;background:linear-gradient(112deg,rgba(212,71,193,.88),rgba(82,157,248,.83));box-shadow:0 0 28px rgba(255,61,183,.4),inset 0 1px rgba(255,255,255,.23);margin-top:29px;padding:13px 23px;color:#fff;font-size:12px;font-weight:650;letter-spacing:.07em}
+body.has-song .start-btn{display:none}
+.dock{position:fixed;z-index:16;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));width:min(320px,calc(100vw - 32px));padding:12px 13px 10px;display:flex;flex-direction:column;gap:8px;border-radius:20px;border:1px solid rgba(255,203,248,.34);background:rgba(11,9,34,.82);box-shadow:0 15px 48px rgba(0,0,0,.43),0 0 28px rgba(234,83,206,.14);backdrop-filter:blur(23px);-webkit-backdrop-filter:blur(23px)}
+.controls{display:flex;align-items:center;gap:9px}
+.ctrl{height:37px;min-width:37px;padding:0 7px;border-radius:50%;border:1px solid rgba(255,215,245,.27);background:rgba(172,66,172,.22);color:#fff5ff;display:grid;place-items:center;font-size:16px;line-height:1}
+.ctrl small{font-size:9px}.ctrl.play{height:43px;min-width:43px;background:linear-gradient(125deg,rgba(244,68,175,.84),rgba(102,153,245,.89));border:1px solid rgba(255,222,248,.59);box-shadow:0 0 23px rgba(255,102,202,.37);font-size:19px}
+.ctrl:active{transform:scale(.96)}.song-name{flex:1;white-space:nowrap;font-size:12px;font-weight:650;overflow:hidden;text-overflow:ellipsis;color:#ffefff}
+.load{cursor:pointer;font-size:18px}.load input{position:absolute;left:-9999px;width:1px;height:1px}
+.progress{display:flex;align-items:center;gap:8px}.progress input{min-width:0;flex:1;height:17px;accent-color:#ff9cde;cursor:pointer}.time{font-variant-numeric:tabular-nums;color:#c9b6db;white-space:nowrap;font-size:10px}
+.toast{position:fixed;left:50%;bottom:115px;transform:translateX(-50%);z-index:22;background:rgba(15,9,39,.92);border:1px solid rgba(255,225,251,.36);color:#fff;font-size:12px;border-radius:99px;padding:9px 14px;white-space:nowrap;max-width:92vw;overflow:hidden;text-overflow:ellipsis}.toast[hidden]{display:none}
+@keyframes glowFlow{0%{background-position:0% 47%}100%{background-position:100% 53%}}@keyframes softHalo{0%,100%{filter:drop-shadow(0 0 11px rgba(255,109,221,.52)) drop-shadow(0 0 20px rgba(68,232,255,.16))}50%{filter:drop-shadow(0 0 19px rgba(255,117,227,.77)) drop-shadow(0 0 34px rgba(108,223,255,.29))}}
+@media(max-width:720px){.brand{top:max(16px,env(safe-area-inset-top))}.brand h1{font-size:clamp(23px,6.1vw,33px)}.stage{top:43%;width:min(92vw,560px);padding:20px 13px;max-height:63dvh}.stage:before{inset:-13px -6px;border-radius:27px}.lyric{font-size:clamp(29px,8.35vw,46px);line-height:1.2}.start-btn{padding:13px 20px}.dock{width:min(270px,calc(100vw - 26px));padding:10px 12px 8px;bottom:max(12px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right));border-radius:18px}.controls{gap:8px}.song-name{font-size:11px}.ctrl{height:33px;min-width:33px;font-size:14px}.ctrl.play{height:39px;min-width:39px}.toast{bottom:100px}.flower{height:calc(var(--height)*.82);width:calc(var(--height)*.43)}}
+@media(max-width:380px){.brand h1{font-size:clamp(20px,6.1vw,25px)}.stage{top:42%;max-height:62dvh}.lyric{font-size:clamp(27px,8.15vw,36px)}.dock{width:min(248px,calc(100vw - 22px));right:11px}}
+@media(max-height:665px){.stage{top:39%;max-height:60dvh}.lyric{font-size:clamp(25px,7vw,38px)}.dock{bottom:7px}.brand{top:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}.flower .stem{stroke-dashoffset:0}.fireflies,.petals{display:none}}
 
-/* Full-song lyric-video layer */
-.center-stage{top:35%;width:min(980px,93vw);min-height:260px;z-index:9;pointer-events:none}
-.lyric{position:relative;z-index:1;font-size:clamp(28px,4.6vw,62px);line-height:1.18;max-width:min(900px,93vw);letter-spacing:-.03em}
-.lyric.karaoke{color:transparent;background:linear-gradient(90deg,#fffafa 0%,#ffc2ec var(--karaoke-progress,0%),rgba(210,196,225,.63) var(--karaoke-progress,0%),rgba(210,196,225,.63) 100%);background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 13px rgba(254,142,220,.55));}
-.lyric-overline,.lyric-next{min-height:1.5em;color:rgba(245,217,244,.55);font-family:Georgia,serif;font-size:clamp(15px,1.45vw,20px);font-style:italic;margin:0 0 12px;text-shadow:0 0 20px rgba(198,124,236,.25);line-height:1.3}
-.lyric-next{margin:13px 0 0;color:rgba(215,229,255,.54)}
-.lyric-sub{color:#ffe1f3;letter-spacing:.08em;line-height:1.35;font-size:clamp(10px,1.2vw,13px)}
-.start-actions{margin-top:15px;pointer-events:auto;display:flex;align-items:center;flex-direction:column;gap:9px;transition:opacity .4s}
-.start-music{border:1px solid rgba(255,218,247,.48);border-radius:999px;background:linear-gradient(115deg,rgba(136,57,164,.72),rgba(205,68,153,.62));color:white;padding:12px 23px;font-size:12px;letter-spacing:.08em;box-shadow:0 0 26px rgba(199,94,230,.28);backdrop-filter:blur(8px)}
-.start-music:hover{background:linear-gradient(115deg,rgba(179,65,218,.8),rgba(248,65,158,.7))}
-.intro-note{color:rgba(239,226,247,.72);font-size:10px;text-shadow:0 0 14px rgba(0,0,0,.6)}
-.start-actions.is-playing .start-music{display:none}
-.youtube-shell{position:relative;width:100%;height:204px;overflow:hidden;border-radius:13px;background:linear-gradient(125deg,rgba(54,19,65,.7),rgba(13,21,49,.9));border:1px solid rgba(245,186,238,.24);margin:6px 0 9px;}
-.youtube-player{width:100%;height:100%}.youtube-player iframe{width:100%;height:100%;display:block;border:none}
-.youtube-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:15px;pointer-events:none;color:rgba(250,224,245,.78);font-size:11px;line-height:1.45;background:radial-gradient(ellipse at center,rgba(209,82,210,.17),rgba(8,7,29,.92));}
-.youtube-placeholder span{font-family:Georgia,serif;font-size:36px;color:#ffc8ee;text-shadow:0 0 18px rgba(247,120,229,.8)}.youtube-placeholder p{max-width:290px;margin:4px auto}
-.youtube-shell.is-ready .youtube-placeholder{display:none}
-.song-progress{display:flex;align-items:center;justify-content:space-between;gap:6px;margin:10px 4px 5px;color:#c7aace;font-size:10px;letter-spacing:.04em}
-#song-source{max-width:155px;text-overflow:ellipsis;overflow:hidden;white-space:nowrap;color:#ffe4f3;text-align:center}
-.sync-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px 0 13px}.sync-row button{margin:0;flex:1}.sync-row span{white-space:nowrap;color:#ffd1ec;min-width:52px;text-align:center;font-variant-numeric:tabular-nums}
-@media(max-width:820px){.center-stage{top:33%;min-height:190px}.lyric-overline,.lyric-next{font-size:14px}.start-actions{margin-top:10px}.youtube-shell{height:204px}.love-note{display:none}.bottom{align-items:center}.player-shell{width:min(390px,100%)} }
-@media(max-width:520px){.center-stage{top:34%;width:93vw;min-height:190px}.lyric{font-size:clamp(25px,7.1vw,37px)}.lyric-overline,.lyric-next{font-size:12px;min-height:0}.lyric-next{margin-top:8px}.lyric-sub{margin-top:9px;font-size:9px}.stage-super{margin-bottom:10px}.timeline{margin-top:10px}.start-music{font-size:10px;padding:10px 15px}.intro-note{font-size:9px;max-width:85vw}.youtube-shell{height:205px}.player-shell{width:min(380px,100%);padding:10px}.bottom{gap:0}.interface{padding:14px}.top-actions{gap:4px}.top-actions .pill-btn{font-size:0;padding:0 9px}.top-actions .pill-btn:first-of-type:after{content:"♫ Video";font-size:10px}.top-actions .pill-btn:nth-of-type(2):after{content:"⚙ Sync";font-size:10px}.brand h1{font-size:22px}}
-@media(max-height:710px){.center-stage{top:29%;min-height:170px}.love-note{display:none}.player-shell{width:min(335px,100%)}.youtube-shell{height:200px}.stage-super{margin-bottom:5px}.lyric-overline{display:none}.lyric-next{display:none}.start-actions{margin-top:6px}}
-
-/* Mobile-first lyric highlight refinement */
-.top .brand{max-width:min(440px,70vw)}
-.brand h1{font-size:clamp(24px,3vw,44px)}
-.center-stage{top:39%;width:min(940px,92vw);min-height:300px;z-index:10}
-.center-stage:before{content:"";position:absolute;inset:-18px -14px -18px -14px;border-radius:32px;background:linear-gradient(145deg,rgba(255,118,214,.13),rgba(100,223,255,.08) 45%,rgba(186,106,255,.12));border:1px solid rgba(255,220,242,.12);box-shadow:0 0 44px rgba(243,87,198,.12), inset 0 1px 0 rgba(255,255,255,.08);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:-1}
-.lyric{font-size:clamp(32px,5.1vw,68px);max-width:min(900px,90vw);text-shadow:0 0 24px rgba(22,4,41,.95),0 0 48px rgba(255,107,214,.23)}
-.lyric.karaoke{background:linear-gradient(90deg,#fffdfc 0%,#ffd3f1 18%,#ff86dc var(--karaoke-progress,0%),#7cefff calc(var(--karaoke-progress,0%) + 8%),rgba(228,218,255,.56) calc(var(--karaoke-progress,0%) + 9%),rgba(228,218,255,.56) 100%);background-clip:text;-webkit-background-clip:text;filter:drop-shadow(0 0 15px rgba(255,130,221,.62)) drop-shadow(0 0 25px rgba(90,224,255,.18));}
-.lyric-overline,.lyric-next{color:rgba(255,228,250,.68)}
-.lyric-sub{color:#ffe7f6;font-size:clamp(11px,1.25vw,14px)}
-.stage-super{color:#ffd1f3;text-shadow:0 0 16px rgba(255,90,210,.45),0 0 25px rgba(111,220,255,.22)}
-.player-shell{background:rgba(8,9,25,.62);border-color:rgba(255,210,246,.2)}
-@media(max-width:820px){
-  .interface{padding:14px;gap:8px}
-  .top{align-items:flex-start}
-  .top-actions{max-width:44vw;justify-content:flex-end}
-  .brand{max-width:56vw}
-  .brand h1{font-size:22px;line-height:1.14}
-  .center-stage{top:36.5%;width:90vw;min-height:260px;padding:14px 12px 18px}
-  .center-stage:before{inset:-10px;border-radius:24px;background:linear-gradient(145deg,rgba(255,126,218,.18),rgba(84,217,255,.10) 45%,rgba(180,108,255,.18));box-shadow:0 0 34px rgba(250,88,195,.18)}
-  .stage-super{margin-bottom:10px;font-size:9px;letter-spacing:.32em}
-  .lyric{font-size:clamp(30px,8vw,44px);line-height:1.16;max-width:82vw}
-  .lyric-overline,.lyric-next{font-size:13px;line-height:1.35;max-width:82vw}
-  .lyric-sub{margin-top:10px;font-size:10px;max-width:80vw}
-  .timeline{margin-top:12px}
-  .start-actions{margin-top:12px}
-  .bottom{position:fixed;right:12px;left:auto;bottom:12px;align-items:flex-end;justify-content:flex-end;pointer-events:auto;z-index:11}
-  .player-shell{width:min(42vw,200px);padding:10px 9px;border-radius:18px;box-shadow:0 14px 38px rgba(0,0,0,.34)}
-  .player-head{margin:0 2px 6px}
-  .player-kicker,.player-head b,.equaliser{display:none}
-  .youtube-shell{height:118px;margin:0 0 7px}
-  .youtube-placeholder p{font-size:10px;max-width:150px}
-  .youtube-placeholder span{font-size:26px}
-  .mini-controls{gap:6px;margin-top:6px}
-  .mini-controls button,.mini-controls label{font-size:9px;padding:7px 8px;border-radius:9px}
-  .song-progress{font-size:9px;margin:6px 2px 0}
-  #song-source{max-width:76px}
-  .player-hint{display:none}
-  audio.loaded{height:28px;margin-top:7px}
-}
-@media(max-width:520px){
-  .top{gap:10px}
-  .brand{max-width:53vw}
-  .eyebrow{font-size:7px;letter-spacing:.3em}
-  .brand h1{font-size:20px}
-  .top-actions{max-width:43vw;gap:5px}
-  .top-actions .pill-btn{font-size:0;padding:0 8px;min-height:33px}
-  .top-actions .pill-btn:first-of-type:after{content:"♫ Video";font-size:10px}
-  .top-actions .pill-btn:nth-of-type(2):after{content:"⚙ Sync";font-size:10px}
-  .icon-btn{width:34px;min-height:34px}
-  .center-stage{top:37.5%;width:90vw;min-height:282px;padding:12px 10px 18px}
-  .lyric{font-size:clamp(31px,9.2vw,42px);max-width:84vw}
-  .lyric-overline,.lyric-next{font-size:12px;max-width:84vw}
-  .lyric-sub{font-size:9px;max-width:78vw}
-  .start-music{font-size:10px;padding:10px 14px}
-  .intro-note{font-size:9px;max-width:74vw;text-align:center}
-  .bottom{right:10px;bottom:10px}
-  .player-shell{width:min(45vw,188px);padding:9px 8px}
-  .youtube-shell{height:104px}
-}
-@media(max-width:390px){
-  .center-stage{top:38%;min-height:290px}
-  .lyric{font-size:clamp(29px,8.8vw,38px)}
-  .bottom{right:8px;bottom:8px}
-  .player-shell{width:min(46vw,176px)}
-  .youtube-shell{height:96px}
-  .mini-controls button,.mini-controls label{font-size:8px;padding:6px 7px}
-  #song-source{max-width:64px}
-}
-
-
-/* V4 / lyric cinema: legibility, colour, karaoke words, collapsible corner music */
-:root{--nebula-intensity:.8}
-#scene{background:radial-gradient(ellipse at 62% 96%,#271352 0%,#0f0b2b 36%,#08061a 72%,#040410 100%)}
-.sky{background:radial-gradient(ellipse 42% 31% at 80% 18%,rgba(0,227,255,.26),transparent 72%),radial-gradient(ellipse 46% 31% at 15% 45%,rgba(255,35,174,.3),transparent 72%),radial-gradient(ellipse 62% 52% at 55% 88%,rgba(153,49,246,.40),transparent 76%)}
-.nebula{background:radial-gradient(ellipse 32% 36% at 34% 50%,rgba(255,35,166,.24),transparent 75%),radial-gradient(ellipse 33% 30% at 71% 44%,rgba(5,235,255,.26),transparent 74%),radial-gradient(ellipse 50% 38% at 54% 82%,rgba(121,42,245,.29),transparent 80%);filter:blur(48px)}
-.horizon{background:radial-gradient(ellipse 50% 58% at 50% 96%,rgba(246,48,185,.31),transparent 70%),linear-gradient(0deg,rgba(2,3,10,.85),transparent 76%)}
-.center-stage{top:47%;min-height:318px;max-height:65dvh;padding:18px 18px;overflow:visible}
-.center-stage:before{background:radial-gradient(ellipse at 50% 35%,rgba(33,10,53,.59),rgba(17,10,36,.4) 57%,rgba(13,10,27,.30)),linear-gradient(125deg,rgba(251,79,175,.13),rgba(75,197,255,.09) 54%,rgba(184,74,248,.15));border-color:rgba(255,224,247,.21);box-shadow:0 0 40px rgba(245,52,164,.16),0 12px 68px rgba(1,1,12,.32),inset 0 1px rgba(255,255,255,.12)}
-.lyric.karaoke{color:#fff3fd;background:none;-webkit-text-fill-color:initial;-webkit-background-clip:initial;background-clip:initial;filter:drop-shadow(0 2px 18px rgba(7,2,19,.85))}
-.lyric-word{display:inline;white-space:normal;color:rgba(245,232,255,.68);transition:color .24s ease,text-shadow .24s ease,filter .24s ease}
-.lyric-word.is-sung{color:#ffe3f6;text-shadow:0 0 15px rgba(255,118,212,.48),0 0 34px rgba(217,112,255,.27)}
-.lyric-word.is-current{color:#fffafa;text-shadow:0 0 7px #fff,0 0 18px rgba(255,108,228,.97),0 0 29px rgba(73,232,255,.9),0 0 46px rgba(190,98,251,.78);animation:wordGlow .7s ease-in-out infinite alternate;filter:brightness(1.2)}
-@keyframes wordGlow{from{filter:brightness(1.12)}to{filter:brightness(1.42)}}
-.stage-super{color:#ffbfec}
-.lyric-overline,.lyric-next{color:rgba(245,224,246,.58)}
-.lyric-sub{font-family:Georgia,'Times New Roman',serif;text-transform:none;font-size:clamp(15px,1.65vw,21px);font-style:italic;letter-spacing:.015em;color:#f9d6f2;line-height:1.38;text-shadow:0 0 20px rgba(220,82,203,.35)}
-.player-shell{position:relative;overflow:visible;transition:transform .38s cubic-bezier(.23,.85,.28,1),box-shadow .25s}
-.player-head{min-height:34px;margin:0 1px 8px;gap:8px}
-.player-kicker{font-size:11px;letter-spacing:.065em;font-weight:700;color:#ffe1f6}
-.player-time-small{font-variant-numeric:tabular-nums;color:#9feef6;font-size:10px;letter-spacing:0;margin-left:4px}
-.player-toggle{margin-left:auto;flex:0 0 34px;height:32px;border-radius:999px;border:1px solid rgba(247,193,250,.3);background:rgba(125,54,158,.35);color:white;font-size:21px;display:grid;place-items:center}
-.music-collapsed .player-shell{transform:translateY(calc(100% - 50px));}
-.music-collapsed .player-shell .player-head{margin-bottom:8px}
-.music-collapsed .player-toggle{transform:rotate(0deg)}
-.player-body{min-width:0}
-@media(max-width:820px){
- .interface{padding:max(12px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
- .brand h1{font-size:clamp(20px,4.4vw,28px);letter-spacing:-.01em}
- .top{position:relative;z-index:14}
- .center-stage{top:49%;width:min(91vw,540px);min-height:290px;max-height:64dvh;padding:18px 12px 19px;z-index:9}
- .center-stage:before{inset:-13px -8px;background:radial-gradient(ellipse at center,rgba(23,7,44,.68),rgba(8,6,29,.47) 78%,rgba(8,6,29,.34)),linear-gradient(135deg,rgba(255,76,176,.15),rgba(28,207,255,.12),rgba(165,57,240,.14));border-radius:27px;backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);box-shadow:0 0 40px rgba(255,94,212,.22),0 0 38px rgba(64,215,255,.1)}
- .lyric{font-size:clamp(34px,7.7vw,55px);line-height:1.22;max-width:85vw;font-weight:400}
- .lyric-sub{font-size:clamp(14px,3.2vw,20px);max-width:83vw;line-height:1.4;margin:14px 0 0}
- .lyric-overline,.lyric-next{font-size:clamp(12px,2.9vw,16px);line-height:1.4}
- .stage-super{font-size:9px;letter-spacing:.26em}
- .bottom{right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));left:auto;width:auto;max-height:none;align-items:flex-end;z-index:13}
- .player-shell{width:clamp(225px,58vw,270px);padding:10px;border-radius:18px;background:rgba(11,9,30,.86);border:1px solid rgba(241,201,255,.28);box-shadow:0 15px 46px rgba(0,0,0,.52)}
- .player-head{margin:0 2px 9px;min-height:32px}
- .player-kicker{display:block;font-size:11px}
- .player-head b{display:none}
- .equaliser{display:flex;margin-left:auto}
- .youtube-shell{height:155px;min-height:135px;margin:0 0 8px}
- .youtube-player iframe{min-width:100%;min-height:100%}
- .song-progress{margin:8px 2px 2px}
- .mini-controls{gap:6px;display:flex}
- .player-hint{display:none}
- .music-collapsed .player-shell{transform:translateY(calc(100% - 52px))}
- .timeline{margin-top:17px}
-}
-@media(max-width:520px){
- .center-stage{top:49%;min-height:310px;padding:18px 11px 20px}
- .lyric{font-size:clamp(34px,9vw,46px);line-height:1.18;max-width:83vw}
- .lyric-sub{font-size:clamp(14px,3.8vw,18px);margin-top:14px}
- .stage-super{font-size:9px;margin-bottom:12px}
- .lyric-overline,.lyric-next{font-size:clamp(12px,3.2vw,15px);opacity:.77;margin:8px 0}
- .timeline{margin-top:15px}
- .start-actions{margin-top:17px}
- .start-music{font-size:12px;padding:13px 25px;border:1px solid rgba(255,221,248,.7);box-shadow:0 0 29px rgba(255,91,190,.45),inset 0 1px rgba(255,255,255,.25)}
- .intro-note{font-size:10px}
- .player-shell{width:min(64vw,268px)}
- .youtube-shell{height:145px;min-height:145px}
- .player-head{margin-bottom:7px}
- .player-kicker{font-size:10px}
- .music-collapsed .player-shell{transform:translateY(calc(100% - 51px))}
-}
-@media(max-width:390px){
- .center-stage{top:48%;width:90vw;min-height:300px}
- .lyric{font-size:clamp(32px,8.6vw,40px)}
- .lyric-sub{font-size:14px}
- .player-shell{width:min(69vw,256px)}
- .youtube-shell{height:135px;min-height:135px}
-}
-@media(max-height:710px){
- .center-stage{top:44%;min-height:225px;padding:9px 14px}
- .stage-super{margin-bottom:6px}
- .lyric-overline,.lyric-next{font-size:11px;margin:4px 0}
- .lyric{font-size:clamp(30px,7.8vw,42px)}
- .lyric-sub{font-size:12px;margin-top:9px}
- .start-actions{margin-top:8px}
- .timeline{margin-top:8px}
- .player-shell{width:clamp(225px,56vw,265px)}
-}
-@media(prefers-reduced-motion:reduce){.lyric-word.is-current{animation:none}}
-
-
-/* The full dedication uses its own mobile row. */
-@media(max-width:820px){
- .top{flex-direction:column;align-items:flex-start;gap:12px}
- .top .brand{max-width:100%;width:100%}
- .top .brand h1{font-size:clamp(20px,5.45vw,25px);white-space:nowrap;line-height:1.1;letter-spacing:-.035em}
- .top .status{display:none}
- .top-actions{position:absolute;top:62px;right:0;max-width:100%;width:auto;gap:5px}
-}
-@media(max-width:390px){
- .top .brand h1{font-size:clamp(19px,5.6vw,22px)}
- .top-actions{top:60px}
-}
-@media(min-width:821px){
- .center-stage{width:min(760px,60vw)}
- .lyric{max-width:100%}
- .player-shell{width:320px}
-}
-
-</style>
-</head>
-<body>
-<div id="scene" aria-hidden="true"><div class="sky"></div><div class="nebula"></div><div class="lightbeams"></div><div class="stars" id="stars"></div><div class="fireflies" id="fireflies"></div><div class="petals" id="petals"></div><div class="horizon"></div><div class="flowers" id="flowers"></div><div class="veil"></div><div class="grain"></div></div>
-<div class="interface" id="interface">
-  <div class="top"><div class="brand"><div class="eyebrow">a little universe, made with love</div><h1><em>Ente Mariammekku</em> 🌸💗</h1><div class="status"><i></i> a love letter written in light</div></div>
-    <div class="top-actions"><button class="pill-btn" id="video-btn" type="button" title="Open Adele’s official lyric video">♫ Lyric video</button><button class="pill-btn" id="custom-btn" type="button">✧ Lyrics settings</button><button class="icon-btn" id="full-btn" type="button" title="Fullscreen" aria-label="Toggle fullscreen">⛶</button><button class="icon-btn" id="hide-btn" type="button" title="Minimize or expand music" aria-label="Minimize or expand music player">♪</button></div>
-  </div>
-  <div class="center-stage" aria-live="polite" aria-atomic="true">
-    <div class="stage-super" id="mode-caption">a love song, written in light ♡</div>
-    <p class="lyric-overline" id="lyric-prev"></p>
-    <h2 class="lyric karaoke" id="lyric">Flowers don’t need a reason to bloom.</h2>
-    <p class="lyric-sub" id="lyric-sub">I'll love you until even our graves bloom with lilies.</p>
-    <p class="lyric-next" id="lyric-next"></p>
-    <div class="timeline" id="timeline"></div>
-    <div class="start-actions"><button class="start-music" id="start-music-btn" type="button">▶ Play Lovesong</button><div class="intro-note" id="playback-state">Your lyrics will bloom with the music ♡</div></div>
-  </div>
-  <div class="bottom"><div class="love-note"><div class="note-label">✧ a love note for you</div><p>“I’ll love you until even our graves bloom with lilies.”</p><small>Enikku ninne othiri, othiri, othiri ishtamaa, ente Mariamme… ♡</small></div>
-    <div class="player-shell" id="player-shell">
-      <div class="player-head"><span class="player-kicker">♫ Lovesong <span class="player-time-small" id="player-time-small">0:00</span></span><b>Adele · 5:20</b><span class="equaliser" aria-hidden="true"><i></i><i></i><i></i><i></i></span><button id="player-toggle" class="player-toggle" type="button" aria-controls="player-body" aria-expanded="true" aria-label="Minimize music player">⌄</button></div>
-      <div class="player-body" id="player-body"><div class="youtube-shell" id="youtube-shell"><div id="youtube-player" class="youtube-player" aria-label="Official YouTube player for Lovesong by Adele"></div><div class="youtube-placeholder" id="youtube-placeholder"><span>♡</span><p>Press <b>Play Lovesong</b> to open the official player. Then press Play in the video if needed.</p></div></div>
-      <audio id="local-audio" controls preload="metadata"></audio>
-      <div class="mini-controls"><label for="audio-file">♪ Play MP3 from this device<input id="audio-file" type="file" accept="audio/mpeg,audio/mp3,audio/*"></label><button id="replay-btn" type="button">↻ From beginning</button><button id="lrc-btn" type="button">⚙ Adjust timing</button></div>
-      <div class="song-progress"><span id="song-time">0:00</span><span id="song-source">Choose a music source</span><span id="song-duration">5:20</span></div>
-      <p class="player-hint">The embedded song streams from YouTube; your MP3 stays on your device. Audio won't autoplay before you press Play.</p></div>
-    </div>
-  </div>
-</div>
-<div class="help-panel" id="help-panel" role="dialog" aria-label="Lyric synchronization settings"><h2>In perfect time ♡</h2><p>The full lyrics are already synchronized to the 5:20 recording you provided, starting around 0:26. Adjust the timing if the official streaming version is slightly different.</p>
-  <div class="sync-row"><button id="offset-earlier" type="button">− 0.5s</button><span id="offset-value">0.0s</span><button id="offset-later" type="button">+ 0.5s</button></div>
-  <p>Optional: paste your own time-stamped LRC file below to replace these timings on this device only.</p><p class="example">[00:26.13] First sung line</p><textarea id="lrc-input" placeholder="[00:26.13] A lyric line&#10;[00:34.41] Another lyric line"></textarea><button id="apply-lrc" type="button">Use custom timing</button> <button id="reset-lrc" type="button">Restore synchronized Lovesong</button><p id="lrc-status" aria-live="polite"></p></div>
-<div class="modal" id="video-modal" role="dialog" aria-modal="true" aria-label="Official Adele Lovesong lyric video"><div class="modal-content"><div class="modal-head"><strong>Lovesong — Adele · official lyric video</strong><button class="close" id="close-video" title="Close video" type="button">×</button></div><div class="video-wrap" id="video-wrap"></div><p class="modal-foot">This YouTube video is served by its official provider. <a href="https://www.youtube.com/watch?v=0wPhbmeNSOs" target="_blank" rel="noopener noreferrer">Watch on YouTube ↗</a>. The player and recording are served by YouTube; the overlaid synchronized captions are based on text you provided.</p></div></div>
-<script>
-(()=>{
-'use strict';
-const scene=document.getElementById('scene'),flowers=document.getElementById('flowers');
-const lyricEl=document.getElementById('lyric'),subEl=document.getElementById('lyric-sub'),modeEl=document.getElementById('mode-caption'),timeline=document.getElementById('timeline');
-const audio=document.getElementById('local-audio');
-const duration=319.97;let sourceMode='idle',ytPlayer=null,ytReady=false,localUrl=null,activeIndex=-1,currentCues=null;
-let lyricOffset=0,analyser=null,frequencyData=null,ctx=null,lastTime=0;
+@keyframes flowerSway{0%{transform:rotate(-4deg) translateY(0)}100%{transform:rotate(4deg) translateY(-8px)}}@keyframes flowerBreath{0%{transform:scale(.97)}100%{transform:scale(1.04)}}@keyframes halo{0%{opacity:.30}100%{opacity:.7}}@keyframes bloomIn{0%{transform:scale(.15) rotate(-23deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}@keyframes stemGrow{to{stroke-dashoffset:0}}@keyframes leafGrow{0%{transform:scale(.02);opacity:0}100%{transform:scale(1);opacity:1}}@keyframes nebula{0%{transform:translateX(-3%) rotate(0)}100%{transform:translateX(3%) rotate(9deg)}}@keyframes beam{from{transform:rotate(19deg) translateX(-30px)}to{transform:rotate(37deg) translateX(45px)}}@keyframes twinkle{from{opacity:calc(var(--o,.6)*.35);transform:scale(.75)}to{opacity:var(--o,1);transform:scale(1.3)}}@keyframes fly{0%{transform:translate(0,0);opacity:0}10%{opacity:.9}70%{opacity:.55}100%{transform:translate(var(--dx),-105vh);opacity:0}}@keyframes fall{0%{transform:translate3d(0,0,0) rotate(0);opacity:0}12%{opacity:.75}90%{opacity:.65}100%{transform:translate3d(var(--dx),115vh,0) rotate(690deg);opacity:0}}@keyframes equalize{from{height:3px}to{height:14px}}
+</style></head>
+<body><div id="scene" aria-hidden="true"><div class="sky"></div><div class="nebula"></div><div class="lightbeams"></div><div class="stars" id="stars"></div><div class="fireflies" id="fireflies"></div><div class="petals" id="petals"></div><div class="horizon"></div><div class="flowers" id="flowers"></div><div class="veil"></div><div class="grain"></div></div>
+<header class="brand"><h1><em>Ente Mariammekku</em> 🌸💗</h1></header>
+<main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don&#x27;t need a reason to bloom, I will love you till our graves bloom with lillies</h2><button id="start-btn" class="start-btn" type="button">▶ Play Lovesong</button></main>
+<section class="dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" title="Rewind 10 seconds" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" title="Play" aria-label="Play Lovesong">▶</button><span class="song-name">♫ Lovesong</span><label class="ctrl load" for="file" title="Choose your MP3" aria-label="Choose MP3">♪<input type="file" accept="audio/*" id="file"></label></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
+<audio id="audio" preload="metadata" playsinline ></audio><div id="toast" class="toast" role="status" hidden></div><script>
+(()=>{'use strict';
+const flowers=document.getElementById('flowers'),scene=document.getElementById('scene');
+const audio=document.getElementById('audio'),fileInput=document.getElementById('file'),lyricEl=document.getElementById('lyric');
+const playBtn=document.getElementById('play'),mainBtn=document.getElementById('start-btn'),rewindBtn=document.getElementById('rewind');
+const seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
+const q1="Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies",q2="Enikku ninnee othiri othiri othiri ishtamaaa ente mariammee .....";
+let localUrl=null,ctx=null,analyser=null,frequencies=null,lastCue='',lastTime=-1,toastTimeout=null;
+const approxDuration=319.97;
 const timedLrc = "[00:00.00] \n[00:26.13] Whenever I'm alone with you\n[00:32.05] \n[00:34.41] You make me feel like I am home again\n[00:41.87] Whenever I'm alone with you\n[00:48.24] \n[00:50.33] You make me feel like I am whole again\n[00:57.25] \n[01:15.44] Whenever I'm alone with you\n[01:23.34] You make me feel like I am young again\n[01:31.69] Whenever I'm alone with you\n[01:39.35] You make me feel like I am fun again\n[01:47.39] However far away\n[01:52.15] I will always love you\n[01:56.20] However long I stay\n[02:00.37] I will always love you\n[02:04.18] Whatever words I say\n[02:08.98] I will always love you\n[02:13.40] I will always love you\n[02:19.06] \n[02:32.63] Whenever I'm alone with you\n[02:40.67] You make me feel like I am free again\n[02:48.56] Whenever I'm alone with you\n[02:55.23] \n[02:57.66] You make me feel like I am clean again\n[03:05.32] However far away\n[03:10.15] I will always love you\n[03:13.83] However long I stay\n[03:18.37] I will always love you\n[03:21.82] Whatever words I say\n[03:26.66] I will always love you\n[03:30.39] I will always love you\n[03:37.25] \n[04:06.94] However far away\n[04:11.79] I will always love you\n[04:15.25] However long I stay\n[04:19.97] I will always love you\n[04:23.42] Whatever words I say\n[04:28.29] I will always love you\n[04:34.08] I'll always love you\n[04:38.10] I'll always love you\n[04:42.61] 'Cause I love you\n[04:44.85] \n[05:19.97] ";
-const notes=[
- {t:0,text:'Flowers don’t need a reason to bloom.',sub:'I’ll love you until even our graves bloom with lilies.'},
- {t:8.5,text:'Enikku ninne othiri, othiri, othiri ishtamaa…',sub:'Ente Mariammekku 🌸💗'},
- {t:17,text:'A little universe of flowers, love and forever.',sub:'The song is about to begin…'},
- {t:57.25,text:'And with every season, I would choose you.',sub:'Some feelings never stop blooming'},
- {t:139.06,text:'For every lifetime, a thousand lilies.',sub:'Just for you, ente Mariamme ♡'},
- {t:217.25,text:'Even in silence, I’ll love you.',sub:'The flowers can say what words cannot'},
- {t:284.85,text:'Flowers don’t need a reason to bloom.',sub:'And I’ll love you until even our graves bloom with lilies.'},
- {t:302,text:'Enikku ninne othiri, othiri, othiri ishtamaa…',sub:'Ente Mariammekku, forever 🌸💗'}
-];
+
 function parseLRC(src){const parsed=[];for(const ln of src.split(/\r?\n/)){const times=[...ln.matchAll(/\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g)];const text=ln.replace(/\[[^\]]*\]/g,'').trim();for(const m of times){const millis=Number((m[3]||'0').padEnd(3,'0'));parsed.push({t:Number(m[1])*60+Number(m[2])+millis/1000,text,sub:''})}}return parsed.sort((a,b)=>a.t-b.t)}
-let syncedCues=parseLRC(timedLrc);
+
+const cues=parseLRC(timedLrc);
+const breaks=[
+ {start:57.25,end:75.44,lines:[{at:57.25,text:'In every season, I would choose you.'}]},
+ {start:139.06,end:152.63,lines:[{at:139.06,text:'For every lifetime, a thousand lilies.'}]},
+ {start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]},
+ {start:284.85,end:319.97,lines:[{at:284.85,text:q1},{at:302,text:q2}]}
+];
 const palettes=[315,280,190,336,208,295,170,320,270,189,344,306];
 const layouts=[
 [1,76,580,.68,0.5],[10,62,680,.88,0],[18,50,460,.56,1.3],[27,82,560,.72,.8],[37,44,740,.92,0.9],[49,55,710,.83,.1],[59,76,660,.78,1.3],[69,43,760,.95,.4],[77,60,500,.7,.8],[87,50,600,.85,1.2],[96,75,520,.68,.3],
@@ -327,125 +104,52 @@ function lilyMarkup(h,i){const id='lily'+i;
  makeParticles('stars','star',125,()=>({'--x':(rand()*100)+'%','--y':(rand()*90)+'%','--s':(.5+rand()*1.7)+'px','--o':(.2+rand()*.72).toFixed(2),'--d':(1.3+rand()*4)+'s'}));
  makeParticles('fireflies','fly',64,()=>({'--x':(rand()*100)+'%','--b':(-rand()*30)+'vh','--s':(2+rand()*4)+'px','--h':(rand()>.55?315:190),'--dx':((rand()-.5)*160)+'px','--d':(9+rand()*19)+'s','--delay':(-rand()*25)+'s'}));
  makeParticles('petals','fall',26,()=>({'--x':(rand()*100)+'%','--s':(6+rand()*9)+'px','--h':(rand()>.5?315:285),'--dx':((rand()-.5)*280)+'px','--d':(13+rand()*21)+'s','--delay':(-rand()*30)+'s'}));
- const prevEl=document.getElementById('lyric-prev'),nextEl=document.getElementById('lyric-next');
- const startMusicBtn=document.getElementById('start-music-btn');
- const playbackState=document.getElementById('playback-state');
- const songTime=document.getElementById('song-time'),songSource=document.getElementById('song-source');
- const playerTimeSmall=document.getElementById('player-time-small');
- const toggleBtn=document.getElementById('player-toggle');
- let playerCollapsed=matchMedia('(max-width: 820px)').matches;
- function setPlayerCollapsed(collapsed){playerCollapsed=!!collapsed;document.body.classList.toggle('music-collapsed',playerCollapsed);toggleBtn.setAttribute('aria-expanded',String(!playerCollapsed));toggleBtn.setAttribute('aria-label',playerCollapsed?'Expand music player':'Minimize music player');toggleBtn.textContent=playerCollapsed?'⌃':'⌄';}
- toggleBtn.addEventListener('click',()=>setPlayerCollapsed(!playerCollapsed));
- setPlayerCollapsed(playerCollapsed);
- let latestYouTubeTime=0,ytState=-1,visualRun=0,lastCueKey='';
- function formatTime(t){const n=Math.max(0,Math.floor(t||0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
- function getCurrentTime(){if(sourceMode==='local')return audio.currentTime||0;if(sourceMode==='youtube'&&ytPlayer&&ytReady){try{return ytPlayer.getCurrentTime()||0}catch(e){return latestYouTubeTime}}return 0}
- function isPlaying(){if(sourceMode==='local')return !audio.paused&&!audio.ended;if(sourceMode==='youtube')return ytState===1;return false}
- function selectNote(t){let i=0;for(let k=0;k<notes.length;k++){if(notes[k].t<=t)i=k;else break}return notes[i]}
- function findCue(cues,t){let l=0,r=cues.length-1;while(l<=r){const mid=(l+r)>>1;if(cues[mid].t<=t)l=mid+1;else r=mid-1}return Math.max(0,r)}
- function renderTimeline(cues,i){timeline.replaceChildren();const n=9;for(let k=0;k<n;k++){const sp=document.createElement('span');if(Math.floor(i/Math.max(cues.length-1,1)*(n-1))===k)sp.classList.add('on');timeline.appendChild(sp)}}
- let highlightedWord=-1;
- function setAnimatedLine(text){
-   lyricEl.replaceChildren();
-   highlightedWord=-1;
-   const words=(text||'').trim().split(/\s+/).filter(Boolean);
-   words.forEach((word,i)=>{
-     const span=document.createElement('span');span.className='lyric-word';span.textContent=word;
-     span.style.setProperty('--spark-delay',`${(i*.05).toFixed(2)}s`);
-     lyricEl.appendChild(span);
-     if(i<words.length-1)lyricEl.appendChild(document.createTextNode(' '));
-   });
- }
- function lightUpWords(progress){
-   const spans=lyricEl.querySelectorAll('.lyric-word');if(!spans.length)return;
-   const lit=Math.min(spans.length-1,Math.max(0,Math.floor(progress*spans.length)));
-   if(lit===highlightedWord)return;
-   highlightedWord=lit;
-   spans.forEach((sp,i)=>{sp.classList.toggle('is-sung',i<lit);sp.classList.toggle('is-current',i===lit);});
- }
- function updateFrame(){let t=Math.min(duration,getCurrentTime()), syncTime=Math.max(0,t+lyricOffset);const cues=currentCues||syncedCues;const idx=findCue(cues,syncTime),cue=cues[idx];let current=cue?.text||'',isInstrumental=!current;
-   const nextNonEmpty=(()=>{for(let j=idx+1;j<cues.length;j++)if(cues[j].text)return cues[j].text;return ''})();
-   const prevNonEmpty=(()=>{for(let j=idx-1;j>=0;j--)if(cues[j].text)return cues[j].text;return ''})();
-   const note=selectNote(t);
-   const cueKey=String(idx)+(isInstrumental?'|'+note.text:'');
-   if(cueKey!==lastCueKey||lastTime>t+1){activeIndex=idx;lastCueKey=cueKey;setAnimatedLine(isInstrumental?note.text:current);
-     if(!matchMedia('(prefers-reduced-motion: reduce)').matches) lyricEl.animate([{opacity:.1,transform:'translateY(15px)',filter:'blur(5px)'},{opacity:1,transform:'translateY(0)',filter:'blur(0)'}],{duration:440,easing:'cubic-bezier(.2,.7,.2,1)'});
-     subEl.textContent=isInstrumental?note.sub:'';prevEl.textContent=isInstrumental?'a little love note ♡':prevNonEmpty;nextEl.textContent=isInstrumental?'':nextNonEmpty;
-     modeEl.textContent=isInstrumental?'a pause for flowers & forever':'Lovesong • lyrics in time with the music';
-     renderTimeline(cues,idx)
-   }
-   const end=idx<cues.length-1?cues[idx+1].t:duration;
-   const noteIndex=notes.indexOf(note);const noteEnd=(notes[noteIndex+1]&&notes[noteIndex+1].t<end)?notes[noteIndex+1].t:end;
-   const progress=isInstrumental?Math.min(1,Math.max(0,(t-note.t)/Math.max(2,noteEnd-note.t))):Math.min(1,Math.max(0,(syncTime-cue.t)/Math.max(0.6,end-cue.t)));
-   lightUpWords(progress);
-   songTime.textContent=formatTime(t);playerTimeSmall.textContent=formatTime(t);
-   startMusicBtn.parentElement.classList.toggle('is-playing',isPlaying());
-   if(analyser&&frequencyData&&sourceMode==='local'&&isPlaying()){analyser.getByteFrequencyData(frequencyData);let sum=0;for(let k=2;k<Math.min(36,frequencyData.length);k++)sum+=frequencyData[k];document.documentElement.style.setProperty('--reactive',Math.min(1,(sum/34)/135).toFixed(3))}else document.documentElement.style.setProperty('--reactive','0');
-   lastTime=t;requestAnimationFrame(updateFrame)
- }
- requestAnimationFrame(updateFrame);
- function pauseYouTube(){if(ytReady){try{ytPlayer.pauseVideo()}catch(e){}}}
- function markSource(label){songSource.textContent=label;playbackState.textContent=label==='Your MP3'?'Your own MP3 is playing locally · timed lyrics are ready':'The words follow the official video player'}
- let youtubePromise=null;
- function loadYouTube(){
-   if(youtubePromise)return youtubePromise;
-   youtubePromise=new Promise((resolve,reject)=>{
-     window.onYouTubeIframeAPIReady=()=>{
-       ytPlayer=new YT.Player('youtube-player',{height:'204',width:'340',videoId:'0wPhbmeNSOs',playerVars:{playsinline:1,controls:1,rel:0,origin:location.origin},events:{
-         onReady:()=>{ytReady=true;document.getElementById('youtube-shell').classList.add('is-ready');resolve(ytPlayer)},
-         onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){sourceMode='youtube';audio.pause();markSource('YouTube video');}if(e.data===YT.PlayerState.ENDED){playbackState.textContent='The song has ended. Press Play to begin again ♡'}} ,
-         onError:()=>{playbackState.innerHTML='Video not available here. <a href="https://www.youtube.com/watch?v=0wPhbmeNSOs" target="_blank" rel="noopener noreferrer" style="color:#ffd3ee">Open Adele’s official video ↗</a> or select your MP3.'}
-       }});
-     };
-     const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';sc.async=true;sc.onerror=()=>{youtubePromise=null;reject(new Error('YouTube blocked or offline'))};document.head.appendChild(sc)
-   });return youtubePromise;
- }
- startMusicBtn.addEventListener('click',()=>{
-   if(sourceMode==='local' && audio.src){audio.play().catch(()=>{});return}
-   setPlayerCollapsed(false);playbackState.textContent='Opening the official music video…';
-   loadYouTube().then(p=>{sourceMode='youtube';markSource('YouTube video');p.playVideo()}).catch(()=>{playbackState.textContent='Unable to load YouTube. You can still play your own MP3 below.'});
- });
- const audioFile=document.getElementById('audio-file');
- audioFile.addEventListener('change',()=>{
-   const f=audioFile.files?.[0];if(!f)return;
-   setPlayerCollapsed(true);
-   if(localUrl)URL.revokeObjectURL(localUrl);localUrl=URL.createObjectURL(f);audio.src=localUrl;audio.classList.add('loaded');sourceMode='local';pauseYouTube();markSource('Your MP3');activeIndex=-1;lastCueKey='';audio.play().catch(()=>{playbackState.textContent='MP3 ready. Press Play in the audio controls ♡'});
- });
- audio.addEventListener('play',()=>{
-   sourceMode='local';pauseYouTube();markSource('Your MP3');
-   try{if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=256;frequencyData=new Uint8Array(analyser.frequencyBinCount);source.connect(analyser);analyser.connect(ctx.destination)}ctx.resume?.()}catch(e){}
- });
- document.getElementById('replay-btn').addEventListener('click',()=>{
-   if(sourceMode==='local'){audio.currentTime=0;audio.play().catch(()=>{})}
-   else{loadYouTube().then(p=>{sourceMode='youtube';p.seekTo(0,true);p.playVideo();markSource('YouTube video')}).catch(()=>{})}
-   activeIndex=-1;lastCueKey=''
- });
- const help=document.getElementById('help-panel');function toggleHelp(){help.classList.toggle('open')}
- document.getElementById('lrc-btn').addEventListener('click',toggleHelp);
- document.getElementById('custom-btn').addEventListener('click',toggleHelp);
- function refreshOffset(){document.getElementById('offset-value').textContent=(lyricOffset>=0?'+':'')+lyricOffset.toFixed(1)+'s';activeIndex=-1;lastCueKey=''}
- document.getElementById('offset-earlier').addEventListener('click',()=>{lyricOffset=Math.max(-15,Math.round((lyricOffset-.5)*10)/10);refreshOffset()});
- document.getElementById('offset-later').addEventListener('click',()=>{lyricOffset=Math.min(15,Math.round((lyricOffset+.5)*10)/10);refreshOffset()});
- document.getElementById('apply-lrc').addEventListener('click',()=>{
-   const parsed=parseLRC(document.getElementById('lrc-input').value);
-   if(!parsed.length){document.getElementById('lrc-status').textContent='Please enter at least one [mm:ss.xx] timestamped line.';return}
-   currentCues=parsed;activeIndex=-1;lastCueKey='';document.getElementById('lrc-status').textContent=parsed.length+' custom timed lines loaded on this device.';help.classList.remove('open')
- });
- document.getElementById('reset-lrc').addEventListener('click',()=>{currentCues=null;lyricOffset=0;refreshOffset();activeIndex=-1;lastCueKey='';document.getElementById('lrc-status').textContent='Restored the complete built-in synchronized Lovesong lyrics.';help.classList.remove('open')});
- const modal=document.getElementById('video-modal'),videoWrap=document.getElementById('video-wrap');
- document.getElementById('video-btn').addEventListener('click',()=>{
-   pauseYouTube();audio.pause();videoWrap.innerHTML='<iframe title="Adele Lovesong official lyric video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube-nocookie.com/embed/0wPhbmeNSOs?autoplay=1&rel=0"></iframe>';modal.classList.add('open')
- });
- function closeVideo(){modal.classList.remove('open');videoWrap.replaceChildren()}
- document.getElementById('close-video').addEventListener('click',closeVideo);
- modal.addEventListener('click',e=>{if(e.target===modal)closeVideo()});
- document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeVideo();help.classList.remove('open')}});
- document.getElementById('hide-btn').addEventListener('click',()=>setPlayerCollapsed(!playerCollapsed));
- document.getElementById('full-btn').addEventListener('click',()=>{if(document.fullscreenElement)document.exitFullscreen?.();else document.documentElement.requestFullscreen?.().catch(()=>{})});
- if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches){scene.addEventListener('pointermove',e=>{let x=(e.clientX/innerWidth-.5)*9,y=(e.clientY/innerHeight-.5)*5;flowers.style.setProperty('--mouse-x',x+'px');flowers.style.setProperty('--mouse-y',y+'px')})}
- window.addEventListener('pagehide',()=>{if(localUrl)URL.revokeObjectURL(localUrl)});
-})();
-</script>
 
-</body>
-</html>
+function findCue(t){let low=0,high=cues.length-1;while(low<=high){const mid=(low+high)>>1;if(cues[mid].t<=t)low=mid+1;else high=mid-1}return Math.max(0,high)}
+function getCaption(t){
+ if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};
+ const i=findCue(t),cue=cues[i],next=cues[i+1];
+ if(cue.text)return{key:'lyric-'+i,text:cue.text};
+ // Small rests retain the preceding lyric, rather than insert an unrelated quote.
+ if(next && next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}
+ const section=breaks.find(b=>t>=b.start&&t<b.end);
+ if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}
+ for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};
+ return{key:'quote1',text:q1};
+}
+function displayLyric(t){
+ const item=getCaption(t);if(item.key===lastCue && !(lastTime>=0&&t<lastTime-1))return;
+ lastCue=item.key;
+ lyricEl.textContent=item.text;
+ if(!matchMedia('(prefers-reduced-motion:reduce)').matches){
+  lyricEl.getAnimations().filter(a=>a.effect && a.effect.getKeyframes().some(f=>f.opacity===0)).forEach(a=>a.cancel());
+  lyricEl.animate([{opacity:0,transform:'translateY(15px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:610,easing:'cubic-bezier(.16,.84,.24,1)'});
+ }
+}
+function message(text){toast.textContent=text;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2200)}
+function updatePlay(){const playing=!!audio.src&&!audio.paused&&!audio.ended;playBtn.textContent=playing?'❚❚':'▶';playBtn.title=playing?'Pause':'Play';playBtn.setAttribute('aria-label',playing?'Pause Lovesong':'Play Lovesong')}
+function playOrLoad(){if(!audio.src){fileInput.click();return}if(audio.paused)audio.play().catch(()=>message('Tap Play once more ♡'));else audio.pause()}
+mainBtn.addEventListener('click',playOrLoad);playBtn.addEventListener('click',playOrLoad);
+rewindBtn.addEventListener('click',()=>{if(!audio.src){fileInput.click();return}audio.currentTime=Math.max(0,audio.currentTime-10);lastCue='';displayLyric(audio.currentTime)});
+fileInput.addEventListener('change',()=>{
+ const f=fileInput.files&&fileInput.files[0];if(!f)return;
+ if(localUrl)URL.revokeObjectURL(localUrl);localUrl=URL.createObjectURL(f);audio.src=localUrl;audio.load();
+ document.body.classList.add('has-song');lastCue='';lastTime=-1;
+ audio.play().catch(()=>message('Tap Play to start ♡'));updatePlay();
+});
+audio.addEventListener('play',()=>{
+ updatePlay();try{if(!ctx){ctx=new(window.AudioContext||window.webkitAudioContext)();const source=ctx.createMediaElementSource(audio);analyser=ctx.createAnalyser();analyser.fftSize=256;frequencies=new Uint8Array(analyser.frequencyBinCount);source.connect(analyser);analyser.connect(ctx.destination)}ctx.resume()}catch(e){}
+});
+for(const e of ['pause','ended','loadedmetadata'])audio.addEventListener(e,updatePlay);
+seek.addEventListener('input',()=>{if(!audio.src)return;const len=Number.isFinite(audio.duration)?audio.duration:approxDuration;audio.currentTime=Number(seek.value)/1000*len;lastCue='';displayLyric(audio.currentTime)});
+function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
+function frame(){const t=audio.currentTime||0,d=Number.isFinite(audio.duration)?audio.duration:approxDuration;
+ displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));
+ if(analyser&&frequencies&&!audio.paused){analyser.getByteFrequencyData(frequencies);let sum=0;for(let i=2;i<Math.min(38,frequencies.length);i++)sum+=frequencies[i];document.documentElement.style.setProperty('--reactive',Math.min(1,(sum/36)/140).toFixed(3))}else document.documentElement.style.setProperty('--reactive','0');
+ lastTime=t;requestAnimationFrame(frame)}
+if(audio.src)document.body.classList.add('has-song');
+updatePlay();requestAnimationFrame(frame);
+if(matchMedia('(pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion:reduce)').matches)scene.addEventListener('pointermove',e=>{flowers.style.setProperty('--mouse-x',((e.clientX/innerWidth-.5)*7)+'px');flowers.style.setProperty('--mouse-y',((e.clientY/innerHeight-.5)*4)+'px')});
+window.addEventListener('pagehide',()=>{if(localUrl)URL.revokeObjectURL(localUrl)});
+})();
+</script></body></html>
