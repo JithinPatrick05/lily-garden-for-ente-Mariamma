@@ -27,11 +27,55 @@ body.yt-collapsed .yt-shell{pointer-events:none}
 .reveal-player{top:max(75px,calc(env(safe-area-inset-top) + 58px));cursor:pointer}
 @media(max-width:720px){.stage{top:53%;padding:9px 8px 12px}.controls-dock{margin-top:20px}.lyric{font-size:clamp(27px,7.5vw,39px)}}
 @media(max-height:700px){.stage{top:56%;max-height:74dvh}.lyric{font-size:clamp(24px,7vw,32px)}.controls-dock{margin-top:14px}}
+
+/* Bottom-center retractable YouTube drawer (native player never below 200px). */
+.yt-shell{
+ left:50%; right:auto;
+ top:auto;
+ bottom:calc(max(12px,env(safe-area-inset-bottom)) + 46px);
+ transform:translateX(-50%) translateY(0);
+ width:200px; height:200px;
+ z-index:15;
+ border:1px solid rgba(255,210,239,.16);
+ border-radius:14px;
+ box-shadow:0 9px 30px rgba(0,0,0,.7),0 0 20px rgba(255,102,192,.13);
+ transition:transform .38s ease,opacity .38s ease,visibility .38s ease;
+}
+.yt-shell iframe,.yt-shell #youtube-player{width:200px!important;height:200px!important}
+body.yt-collapsed .yt-shell{
+ transform:translateX(-50%) translateY(22px);
+ opacity:0;visibility:hidden;pointer-events:none;
+}
+.reveal-player{
+ position:fixed;
+ left:50%;right:auto;
+ top:auto;
+ bottom:max(11px,env(safe-area-inset-bottom));
+ transform:translateX(-50%);
+ min-width:118px;
+ height:36px;
+ padding:0 17px;
+ font-size:11px;font-weight:650;letter-spacing:.025em;
+ border-radius:999px;
+ border:1px solid rgba(255,216,245,.24);
+ background:rgba(21,10,25,.82);
+ box-shadow:0 0 17px rgba(241,91,177,.13);
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+ opacity:1;visibility:visible;display:grid;place-items:center;
+ z-index:17;
+}
+body.yt-collapsed .reveal-player{opacity:1;visibility:visible}
+@media(max-width:720px){
+ .yt-shell{bottom:calc(max(10px,env(safe-area-inset-bottom)) + 46px)}
+ .reveal-player{bottom:max(10px,env(safe-area-inset-bottom))}
+}
+@media(prefers-reduced-motion:reduce){.yt-shell{transition:none}}
+
 </style></head><body class="yt-collapsed">
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button><button class="ctrl" id="toggle-player" type="button" aria-label="Show or hide player">♫</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section></main>
-<div class="yt-shell" id="yt-shell"><div id="youtube-player"></div></div><button class="reveal-player" id="reveal-player" type="button">♫ Player</button><div id="toast" class="toast" hidden></div>
+<div class="yt-shell" id="yt-shell"><div id="youtube-player"></div></div><button class="reveal-player" id="reveal-player" type="button" aria-controls="yt-shell" aria-expanded="false" aria-label="Open YouTube player">♫ Open YouTube ▴</button><div id="toast" class="toast" hidden></div>
 <script>
 (()=>{
 'use strict';
@@ -51,14 +95,14 @@ function displayLyric(t){const item=getCaption(t);if(item.key===lastCue&&!(lastT
 function youtubeTime(){if(!ytReady||!ytPlayer)return 0;try{const n=ytPlayer.getCurrentTime();return Number.isFinite(n)?Math.max(0,n):0}catch(e){return 0}}
 function youtubeDuration(){if(!ytReady||!ytPlayer)return approxDuration;try{const n=ytPlayer.getDuration();return Number.isFinite(n)&&n>0?n:approxDuration}catch(e){return approxDuration}}
 function isPlaying(){return ytReady&&ytState===YT.PlayerState.PLAYING}
-function collapsePlayer(){pauseSong();document.body.classList.add('yt-collapsed')} function expandPlayer(){document.body.classList.remove('yt-collapsed')}
+function collapsePlayer(){pauseSong();document.body.classList.add('yt-collapsed');updateDrawer()} function expandPlayer(){document.body.classList.remove('yt-collapsed');updateDrawer()} function updateDrawer(){const hidden=document.body.classList.contains('yt-collapsed');revealBtn.textContent=hidden?'♫ Open YouTube ▴':'⌄ Hide YouTube';revealBtn.setAttribute('aria-expanded',String(!hidden));revealBtn.setAttribute('aria-label',hidden?'Open YouTube player':'Hide YouTube player');toggleBtn.setAttribute('aria-expanded',String(!hidden))}
 function playSong(){if(!ytReady||!ytPlayer){queuedPlay=true;expandPlayer();showMessage('Preparing the YouTube song…');return}try{expandPlayer();ytPlayer.playVideo();document.body.classList.add('has-song')}catch(e){showMessage('Tap play inside the player ♡')}}
 function pauseSong(){if(ytReady&&ytPlayer)try{ytPlayer.pauseVideo()}catch(e){}}
-playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pauseSong);rewindBtn.addEventListener('click',()=>{if(!ytReady||!ytPlayer){showMessage('Loading the song…');return}const next=Math.max(0,youtubeTime()-10);ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});toggleBtn.addEventListener('click',()=>{if(document.body.classList.contains('yt-collapsed'))expandPlayer();else{pauseSong();collapsePlayer()}});revealBtn.addEventListener('click',expandPlayer);seek.addEventListener('input',()=>{if(!ytReady||!ytPlayer)return;const next=Number(seek.value)/1000*youtubeDuration();ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});
+playBtn.addEventListener('click',playSong);pauseBtn.addEventListener('click',pauseSong);rewindBtn.addEventListener('click',()=>{if(!ytReady||!ytPlayer){showMessage('Loading the song…');return}const next=Math.max(0,youtubeTime()-10);ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});toggleBtn.addEventListener('click',()=>{if(document.body.classList.contains('yt-collapsed'))expandPlayer();else{pauseSong();collapsePlayer()}});revealBtn.addEventListener('click',()=>{if(document.body.classList.contains('yt-collapsed'))expandPlayer();else collapsePlayer()});seek.addEventListener('input',()=>{if(!ytReady||!ytPlayer)return;const next=Number(seek.value)/1000*youtubeDuration();ytPlayer.seekTo(next,true);lastCue='';displayLyric(next)});
 function formatTime(t){const n=Math.max(0,Math.floor(Number.isFinite(t)?t:0));return Math.floor(n/60)+':'+String(n%60).padStart(2,'0')}
 function updateButtons(){playBtn.style.opacity=isPlaying()?'.65':'1';pauseBtn.style.opacity=isPlaying()?'1':'.65'}
 let lastFrame=0;function frame(now){requestAnimationFrame(frame);if(now-lastFrame<85)return;lastFrame=now;const t=youtubeTime(),d=youtubeDuration();displayLyric(t);timeEl.textContent=formatTime(t)+' / '+formatTime(d);seek.value=String(Math.min(1000,Math.round(t/Math.max(1,d)*1000)));lastTime=t;updateButtons()};
 function initYoutube(){const script=document.createElement('script');script.src='https://www.youtube.com/iframe_api';script.async=true;script.onerror=()=>showMessage('YouTube unavailable.');window.onYouTubeIframeAPIReady=()=>{ytPlayer=new YT.Player('youtube-player',{width:'200',height:'200',videoId:'0wPhbmeNSOs',playerVars:{playsinline:1,controls:1,rel:0,modestbranding:1,iv_load_policy:3},events:{onReady:()=>{ytReady=true;if(queuedPlay){queuedPlay=false;playSong()}},onStateChange:e=>{ytState=e.data;if(e.data===YT.PlayerState.PLAYING){document.body.classList.add('has-song');toast.hidden=true}if(e.data===YT.PlayerState.ENDED)showMessage('For you, always ♡');updateButtons()},onError:()=>showMessage('YouTube playback unavailable here.')}})};document.head.appendChild(script)}
-requestAnimationFrame(frame);initYoutube();
+updateDrawer();requestAnimationFrame(frame);initYoutube();
 })();
 </script></body></html>
