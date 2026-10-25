@@ -285,6 +285,13 @@ body {background:#000!important}
   }
 }
 
+/* v11: Private local MP3 support; no copyrighted audio hosted publicly. */
+.soundcloud-drawer{height:206px}
+.mp3-picker{display:flex;align-items:center;justify-content:center;height:40px;padding:0 8px;color:rgba(255,222,243,.88);font-size:11px;background:rgba(255,255,255,.035);border-top:1px solid rgba(255,210,242,.13);cursor:pointer}
+.mp3-picker:hover{background:rgba(255,170,223,.10)}
+.mp3-picker input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+body.local-song .audio-source a{display:none}
+body.local-song .audio-source:before{content:"♫ Your MP3 · private playback";color:rgba(249,220,241,.65);font-size:9px;letter-spacing:.02em}
 /* v10: SoundCloud audio, lyrics-first composition. The official widget is only shown on request. */
 .stage,body:not(.yt-collapsed) .stage{
   top:max(62px,calc(46px + env(safe-area-inset-top,0px)))!important;
@@ -367,6 +374,8 @@ body.sc-open .source-toggle{transform:rotate(180deg)}
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2></main><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
 <div class="soundcloud-drawer" id="soundcloud-drawer" aria-label="Official SoundCloud player">
 <iframe id="soundcloud-player" title="Adele — Lovesong on SoundCloud" scrolling="no" frameborder="0" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fadelemusic%2Flovesong&color=%23f19acb&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&show_artwork=false&visual=false"></iframe>
+<label class="mp3-picker" for="local-mp3">♫ Choose your full MP3 (private)<input type="file" id="local-mp3" accept="audio/*"></label>
+<audio id="local-audio" preload="metadata"></audio>
 </div>
 <div class="audio-source"><a href="https://soundcloud.com/adelemusic/lovesong" target="_blank" rel="noopener noreferrer" title="Listen to Lovesong by Adele on SoundCloud">Adele · Lovesong <span class="source-name">on SoundCloud ↗</span></a><button id="source-toggle" class="source-toggle" type="button" aria-label="Show SoundCloud player" aria-expanded="false" aria-controls="soundcloud-drawer">⌃</button></div>
 <div id="toast" class="toast" hidden></div>
@@ -387,6 +396,37 @@ function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;i
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
 function displayLyric(t){const item=getCaption(t);if(item.key===lastCue&&!(lastTime>=0&&t<lastTime-1))return;lastCue=item.key;lyricEl.classList.add('switching');const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;setTimeout(()=>{lyricEl.textContent=item.text;lyricEl.classList.remove('switching');if(!reduced)lyricEl.animate([{opacity:0,transform:'translateY(14px) scale(.987)'},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:820,easing:'cubic-bezier(.18,.84,.24,1)'})},reduced?0:180)}
 
+let sourceMode='soundcloud',localObjectURL=null;
+const localAudio=document.getElementById('local-audio');
+const localMp3=document.getElementById('local-mp3');
+localMp3.addEventListener('change',()=>{
+ const file=localMp3.files&&localMp3.files[0];if(!file)return;
+ if(localObjectURL)URL.revokeObjectURL(localObjectURL);
+ localObjectURL=URL.createObjectURL(file);
+ localAudio.src=localObjectURL;
+ sourceMode='local';queuedPlay=false;
+ if(scWidget&&scReady)scWidget.pause();
+ scPlaying=false;positionSeconds=0;durationSeconds=approxDuration;lastCue='';
+ document.body.classList.add('local-song');
+ document.body.classList.remove('sc-open');
+ scToggle.setAttribute('aria-expanded','false');
+ scToggle.setAttribute('aria-label','Show music options');
+ localAudio.play().catch(()=>showMessage('Your song is ready — tap Play ♡'));
+});
+localAudio.addEventListener('loadedmetadata',()=>{
+ if(Number.isFinite(localAudio.duration)&&localAudio.duration>0)durationSeconds=localAudio.duration;
+});
+localAudio.addEventListener('timeupdate',()=>{
+ if(sourceMode==='local')positionSeconds=localAudio.currentTime||0;
+});
+localAudio.addEventListener('play',()=>{
+ if(sourceMode!=='local')return;
+ scPlaying=true;document.body.classList.add('has-song');updateButtons();
+});
+localAudio.addEventListener('pause',()=>{if(sourceMode==='local'){scPlaying=false;updateButtons()}});
+localAudio.addEventListener('ended',()=>{
+ if(sourceMode==='local'){scPlaying=false;lastCue='';showMessage('For you, always ♡');updateButtons()}
+});
 function playbackTime(){return Math.max(0,positionSeconds)}
 function playbackDuration(){return Math.max(1,durationSeconds)}
 function isPlaying(){return scPlaying}
@@ -405,6 +445,10 @@ function revealSoundcloud(message){
  if(message)showMessage(message);
 }
 function playSong(){
+ if(sourceMode==='local'&&localAudio.src){
+  localAudio.play().catch(()=>showMessage('Tap Play to start your MP3 ♡'));
+  return;
+ }
  if(!scReady||!scWidget){queuedPlay=true;showMessage('Preparing Lovesong…');return}
  try{
   scWidget.play();
@@ -416,12 +460,14 @@ function playSong(){
 }
 function pauseSong(){
  queuedPlay=false;
+ if(sourceMode==='local'){localAudio.pause();return}
  if(scReady&&scWidget){scWidget.pause();scPlaying=false;updateButtons()}
 }
 function seekSong(t){
  const seconds=Math.max(0,Math.min(playbackDuration(),t));
  positionSeconds=seconds;lastSeek=performance.now();
- if(scReady&&scWidget)scWidget.seekTo(Math.round(seconds*1000));
+ if(sourceMode==='local'&&localAudio.src)localAudio.currentTime=seconds;
+ else if(scReady&&scWidget)scWidget.seekTo(Math.round(seconds*1000));
  lastCue='';displayLyric(seconds);
 }
 playBtn.addEventListener('click',playSong);
@@ -437,7 +483,9 @@ let lastFrame=0;
 function frame(now){
  requestAnimationFrame(frame);
  if(now-lastFrame<110)return;lastFrame=now;
- if(scReady&&scWidget&&now-lastPositionRead>160&&!readingPosition){
+ if(sourceMode==='local'&&localAudio.src){
+  if(Number.isFinite(localAudio.currentTime))positionSeconds=localAudio.currentTime;
+ }else if(scReady&&scWidget&&now-lastPositionRead>160&&!readingPosition){
   readingPosition=true;lastPositionRead=now;
   scWidget.getPosition(ms=>{
    readingPosition=false;
@@ -461,18 +509,23 @@ function initSoundcloud(){
   scWidget.bind(SC.Widget.Events.READY,()=>{
    scReady=true;
    scWidget.getDuration(ms=>{
-    if(Number.isFinite(ms)&&ms>0)durationSeconds=ms/1000;
+    if(sourceMode==='soundcloud'&&Number.isFinite(ms)&&ms>0)durationSeconds=ms/1000;
    });
    if(queuedPlay){queuedPlay=false;playSong()}
   });
-  scWidget.bind(SC.Widget.Events.PLAY,()=>{scPlaying=true;document.body.classList.add('has-song');toast.hidden=true;updateButtons()});
-  scWidget.bind(SC.Widget.Events.PAUSE,()=>{scPlaying=false;updateButtons()});
+  scWidget.bind(SC.Widget.Events.PLAY,()=>{
+   if(sourceMode==='local'){scWidget.pause();return}
+   scPlaying=true;document.body.classList.add('has-song');toast.hidden=true;updateButtons();
+  });
+  scWidget.bind(SC.Widget.Events.PAUSE,()=>{if(sourceMode==='soundcloud'){scPlaying=false;updateButtons()}});
   scWidget.bind(SC.Widget.Events.FINISH,()=>{
+   if(sourceMode!=='soundcloud')return;
    scPlaying=false;positionSeconds=0;lastCue='';updateButtons();
-   showMessage('For you, always ♡');
+   if(durationSeconds<65)showMessage('SoundCloud preview ended — choose your MP3 for the full song ♡');
+   else showMessage('For you, always ♡');
   });
   scWidget.bind(SC.Widget.Events.PLAY_PROGRESS,e=>{
-   if(e&&Number.isFinite(e.currentPosition)&&performance.now()-lastSeek>450)positionSeconds=e.currentPosition/1000;
+   if(sourceMode==='soundcloud'&&e&&Number.isFinite(e.currentPosition)&&performance.now()-lastSeek>450)positionSeconds=e.currentPosition/1000;
   });
   scWidget.bind(SC.Widget.Events.ERROR,()=>revealSoundcloud('Play the song from its official SoundCloud player'));
  };
