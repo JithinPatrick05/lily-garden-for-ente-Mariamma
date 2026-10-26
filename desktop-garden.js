@@ -31,7 +31,8 @@
     frag.appendChild(el);
   }
   function fill(){
-    if(!media.matches)return;
+    // Build the additional original lily elements on all viewports;
+    // CSS hides them below laptop width without loading extra decoration.
     const next=innerWidth>=1600?'wide':innerWidth>=1120?'laptop':'compact';
     if(next===mode&&layer.querySelector('.original-extra-lily'))return;
     mode=next;
