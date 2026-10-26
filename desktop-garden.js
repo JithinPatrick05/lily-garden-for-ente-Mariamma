@@ -7,6 +7,8 @@
   const layer=document.getElementById('desktop-lily-garden');
   const particles=document.getElementById('particles');
   if(!layer||!particles)return;
+  if(window.__lilyPhotoGardenReady)return;
+  window.__lilyPhotoGardenReady=true;
   const colours=['255,179,227','231,207,255','255,230,174','172,224,255','255,249,251','235,168,247'];
   const crops=[
     [34,22,360],[68,35,345],[34,70,345],[65,78,365],
