@@ -1848,6 +1848,46 @@ html body #bouquets .bouquet{
  html body #bouquets .bouquet{translate:0 0!important;transition:none!important}
 }
 
+
+/* Anti-flicker love-letter reveal: no costly GPU backdrop recapture.
+   The overlay and letter use one coherent fade + gentle translation. */
+html body .secret-letter-overlay{
+  background:rgba(10,4,15,.86)!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  opacity:0;
+  visibility:visible;
+  transition:opacity .32s cubic-bezier(.22,.7,.22,1)!important;
+  will-change:opacity;
+  contain:layout style;
+}
+html body .secret-letter-overlay.secret-letter-visible{opacity:1!important}
+html body .secret-letter-overlay .secret-letter-card{
+  transform:translate3d(0,12px,0) scale(.985)!important;
+  opacity:0!important;
+  transition:
+    transform .40s cubic-bezier(.17,.78,.22,1),
+    opacity .32s cubic-bezier(.22,.7,.22,1)!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:transform,opacity;
+}
+html body .secret-letter-overlay.secret-letter-visible .secret-letter-card{
+  transform:translate3d(0,0,0) scale(1)!important;
+  opacity:1!important;
+}
+html body .secret-letter-overlay.secret-letter-closing .secret-letter-card{
+  transform:translate3d(0,8px,0) scale(.99)!important;
+  opacity:0!important;
+}
+@media(prefers-reduced-motion:reduce){
+  html body .secret-letter-overlay,
+  html body .secret-letter-overlay .secret-letter-card{
+    transition:none!important;
+    will-change:auto!important;
+  }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>🌸 Ente Mariammekku 🌸</h1></header>
@@ -2019,15 +2059,17 @@ function openSecretLetter(i){
  selected.button.classList.add('secret-lily-read');
  secretLetterOverlay.querySelector('#secret-letter-title').textContent=SECRET_LETTERS[i].title;
  secretLetterOverlay.querySelector('.secret-letter-body').textContent=SECRET_LETTERS[i].text;
- secretLetterOverlay.hidden=false;
  secretLetterOverlay.classList.remove('secret-letter-visible','secret-letter-closing');
- // A separate painted starting frame guarantees that the glass/card genuinely
- // unfolds, instead of skipping immediately to the visible state on mobile.
- requestAnimationFrame(()=>requestAnimationFrame(()=>{
+ secretLetterOverlay.hidden=false;
+ // Establish the invisible opening state before the first visible paint.
+ // Keeping the background blur disabled avoids a one-frame GPU flash on mobile.
+ // One animation-frame transition is smoother than the old two-frame delay.
+ void secretLetterOverlay.offsetWidth;
+ requestAnimationFrame(()=>{
    if(version!==secretDialogVersion||secretLetterOverlay.hidden)return;
    secretLetterOverlay.classList.add('secret-letter-visible');
- }));
- secretLetterOverlay.querySelector('.secret-letter-close').focus({preventScroll:true});
+   secretLetterOverlay.querySelector('.secret-letter-close').focus({preventScroll:true});
+ });
 }
 function closeSecretLetter(){
  if(secretLetterOverlay.hidden)return;
@@ -2037,7 +2079,7 @@ function closeSecretLetter(){
  secretLetterOverlay.classList.remove('secret-letter-visible');
  secretLetterOverlay.classList.add('secret-letter-closing');
  const version=secretDialogVersion;
- const closeDelay=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:400;
+ const closeDelay=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:360;
  secretCloseTimer=setTimeout(()=>{
    if(version!==secretDialogVersion)return;
    secretLetterOverlay.hidden=true;
