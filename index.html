@@ -16,7 +16,7 @@
       html=html.replace(a,b);
     };
     replace('</style></head>',
-      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-4"></head>',
+      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-5"></head>',
       'enhancements');
     /* Keep the existing photos but omit expensive unused desktop vector flowers. */
     replace('desktopLilyPositions.forEach((p,i)=>{','[].forEach((p,i)=>{','vector performance');
@@ -33,21 +33,16 @@
       '  setTimeout(()=>{if(leaving.isConnected)leaving.remove()},390);\n'+
       ' } else {lyricEl.replaceChildren(sentence)}\n fitLyric();',
       'smooth caption transition');
-    // A blocking script after the app's inline setup avoids dynamic-defer races.
+    // Load the extra ORIGINAL lilies after the page's own script,
+    // inside the same execution block. This avoids browser script-order races.
+    const addonResponse=await fetch('./desktop-garden.js?v=20261026-5',{cache:'no-cache'});
+    if(!addonResponse.ok)throw new Error('Original lily decorations could not load');
+    const originalLilyFill=await addonResponse.text();
     const tail='</scr'+'ipt></body></html>';
-    replace(tail,'</scr'+'ipt><scr'+'ipt src="./desktop-garden.js?v=20261026-4"></scr'+'ipt></body></html>','desktop visual setup');
+    replace(tail,'\n'+originalLilyFill+'\n'+tail,'additional original lilies');
     document.open('text/html','replace');
     document.write(html);
     document.close();
-    // Some browsers ignore dynamically written defer scripts. Load from the
-    // live DOM as a fallback; the enhancement's guard prevents duplicate blooms.
-    requestAnimationFrame(()=>{
-      if(window.__lilyPhotoGardenReady)return;
-      const script=document.createElement('script');
-      script.src='./desktop-garden.js?v=20261026-4';
-      if(document.body)document.body.appendChild(script);
-      else document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(script),{once:true});
-    });
   } catch(error) {
     console.error('Garden enhancement loading error:',error);
     const note=document.querySelector('#loading span');
