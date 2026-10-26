@@ -1263,6 +1263,59 @@ body:not(.yt-collapsed) .stage #lyric .lyric-sentence.caption-lyric {
   }
 }
 
+
+/* Smooth kinetic lyrics v2: compositor-friendly opacity/transform only. */
+.stage #lyric .ig-word,
+body .stage #lyric .ig-word{
+  opacity:0;
+  transform:translate3d(0,12px,0) scale(.965)!important;
+  filter:none!important;
+  transition:
+    opacity .34s cubic-bezier(.18,.68,.24,1),
+    transform .56s cubic-bezier(.16,.78,.23,1)!important;
+  will-change:opacity,transform;
+  backface-visibility:hidden;
+}
+.stage #lyric .ig-word.ig-visible,
+body .stage #lyric .ig-word.ig-visible{
+  opacity:1!important;
+  transform:translate3d(0,0,0) scale(1)!important;
+  filter:none!important;
+}
+body .stage #lyric .lyric-sentence.caption-lyric{
+  transition:
+    opacity .18s ease-out,
+    transform .27s cubic-bezier(.22,.72,.28,1)!important;
+  will-change:opacity,transform;
+}
+body .stage #lyric .lyric-sentence.caption-lyric.is-exiting,
+body .stage #lyric .lyric-sentence.caption-lyric.is-current.is-exiting{
+  opacity:0!important;
+  transform:translate3d(0,-6px,0)!important;
+}
+body .stage #lyric .lyric-sentence.caption-quote.is-exiting,
+body .stage #lyric .lyric-sentence.caption-quote.is-current.is-exiting{
+  opacity:0!important;
+  transform:translate3d(17px,0,0)!important;
+  transition:opacity .18s ease-out,transform .25s ease-out!important;
+}
+@media(prefers-reduced-motion:reduce){
+  body .stage #lyric .lyric-sentence.caption-lyric,
+  body .stage #lyric .lyric-sentence.caption-lyric.is-exiting,
+  body .stage #lyric .lyric-sentence.caption-quote.is-exiting{
+    transition:none!important;
+    opacity:1!important;
+    transform:none!important;
+  }
+  .stage #lyric .ig-word,
+  .stage #lyric .ig-word.ig-visible{
+    transition:none!important;
+    filter:none!important;
+    transform:none!important;
+    opacity:1!important;
+  }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -1478,30 +1531,53 @@ function installCaption(item,t,force){
    captionTimes=getWordTimes(item,words);
    if(force||reduced)sentence.classList.add('ig-instant');
  }
- // Removing the outgoing caption first ensures no duplicate words or overlap.
+ // Keep exactly ONE caption in the document at every moment.
  lyricEl.replaceChildren(sentence);
  fitLyric();
- captionReady=true;
- if(isQuote&&!force&&!reduced){
+ if(isQuote){
+   captionReady=true;
+   if(!force&&!reduced){
+     requestAnimationFrame(()=>{
+       if(!sentence.isConnected)return;
+       sentence.getBoundingClientRect();
+       sentence.classList.remove('is-entering');
+       sentence.classList.add('is-current');
+     });
+   }
+ }else if(force||reduced){
+   // Seeking should show the correct words immediately.
+   captionReady=true;
+   syncCaptionWords(t);
    requestAnimationFrame(()=>{
-     if(!sentence.isConnected)return;
-     sentence.getBoundingClientRect();
-     sentence.classList.remove('is-entering');
-     sentence.classList.add('is-current');
+     if(sentence.isConnected)sentence.classList.remove('ig-instant');
    });
  }else{
-   syncCaptionWords(t);
-   if(sentence.classList.contains('ig-instant')){
-     requestAnimationFrame(()=>{if(sentence.isConnected)sentence.classList.remove('ig-instant')});
-   }
+   // Let the initial position paint before revealing the first timed words,
+   // so mobile browsers animate rather than jumping to the final state.
+   requestAnimationFrame(()=>{
+     if(!sentence.isConnected)return;
+     captionReady=true;
+     const now=Number.isFinite(music.currentTime)
+       ? Math.max(0,music.currentTime+LYRIC_OFFSET_SECONDS):t;
+     syncCaptionWords(now);
+   });
  }
 }
+// Fade the current line just BEFORE the next cue, instead of dropping it
+// instantly. The replacement itself stays on the existing MP3 cue.
+const CAPTION_EXIT_LEAD=0.16;
 function displayLyric(t,force=false){
  const aligned=Math.max(0,t+LYRIC_OFFSET_SECONDS);
  const item=getCaption(aligned);
  if(force||item.key!==lastCue){
     lastCue=item.key;
     installCaption(item,aligned,force);
+ }
+ const sentence=lyricEl.querySelector('.lyric-sentence');
+ if(sentence){
+   const upcoming=getCaption(aligned+CAPTION_EXIT_LEAD);
+   const shouldExit=!force&&!music.paused&&upcoming.key!==item.key;
+   sentence.classList.toggle('is-exiting',shouldExit);
  }
  syncCaptionWords(aligned);
 }
