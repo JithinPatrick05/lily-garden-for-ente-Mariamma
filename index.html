@@ -781,6 +781,33 @@ body,.brand h1,.stage #lyric,.stage #lyric .lyric-sentence,
 @media(prefers-reduced-motion:reduce){
  .stage #lyric .lyric-sentence{animation:none!important}
 }
+
+/* Modern lyric-video rain: word-by-word reveal driven by song position. */
+.stage #lyric .lyric-sentence {
+ display:inline-flex!important;flex-wrap:wrap;align-content:center;align-items:center;
+ justify-content:center;column-gap:.24em;row-gap:.04em;
+ width:auto;max-width:100%;line-height:inherit;text-wrap:balance;
+}
+.stage #lyric .rain-word{
+ display:inline-block;opacity:0;transform:translate3d(0,-31px,0) scale(.97);
+ filter:blur(6px);
+ transition:opacity .58s cubic-bezier(.16,.8,.28,1),
+ transform .81s cubic-bezier(.17,.88,.24,1),filter .67s ease;
+ will-change:opacity,transform,filter;
+ color:rgba(255,238,247,.97)!important;
+ -webkit-text-fill-color:rgba(255,238,247,.97)!important;
+ white-space:nowrap;
+}
+.stage #lyric .rain-word.landed{opacity:1;transform:translate3d(0,0,0) scale(1);filter:blur(0)}
+.stage #lyric .rain-word:nth-child(3n).landed{
+ color:rgba(255,209,236,.98)!important;-webkit-text-fill-color:rgba(255,209,236,.98)!important;
+}
+.stage #lyric .rain-word:nth-child(5n).landed{
+ color:rgba(229,220,255,.97)!important;-webkit-text-fill-color:rgba(229,220,255,.97)!important;
+}
+@media(prefers-reduced-motion:reduce){
+ .stage #lyric .rain-word{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+}
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -893,30 +920,59 @@ function requestLyricFit(){
  if(fitRequest!==null)cancelAnimationFrame(fitRequest);
  fitRequest=requestAnimationFrame(()=>{fitRequest=null;fitLyric()});
 }
+// The MP3 clock reveals each word; paused and seeking lyrics stay synchronized.
+let rainWords=[],rainWordStart=0,rainWordStep=.2;
+function lyricRainTiming(item,t,count){
+ let start=t,windowSeconds=2.2;
+ if(item.key==='quote1'){start=0;windowSeconds=5.6}
+ else if(item.key==='quote2'){start=12.9;windowSeconds=4.8}
+ else if(item.key.startsWith('lyric-')){
+  const i=Number(item.key.slice(6));
+  if(Number.isInteger(i)&&cues[i]){
+    start=cues[i].t;
+    const next=cues[i+1],span=next?Math.max(.8,next.t-start):4.3;
+    windowSeconds=Math.max(.95,Math.min(4.3,span*.78));
+  }
+ }else if(item.key.startsWith('note-')){
+   start=Number(item.key.slice(5))||t;windowSeconds=2.5;
+ }else if(item.key.startsWith('hold-')){
+   start=cues[Number(item.key.slice(5))]?.t||t;windowSeconds=1.8;
+ }
+ return {start,step:count>1?windowSeconds/(count-1):0};
+}
 function displayLyric(t,force=false){
- const item=getCaption(Math.max(0,t+LYRIC_OFFSET_SECONDS));
- if(!force && item.key===lastCue)return;
- lastCue=item.key;
- lyricTransitionId++;
- clearTimeout(lyricChangeTimer);
- lyricEl.classList.remove('switching');
- const span=document.createElement('span');
- span.className='lyric-sentence';
- span.textContent=item.text;
- lyricEl.replaceChildren(span);
- requestLyricFit();
- if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches && span.animate){
-   // Modern soft-focus reveal, with a short cinematic light-wipe rather than the old traditional fade.
-   span.animate([
-     {opacity:0,transform:'translate3d(0,13px,0)',filter:'blur(6px)',clipPath:'inset(0 20% 0 0)',offset:0},
-     {opacity:.88,transform:'translate3d(0,1px,0)',filter:'blur(.5px)',clipPath:'inset(0 0 0 0)',offset:.7},
-     {opacity:1,transform:'translate3d(0,0,0)',filter:'blur(0)',clipPath:'inset(0 0 0 0)',offset:1}
-   ],{duration:930,easing:'cubic-bezier(.17,.84,.28,1)'});
+ const aligned=Math.max(0,t+LYRIC_OFFSET_SECONDS);
+ const item=getCaption(aligned);
+ if(force||item.key!==lastCue){
+  lastCue=item.key;
+  lyricTransitionId++;
+  clearTimeout(lyricChangeTimer);
+  lyricEl.classList.remove('switching');
+  const sentence=document.createElement('span');
+  sentence.className='lyric-sentence';
+  const tokens=(item.text||'').trim().split(/\s+/).filter(Boolean);
+  rainWords=[];
+  tokens.forEach(word=>{
+    const el=document.createElement('span');
+    el.className='rain-word';
+    el.textContent=word;
+    sentence.appendChild(el);
+    rainWords.push(el);
+  });
+  if(!rainWords.length)sentence.textContent=' ';
+  lyricEl.replaceChildren(sentence);
+  const timing=lyricRainTiming(item,aligned,rainWords.length);
+  rainWordStart=timing.start;
+  rainWordStep=timing.step;
+  requestLyricFit();
+ }
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ for(let i=0;i<rainWords.length;i++){
+  const landed=reduced||aligned+.045>=rainWordStart+rainWordStep*i;
+  if(rainWords[i].classList.contains('landed')!==landed)
+   rainWords[i].classList.toggle('landed',landed);
  }
 }
-window.addEventListener('resize',requestLyricFit,{passive:true});
-if(document.fonts && document.fonts.ready)document.fonts.ready.then(requestLyricFit).catch(()=>{});
-
 
 const music=document.getElementById('lovesong-audio');
 function playSong(){
