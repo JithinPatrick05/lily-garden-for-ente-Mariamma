@@ -16,7 +16,7 @@
       html=html.replace(a,b);
     };
     replace('</style></head>',
-      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-3"></head>',
+      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-4"></head>',
       'enhancements');
     /* Keep the existing photos but omit expensive unused desktop vector flowers. */
     replace('desktopLilyPositions.forEach((p,i)=>{','[].forEach((p,i)=>{','vector performance');
@@ -35,10 +35,19 @@
       'smooth caption transition');
     // A blocking script after the app's inline setup avoids dynamic-defer races.
     const tail='</scr'+'ipt></body></html>';
-    replace(tail,'</scr'+'ipt><scr'+'ipt src="./desktop-garden.js?v=20261026-3"></scr'+'ipt></body></html>','desktop visual setup');
+    replace(tail,'</scr'+'ipt><scr'+'ipt src="./desktop-garden.js?v=20261026-4"></scr'+'ipt></body></html>','desktop visual setup');
     document.open('text/html','replace');
     document.write(html);
     document.close();
+    // Some browsers ignore dynamically written defer scripts. Load from the
+    // live DOM as a fallback; the enhancement's guard prevents duplicate blooms.
+    requestAnimationFrame(()=>{
+      if(window.__lilyPhotoGardenReady)return;
+      const script=document.createElement('script');
+      script.src='./desktop-garden.js?v=20261026-4';
+      if(document.body)document.body.appendChild(script);
+      else document.addEventListener('DOMContentLoaded',()=>document.body.appendChild(script),{once:true});
+    });
   } catch(error) {
     console.error('Garden enhancement loading error:',error);
     const note=document.querySelector('#loading span');
