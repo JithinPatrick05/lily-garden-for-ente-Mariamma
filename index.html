@@ -2384,7 +2384,7 @@ function updateMusicLilies(now){
  if(active){
   try{target=musicLilyEnergy()}catch(e){target=.23}
  }
- lilyMotionEnergy+=(target-lilyMotionEnergy)*(active?.17:.20);
+ lilyMotionEnergy+=(target-lilyMotionEnergy)*(active?.10:.13);
  const energy=lilyMotionEnergy;
  if(!active&&!lilyMotionActive&&energy<.008)return;
  lilyMotionActive=active||energy>=.008;
@@ -2393,8 +2393,9 @@ function updateMusicLilies(now){
   const flower=interactiveBlooms[i];
   if(flower.classList.contains('secret-lily-bloom'))continue;
   const phase=i*.73;
-  const x=Math.sin(t*1.05+phase)*energy*3.2;
-  const y=(Math.cos(t*1.47+phase*.82)-.28)*energy*3.7;
+  // Subtle mode: barely perceptible, smooth breathing in time with the song.
+  const x=Math.sin(t*.72+phase)*energy*1.45;
+  const y=(Math.cos(t*.93+phase*.82)-.28)*energy*1.85;
   flower.style.setProperty('--song-x',x.toFixed(2)+'px');
   flower.style.setProperty('--song-y',y.toFixed(2)+'px');
  }
