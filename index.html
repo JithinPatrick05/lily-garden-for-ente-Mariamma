@@ -725,7 +725,7 @@ function touchLilies(x,y){
       flower.style.translate='0px 0px';
       flower.style.rotate='0deg';
       flower.style.scale='1';
-      continue;
+      return;
     }
     const angle=Math.atan2(dy,dx);
     const sideways=Math.cos(angle)*13*intensity;
