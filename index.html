@@ -1351,6 +1351,111 @@ body .stage #lyric .lyric-sentence.caption-quote.is-current.is-exiting{
   .brand h1 { font-size:clamp(19px,6vw,23px)!important; }
 }
 
+
+/* Four touch-to-reveal love letters hidden in real, randomly picked lilies. */
+#secret-lily-layer{position:fixed;inset:0;z-index:12;pointer-events:none;}
+.secret-lily-trigger{
+  position:absolute;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;min-width:54px;min-height:56px;
+  padding:6px 4px;border:0;outline-offset:3px;border-radius:50%;
+  transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;
+  background:transparent;color:#fff2f9;
+  -webkit-tap-highlight-color:transparent;
+  animation:secret-arrive .9s ease-out both;
+}
+.secret-lily-trigger[hidden],.secret-letter-overlay[hidden]{display:none!important;}
+.secret-lily-trigger:focus-visible{outline:2px solid #ffe8f4;}
+.secret-lily-halo{
+  display:grid;place-items:center;width:36px;height:36px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,213,244,.27),rgba(255,103,191,.13) 46%,transparent 73%);
+  font-size:25px;line-height:1;
+  text-shadow:0 0 10px #ffafd9,0 0 24px #ff62b4;
+  filter:drop-shadow(0 0 8px rgba(255,166,220,.67));
+  animation:secret-beacon 2.8s ease-in-out infinite;
+}
+.secret-lily-hint{
+  display:block;white-space:nowrap;text-transform:uppercase;
+  font-family:Outfit,system-ui,sans-serif;font-size:8px;font-weight:700;
+  letter-spacing:.07em;color:#ffe4f3;
+  text-shadow:0 1px 7px #000,0 0 7px #ff64af;
+  opacity:.9;
+}
+.secret-lily-trigger.secret-lily-read .secret-lily-hint{opacity:.48}
+.secret-lily-trigger.secret-lily-picked .secret-lily-halo{animation:secret-beacon .8s ease-in-out infinite}
+.bouquet.secret-lily-ready{filter:drop-shadow(0 0 24px rgba(255,120,211,.55)) saturate(1.2)}
+.bouquet.secret-lily-bloom{
+  animation:secret-real-bloom 1.1s cubic-bezier(.17,.83,.18,1) both!important;
+}
+@keyframes secret-arrive{
+  from{opacity:0;scale:.7}to{opacity:1;scale:1}
+}
+@keyframes secret-beacon{
+  0%,100%{opacity:.66;transform:scale(.92)}
+  50%{opacity:1;transform:scale(1.15)}
+}
+@keyframes secret-real-bloom{
+  0%{opacity:.50;scale:.90;filter:drop-shadow(0 0 12px rgba(255,125,212,.3))}
+  45%{opacity:1;scale:1.21;filter:drop-shadow(0 0 37px rgba(255,140,224,.84))}
+  100%{opacity:1;scale:1;filter:drop-shadow(0 0 26px rgba(255,133,217,.60))}
+}
+.secret-letter-overlay{
+  position:fixed;inset:0;z-index:40;
+  display:flex;align-items:center;justify-content:center;
+  padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
+  background:rgba(8,3,12,.70);
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  opacity:0;transition:opacity .36s ease;
+  pointer-events:auto;
+}
+.secret-letter-overlay.secret-letter-visible{opacity:1;}
+.secret-letter-card{
+  position:relative;width:min(100%,395px);
+  padding:37px 30px 31px;
+  border-radius:23px;
+  border:1px solid rgba(255,220,244,.28);
+  background:linear-gradient(145deg,rgba(42,19,43,.97),rgba(22,11,32,.98));
+  box-shadow:0 23px 75px rgba(0,0,0,.52),0 0 45px rgba(233,92,185,.12);
+  transform:translateY(15px) scale(.97);
+  transition:transform .52s cubic-bezier(.17,.79,.18,1);
+  text-align:center;color:#fff3fb;
+}
+.secret-letter-visible .secret-letter-card{transform:translateY(0) scale(1)}
+.secret-letter-close{
+  position:absolute;top:9px;right:12px;width:34px;height:34px;
+  padding:0;border:0;border-radius:50%;
+  color:#ffeaf7;background:rgba(255,255,255,.09);
+  font-size:26px;line-height:1;cursor:pointer;
+}
+.secret-letter-close:focus-visible{outline:2px solid #fff1fa;outline-offset:3px}
+.secret-letter-mark{color:#ffd3eb;font-size:31px;text-shadow:0 0 20px rgba(255,125,192,.48);}
+.secret-letter-card h2{
+  margin:10px 0 13px;
+  font-family:"Great Vibes","Brush Script MT",cursive!important;
+  font-size:clamp(34px,9vw,43px);font-weight:400;
+  line-height:1.18;letter-spacing:0;color:#ffcae6;
+}
+.secret-letter-body{
+  margin:0 auto;max-width:32ch;
+  font-family:Outfit,system-ui,sans-serif;
+  font-size:clamp(13px,3.5vw,15px);
+  font-weight:400;line-height:1.75;letter-spacing:.005em;
+  color:#fff2f8;
+}
+.secret-letter-signature{
+  margin-top:22px;font-family:"Great Vibes","Brush Script MT",cursive;
+  font-size:25px;color:#ffc6e5;
+}
+@media(max-width:720px){
+  .secret-lily-trigger{min-width:50px;min-height:54px}
+  .secret-lily-halo{width:33px;height:33px;font-size:23px}
+  .secret-letter-card{padding:33px 25px 27px}
+}
+@media(prefers-reduced-motion:reduce){
+  .secret-lily-trigger,.secret-lily-halo,.bouquet.secret-lily-bloom,
+  .secret-letter-overlay,.secret-letter-card{animation:none!important;transition:none!important}
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -1432,6 +1537,111 @@ window.addEventListener('pointerdown',onGardenTouch,{passive:true});
 window.addEventListener('pointermove',onGardenTouch,{passive:true});
 window.addEventListener('pointerup',()=>{clearTimeout(settleTimer);settleTimer=setTimeout(calmLilies,1200)},{passive:true});
 window.addEventListener('pointercancel',()=>{clearTimeout(settleTimer);settleTimer=setTimeout(calmLilies,250)},{passive:true});
+
+/* Four secret lilies are chosen from the garden on each page load.
+   Each unlocks at an instrumental pause, but its note opens ONLY on touch.
+   Once unlocked the flower remains available so letters cannot be missed. */
+const SECRET_LETTERS=[
+ {at:58.0,title:"Marriamme,",text:"If lilies could keep secrets, every petal would hold a reason I love you. You turn ordinary moments into the sweetest memories, and wherever life takes us, my heart will always find its way home to you."},
+ {at:140.1,title:"My love,",text:"You are the calm in my busiest days, the smile I look for without even thinking. I would choose you in a thousand lifetimes, and still wish for one more minute beside you."},
+ {at:219.0,title:"Muthe,",text:"Enikku ninne othiri ishtamaanu. Even on the quietest days, you make my world feel warm. If I could gather every star and every flower, it still wouldn't show how precious you are to me."},
+ {at:286.0,title:"My world,",text:"If forever had a colour, it would be the soft pink of these lilies blooming for you. I don't need a perfect story — just the beautiful little life we can write together, one day and one heartbeat at a time."}
+];
+const letterSpots=[
+ positions.map((p,i)=>({p,i})).filter(({p})=>p.x<22&&p.y>=19&&p.y<52),
+ positions.map((p,i)=>({p,i})).filter(({p})=>p.x>78&&p.y>=19&&p.y<52),
+ positions.map((p,i)=>({p,i})).filter(({p})=>p.x<22&&p.y>=53&&p.y<76),
+ positions.map((p,i)=>({p,i})).filter(({p})=>p.x>78&&p.y>=53&&p.y<76)
+];
+// Pick randomly within each quadrant; shuffle which letter goes in which area.
+const selectedSpots=letterSpots.map(group=>group[Math.floor(Math.random()*group.length)]);
+for(let i=selectedSpots.length-1;i>0;i--){
+ const j=Math.floor(Math.random()*(i+1));
+ [selectedSpots[i],selectedSpots[j]]=[selectedSpots[j],selectedSpots[i]];
+}
+const secretLilyLayer=document.createElement('div');
+secretLilyLayer.id='secret-lily-layer';
+secretLilyLayer.setAttribute('aria-label','Hidden letters in the lily garden');
+document.body.appendChild(secretLilyLayer);
+const secretLetterOverlay=document.createElement('div');
+secretLetterOverlay.className='secret-letter-overlay';
+secretLetterOverlay.hidden=true;
+secretLetterOverlay.setAttribute('role','dialog');
+secretLetterOverlay.setAttribute('aria-modal','true');
+secretLetterOverlay.setAttribute('aria-labelledby','secret-letter-title');
+secretLetterOverlay.innerHTML='<div class="secret-letter-card"><button type="button" class="secret-letter-close" aria-label="Close love letter">×</button><div class="secret-letter-mark" aria-hidden="true">✿</div><h2 id="secret-letter-title"></h2><p class="secret-letter-body"></p><div class="secret-letter-signature">with all my heart ♡</div></div>';
+document.body.appendChild(secretLetterOverlay);
+let secretOpenIndex=-1,secretLastFocus=null,secretRevealTimer=null;
+const secretButtons=SECRET_LETTERS.map((letter,i)=>{
+ const {p,index}= {p:selectedSpots[i].p,index:selectedSpots[i].i};
+ const bloom=interactiveBlooms[index];
+ const button=document.createElement('button');
+ button.type='button';
+ button.className='secret-lily-trigger';
+ button.style.left=Math.max(8,Math.min(92,p.x))+'%';
+ button.style.top=Math.max(12,Math.min(79,p.y))+'%';
+ button.setAttribute('aria-label','Open a hidden love letter from this lily');
+ button.setAttribute('aria-hidden','true');
+ button.tabIndex=-1;
+ button.hidden=true;
+ button.innerHTML='<span class="secret-lily-halo" aria-hidden="true">✦</span><span class="secret-lily-hint" aria-hidden="true">touch me</span>';
+ button.addEventListener('click',ev=>{
+   ev.stopPropagation();
+   if(button.hidden)return;
+   clearTimeout(secretRevealTimer);
+   secretLastFocus=button;
+   bloom.classList.remove('secret-lily-bloom');
+   // Restart the opening bloom on every tap.
+   void bloom.offsetWidth;
+   bloom.classList.add('secret-lily-bloom');
+   button.classList.add('secret-lily-picked');
+   secretRevealTimer=setTimeout(()=>openSecretLetter(i),360);
+ });
+ secretLilyLayer.appendChild(button);
+ return {button,bloom,at:letter.at,unlocked:false,read:false};
+});
+function updateSecretLilies(t){
+ for(let i=0;i<secretButtons.length;i++){
+   const s=secretButtons[i];
+   if(s.unlocked||t<s.at)continue;
+   s.unlocked=true;
+   s.button.hidden=false;
+   s.button.tabIndex=0;
+   s.button.removeAttribute('aria-hidden');
+   s.bloom.classList.add('secret-lily-ready');
+   if(i===0)showMessage('A lily has a secret ♡ Tap the glowing flower');
+   else showMessage('Another lily is ready to bloom ♡');
+ }
+}
+function openSecretLetter(i){
+ const s=secretButtons[i];
+ if(!s||!s.unlocked)return;
+ secretOpenIndex=i;
+ s.read=true;
+ s.button.classList.add('secret-lily-read');
+ secretLetterOverlay.querySelector('#secret-letter-title').textContent=SECRET_LETTERS[i].title;
+ secretLetterOverlay.querySelector('.secret-letter-body').textContent=SECRET_LETTERS[i].text;
+ secretLetterOverlay.hidden=false;
+ requestAnimationFrame(()=>secretLetterOverlay.classList.add('secret-letter-visible'));
+ secretLetterOverlay.querySelector('.secret-letter-close').focus({preventScroll:true});
+}
+function closeSecretLetter(){
+ clearTimeout(secretRevealTimer);
+ secretLetterOverlay.classList.remove('secret-letter-visible');
+ secretLetterOverlay.hidden=true;
+ if(secretOpenIndex>=0)secretButtons[secretOpenIndex].button.classList.remove('secret-lily-picked');
+ secretOpenIndex=-1;
+ if(secretLastFocus?.isConnected)secretLastFocus.focus({preventScroll:true});
+ secretLastFocus=null;
+}
+secretLetterOverlay.querySelector('.secret-letter-close').addEventListener('click',closeSecretLetter);
+secretLetterOverlay.addEventListener('click',ev=>{
+ if(ev.target===secretLetterOverlay)closeSecretLetter();
+});
+document.addEventListener('keydown',ev=>{
+ if(ev.key==='Escape'&&!secretLetterOverlay.hidden)closeSecretLetter();
+});
+// Preserve the garden's existing shy-on-touch effect, while buttons handle the reveal.
 
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
@@ -1627,7 +1837,7 @@ function pauseSong(){music.pause()}
 function seekSong(value){
  const next=Math.max(0,Math.min(Number.isFinite(music.duration)?music.duration:durationSeconds,value));
  if(music.readyState>0)music.currentTime=next;
- positionSeconds=next;lastCue='';displayLyric(next,true);
+ positionSeconds=next;lastCue='';displayLyric(next,true);updateSecretLilies(next);
 }
 playBtn.addEventListener('click',playSong);
 pauseBtn.addEventListener('click',pauseSong);
@@ -1644,7 +1854,7 @@ music.addEventListener('loadedmetadata',()=>{
  if(Number.isFinite(music.duration)&&music.duration>0)durationSeconds=music.duration;
 });
 music.addEventListener('timeupdate',()=>{positionSeconds=music.currentTime||0});
-music.addEventListener('seeked',()=>displayLyric(music.currentTime||0,true));
+music.addEventListener('seeked',()=>{const t=music.currentTime||0;displayLyric(t,true);updateSecretLilies(t)});
 music.addEventListener('play',()=>{document.body.classList.add('has-song');updateButtons()});
 music.addEventListener('pause',updateButtons);
 music.addEventListener('ended',()=>{showMessage('For you, always ♡');updateButtons()});
@@ -1657,6 +1867,7 @@ function frame(now){
  // Use the audio element's clock every display frame, avoiding the old ~90 ms
  // word-reveal quantisation and all artificial 260 ms caption entry delays.
  displayLyric(t);
+ updateSecretLilies(t);
  if(now-lastFrame>=110){
    lastFrame=now;
    timeEl.textContent=formatTime(t)+' / '+formatTime(durationSeconds);
