@@ -1,60 +1,44 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#000000"><title>Ente Mariammekku 🌸💗</title>
-<style>html,body{margin:0;min-height:100%;background:#000;color:#ffe6f5;font-family:system-ui,sans-serif}#loading{position:fixed;inset:0;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center}#loading strong{font-size:clamp(19px,4vw,29px);font-weight:600;letter-spacing:.01em;text-shadow:0 0 17px rgba(255,93,197,.4)}#loading span{color:#c48aaf;font-size:12px}a{color:#f7b3dc}</style>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Ente Mariammekku — original textured stargazer lilies and synchronized love-song lyrics.">
+<title>Ente Mariammekku 🌸💗</title>
+<style>
+ html,body{height:100%;height:100dvh;width:100%;margin:0;background:#000;overflow:hidden}
+ #original-site{position:fixed;inset:0;width:100%;height:100%;height:100dvh;display:block;border:0;z-index:1;background:#000}
+ #individual-lily-garden{position:fixed;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+ @media(max-width:899px){#individual-lily-garden{display:none!important}}
+</style>
+<link rel="stylesheet" href="./desktop-garden.css?v=unique-original-2">
 </head>
-<body><main id="loading"><strong>🌸 Ente Mariammekku 🌸</strong><span>Opening the lily garden…</span></main>
+<body>
+<iframe id="original-site" src="./site-original.html" title="Ente Mariammekku — song and lyrics" allow="autoplay" loading="eager"></iframe>
+<div id="individual-lily-garden" aria-hidden="true"></div>
 <script>
-(async()=>{
-  try {
-    const response=await fetch('./site-original.html',{cache:'no-cache'});
-    if(!response.ok)throw new Error('Unable to load the garden');
-    let html=await response.text();
-    const replace=(a,b,name)=>{
-      if(!html.includes(a))throw new Error('Missing website section: '+name);
-      html=html.replace(a,b);
-    };
-    replace('</style></head>',
-      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-unique-1"></head>',
-      'enhancements');
-    /* Keep the existing photos but omit expensive unused desktop vector flowers. */
-    replace('desktopLilyPositions.forEach((p,i)=>{','[].forEach((p,i)=>{','vector performance');
-    /* Preserve all the hand-aligned MP3 cue points and private heart animations.
-       Transition old sentence out while the next is timed to the native audio clock. */
-    replace(' lyricEl.replaceChildren(sentence);\n fitLyric();',
-      ' const leaving=lyricEl.querySelector(".lyric-sentence");\n'+
-      ' if(leaving&&!force&&!reduced){\n'+
-      '  leaving.classList.add("lyric-leaving");\n'+
-      '  leaving.classList.remove("is-exiting","is-entering","is-current");\n'+
-      '  leaving.setAttribute("aria-hidden","true");\n'+
-      '  lyricEl.replaceChildren(leaving,sentence);\n'+
-      '  requestAnimationFrame(()=>{if(leaving.isConnected)leaving.classList.add("lyric-leaving-active")});\n'+
-      '  setTimeout(()=>{if(leaving.isConnected)leaving.remove()},390);\n'+
-      ' } else {lyricEl.replaceChildren(sentence)}\n fitLyric();',
-      'smooth caption transition');
-    // The original lyric page initializes first. Add a separate browser script
-    // afterwards so the unique flower visuals never disrupt music playback.
-    document.open('text/html','replace');
-    document.write(html);
-    document.close();
-    const startIndividualLilies=()=>{
-      if(document.querySelector('script[data-individual-lilies]'))return;
-      const extra=document.createElement('script');
-      extra.dataset.individualLilies='true';
-      extra.src='./desktop-garden.js?v=20261026-unique-1';
-      extra.onerror=()=>console.warn('Unique lilies did not load; original lilies preserved.');
-      (document.body||document.documentElement).appendChild(extra);
-    };
-    if(document.readyState==='loading')
-      document.addEventListener('DOMContentLoaded',startIndividualLilies,{once:true});
-    else startIndividualLilies();
-  } catch(error) {
-    console.error('Garden enhancement loading error:',error);
-    const note=document.querySelector('#loading span');
-    if(note)note.innerHTML='The enhanced view could not load. <a href="./site-original.html">Open the original garden</a>';
-  }
+(()=>{
+ 'use strict';
+ const frame=document.getElementById('original-site');
+ frame.addEventListener('load',()=>{
+   try{
+     const doc=frame.contentDocument;
+     if(!doc||doc.getElementById('unique-garden-base-style'))return;
+     const st=doc.createElement('style');
+     st.id='unique-garden-base-style';
+     st.textContent='@media(min-width:900px){'+
+       '#bouquets>.bouquet{opacity:.085!important}'+
+       '#bouquets>.bouquet:nth-child(-n+4),'+
+       '#bouquets>.bouquet:nth-child(n+17):nth-child(-n+20),'+
+       '#bouquets>.bouquet:nth-child(n+33):nth-child(-n+35){opacity:.31!important}'+
+       '#desktop-lily-garden{display:none!important}'+
+       '}';
+     doc.head.appendChild(st);
+   }catch(e){console.warn('Original lily garden preserved',e)}
+ });
 })();
 </script>
+<script src="./desktop-garden.js?v=unique-original-2" defer></script>
 </body>
 </html>
