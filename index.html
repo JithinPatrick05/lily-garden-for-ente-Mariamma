@@ -16,8 +16,7 @@
       html=html.replace(a,b);
     };
     replace('</style></head>',
-      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-2">'+
-      '<scr'+'ipt src="./desktop-garden.js?v=20261026-2" defer></scr'+'ipt></head>',
+      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-3"></head>',
       'enhancements');
     /* Keep the existing photos but omit expensive unused desktop vector flowers. */
     replace('desktopLilyPositions.forEach((p,i)=>{','[].forEach((p,i)=>{','vector performance');
@@ -34,6 +33,9 @@
       '  setTimeout(()=>{if(leaving.isConnected)leaving.remove()},390);\n'+
       ' } else {lyricEl.replaceChildren(sentence)}\n fitLyric();',
       'smooth caption transition');
+    // A blocking script after the app's inline setup avoids dynamic-defer races.
+    const tail='</scr'+'ipt></body></html>';
+    replace(tail,'</scr'+'ipt><scr'+'ipt src="./desktop-garden.js?v=20261026-3"></scr'+'ipt></body></html>','desktop visual setup');
     document.open('text/html','replace');
     document.write(html);
     document.close();
