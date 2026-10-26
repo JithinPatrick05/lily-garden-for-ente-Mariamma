@@ -1,88 +1,79 @@
-/* ORIGINAL LILY GARDEN • desktop fill.
-   All added flowers use the exact original .bouquet artwork, intact.
-   No masking, photo-crops, hue rotation, SVGs or recolouring. */
-#desktop-lily-garden .original-extra-lily{
+/* ORIGINAL-TEXTURE LILY GARDEN — individual photo-textured flowers.
+   No hue rotation, vector petals, or repeated whole-bouquet pictures. */
+#individual-lily-garden{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:2}
+#individual-lily-garden .individual-lily{
   position:absolute;
-  left:var(--x);
-  top:var(--y);
-  width:var(--w);
-  aspect-ratio:.80;
-  opacity:var(--o);
-  transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s));
+  top:var(--y);left:var(--x);
+  width:var(--w);aspect-ratio:1;
+  opacity:var(--opacity);
+  transform:translate3d(-50%,-50%,0) rotate(var(--rot)) scaleX(var(--flip)) scaleY(var(--stretch));
   transform-origin:50% 62%;
-  background-position:center!important;
-  background-size:contain!important;
-  background-repeat:no-repeat!important;
-  mix-blend-mode:screen;
-  filter:drop-shadow(0 0 19px rgba(255,103,181,.32)) saturate(1.08);
-  animation:sway var(--d) ease-in-out var(--delay) infinite alternate;
+  animation:individualLilySway var(--duration) ease-in-out var(--delay) infinite alternate;
   pointer-events:none!important;
+  filter:drop-shadow(0 0 12px rgba(244,111,182,.19));
+  contain:layout style;
 }
-#desktop-lily-garden .original-extra-lily::before,
-#desktop-lily-garden .original-extra-lily::after{
-  display:none!important;
-}
-@media(max-width:899px){
-  #desktop-lily-garden .original-extra-lily{display:none!important}
+#individual-lily-garden .individual-lily canvas{display:block;width:100%;height:100%;object-fit:contain}
+@keyframes individualLilySway{
+ from{transform:translate3d(-50%,-50%,0) rotate(calc(var(--rot) - 2.2deg)) scaleX(var(--flip)) scaleY(var(--stretch))}
+ to{transform:translate3d(-50%,calc(-50% - 7px),0) rotate(calc(var(--rot) + 2.2deg)) scaleX(var(--flip)) scaleY(var(--stretch))}
 }
 @media(min-width:900px){
-  /* Preserve more detail on the original lilies along the laptop borders. */
-  #desktop-lily-garden{overflow:hidden;pointer-events:none}
-  #desktop-lily-garden::after{
-    content:"";position:absolute;inset:0;
-    pointer-events:none;
-    background:radial-gradient(ellipse 31% 37% at 50% 49%,
-      rgba(0,0,0,.39),rgba(0,0,0,.21) 60%,transparent 100%);
-  }
+ /* Keep only select original full bouquets behind the individualized flowers,
+    so the background stays recognisable without duplicating the same cluster. */
+ body.unique-lilies-ready #bouquets>.bouquet{
+   opacity:.065!important;
+   pointer-events:none!important;
+ }
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(-n+5),
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+17):nth-child(-n+21),
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+33):nth-child(-n+36){
+   opacity:.29!important;
+ }
+ #individual-lily-garden{display:block}
+ #individual-lily-garden::after{
+   content:"";position:absolute;inset:0;
+   pointer-events:none;
+   background:radial-gradient(ellipse 34% 34% at 50% 50%,rgba(0,0,0,.35) 0%,rgba(0,0,0,.11) 63%,transparent 100%);
+ }
 }
+@media(max-width:899px){#individual-lily-garden{display:none!important}}
 @media(prefers-reduced-motion:reduce){
-  #desktop-lily-garden .original-extra-lily{
-    animation:none!important;
-    transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s))!important;
-  }
+ #individual-lily-garden .individual-lily{animation:none!important;transition:none!important}
 }
-/* Keep the smoother audio-timed caption changes from the previous update.
-   The original lily imagery and colours above are never altered. */
+/* Preserve fluid lyric transitions introduced in the previous build. */
 html body .stage #lyric{position:relative!important;isolation:isolate}
 html body .stage #lyric .lyric-sentence.caption-lyric:not(.ig-instant):not(.lyric-leaving){
-  animation:captionRain .52s cubic-bezier(.18,.82,.22,1) both!important;
-  backface-visibility:hidden;
+ animation:captionRain .52s cubic-bezier(.18,.82,.22,1) both!important
 }
 html body .stage #lyric .lyric-sentence.lyric-leaving{
-  position:absolute!important;top:50%;left:50%;width:100%;margin:0!important;
-  pointer-events:none!important;z-index:0;
-  transform:translate3d(-50%,-50%,0);
-  animation:none!important;transition:none!important;
+ position:absolute!important;top:50%;left:50%;width:100%;margin:0!important;
+ pointer-events:none!important;z-index:0;transform:translate3d(-50%,-50%,0);
+ transition:none!important
 }
 html body .stage #lyric .lyric-sentence.lyric-leaving.lyric-leaving-active{
-  animation:captionDissolve .31s cubic-bezier(.3,.65,.3,1) both!important;
+ animation:captionDissolve .31s cubic-bezier(.3,.65,.3,1) both!important
 }
 html body .stage #lyric .lyric-sentence:not(.lyric-leaving){position:relative;z-index:1}
-@keyframes captionRain{
-  from{opacity:0;transform:translate3d(0,-18px,0)}
-  32%{opacity:.38}
-  to{opacity:1;transform:translate3d(0,0,0)}
-}
+@keyframes captionRain{from{opacity:0;transform:translate3d(0,-18px,0)}32%{opacity:.38}to{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes captionDissolve{
-  from{opacity:.72;transform:translate3d(-50%,-50%,0)}
-  65%{opacity:.10}
-  to{opacity:0;transform:translate3d(-50%,calc(-50% + 13px),0)}
+ from{opacity:.72;transform:translate3d(-50%,-50%,0)}
+ 65%{opacity:.10}to{opacity:0;transform:translate3d(-50%,calc(-50% + 13px),0)}
 }
 html body .stage #lyric .lyric-sentence.caption-quote.is-entering{
-  opacity:0!important;transform:translate3d(-24px,0,0)!important;
+ opacity:0!important;transform:translate3d(-24px,0,0)!important
 }
 html body .stage #lyric .lyric-sentence.caption-quote.is-current{
-  opacity:1!important;transform:translate3d(0,0,0)!important;
-  transition:opacity .67s ease-out,transform .76s cubic-bezier(.16,.8,.27,1)!important;
+ opacity:1!important;transform:translate3d(0,0,0)!important;
+ transition:opacity .67s ease-out,transform .76s cubic-bezier(.16,.8,.27,1)!important
 }
 html body .stage #lyric .ig-word{
-  transition:opacity .47s cubic-bezier(.2,.7,.22,1),
-  transform .65s cubic-bezier(.18,.86,.24,1)!important;
+ transition:opacity .47s cubic-bezier(.2,.7,.22,1),transform .65s cubic-bezier(.18,.86,.24,1)!important
 }
 @media(prefers-reduced-motion:reduce){
-  html body .stage #lyric .lyric-sentence.caption-lyric,
-  html body .stage #lyric .lyric-sentence.lyric-leaving,
-  html body .stage #lyric .lyric-sentence.caption-quote{
-    animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
-  }
+ html body .stage #lyric .lyric-sentence.caption-lyric,
+ html body .stage #lyric .lyric-sentence.lyric-leaving,
+ html body .stage #lyric .lyric-sentence.caption-quote{
+  animation:none!important;transition:none!important;opacity:1!important;transform:none!important
+ }
 }
