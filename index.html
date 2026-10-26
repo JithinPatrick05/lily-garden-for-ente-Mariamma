@@ -891,6 +891,61 @@ body:not(.yt-collapsed) .stage #lyric .lyric-sentence {
   .stage #lyric .lyric-sentence.is-leaving {opacity:0!important}
 }
 
+
+/* Alignment/overlap repair: equal inset centres stage on the viewport.
+   The JS below keeps precisely ONE caption in the document. */
+.stage,body:not(.yt-collapsed) .stage {
+  top:calc(88px + env(safe-area-inset-top,0px))!important;
+  bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;
+  left:50%!important;
+  right:auto!important;
+  width:min(94vw,760px)!important;
+  height:auto!important;
+  padding:0 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  transform:translateX(-50%)!important;
+}
+.stage #lyric.lyric.glow,body:not(.yt-collapsed) .stage #lyric.lyric.glow {
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  margin:0 auto!important;
+  padding:0!important;
+  text-align:center!important;
+}
+.stage #lyric .lyric-sentence,body:not(.yt-collapsed) .stage #lyric .lyric-sentence {
+  position:relative!important;
+  flex:0 1 100%;
+  min-width:0;
+  margin:0 auto!important;
+  text-align:center!important;
+}
+.stage #lyric .lyric-sentence.caption-quote {
+  display:block!important;
+  width:100%!important;
+  white-space:normal;
+}
+.stage #lyric .lyric-sentence.caption-lyric {
+  display:flex!important;
+  flex-wrap:wrap;
+  justify-content:center!important;
+  align-items:center;
+  align-content:center;
+  width:100%!important;
+}
+@media(max-height:490px){
+  .stage,body:not(.yt-collapsed) .stage {
+    top:calc(75px + env(safe-area-inset-top,0px))!important;
+    bottom:calc(92px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -975,7 +1030,7 @@ window.addEventListener('pointercancel',()=>{clearTimeout(settleTimer);settleTim
 
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
-function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'hold-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
+function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
 // Aligned to the supplied recording. Updates at each sentence boundary,
 // with a short fade-out and slow, luminous fade-in.
 const LYRIC_OFFSET_SECONDS=0.10;
@@ -1026,60 +1081,61 @@ function lyricRainTiming(item,t,count){
 function displayLyric(t,force=false){
  const aligned=Math.max(0,t+LYRIC_OFFSET_SECONDS);
  const item=getCaption(aligned);
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  if(force||item.key!==lastCue){
   lastCue=item.key;
-  lyricTransitionId++;
+  const transition=++lyricTransitionId;
   clearTimeout(lyricChangeTimer);
-  lyricEl.classList.remove('switching');
-  const isQuote=item.key==='quote1'||item.key==='quote2'||item.key.startsWith('note-');
-  const sentence=document.createElement('span');
-  sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+(force?' is-current':' is-entering');
-  rainWords=[];
-  if(isQuote){
-   // Quotes move as a single centred thought, not word-by-word.
-   sentence.textContent=item.text||' ';
-  }else{
-   // Sung lyrics keep their timed, falling-word reveal.
-   const tokens=(item.text||'').trim().split(/\s+/).filter(Boolean);
-   tokens.forEach(word=>{
-    const el=document.createElement('span');
-    el.className='rain-word';
-    el.textContent=word;
-    sentence.appendChild(el);
-    rainWords.push(el);
-   });
-   if(!rainWords.length)sentence.textContent=' ';
-  }
-  if(force){
-   // Seeking snaps straight to the correct caption instead of replaying an old transition.
-   lyricEl.replaceChildren(sentence);
-  }else{
-   const previous=[...lyricEl.querySelectorAll('.lyric-sentence')];
-   previous.forEach(old=>{
-    if(old.classList.contains('is-leaving')){
-     old.remove();
-     return;
+  const previous=lyricEl.querySelector('.lyric-sentence');
+  // Replace the text only after the outgoing line fades; no simultaneous
+  // captions or stacked grid children are allowed.
+  const install=()=>{
+   if(transition!==lyricTransitionId)return;
+   const isQuote=item.key==='quote1'||item.key==='quote2'||item.key.startsWith('note-');
+   const sentence=document.createElement('span');
+   const animate=!force&&!reduced;
+   sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+(animate?' is-entering':' is-current');
+   rainWords=[];
+   if(isQuote){
+    sentence.textContent=item.text||' ';
+   }else{
+    for(const word of (item.text||'').trim().split(/\s+/).filter(Boolean)){
+     const el=document.createElement('span');
+     el.className='rain-word';
+     el.textContent=word;
+     sentence.appendChild(el);
+     rainWords.push(el);
     }
-    old.classList.remove('is-current','is-entering');
-    old.classList.add('is-leaving');
-    old.setAttribute('aria-hidden','true');
-    setTimeout(()=>old.remove(),820);
-   });
-   lyricEl.appendChild(sentence);
-   // Ensure the browser paints the entry position before animating to the centre.
-   requestAnimationFrame(()=>{
-    if(!sentence.isConnected)return;
-    sentence.getBoundingClientRect();
-    sentence.classList.remove('is-entering');
-    sentence.classList.add('is-current');
-   });
+    if(!rainWords.length)sentence.textContent=' ';
+   }
+   lyricEl.replaceChildren(sentence);
+   const timing=lyricRainTiming(item,aligned,rainWords.length);
+   rainWordStart=timing.start;
+   rainWordStep=timing.step;
+   requestLyricFit();
+   // Catch up to the actual MP3 time after the brief exit transition.
+   const now=Math.max(0,(music.currentTime||t)+LYRIC_OFFSET_SECONDS);
+   for(let i=0;i<rainWords.length;i++){
+    rainWords[i].classList.toggle('landed',reduced||now+.045>=rainWordStart+rainWordStep*i);
+   }
+   if(animate){
+    requestAnimationFrame(()=>{
+     if(transition!==lyricTransitionId||!sentence.isConnected)return;
+     sentence.getBoundingClientRect();
+     sentence.classList.remove('is-entering');
+     sentence.classList.add('is-current');
+    });
+   }
+  };
+  if(!force&&!reduced&&previous){
+   previous.classList.remove('is-current','is-entering');
+   previous.classList.add('is-leaving');
+   // The exit finishes before incoming text is created; never duplicate it.
+   lyricChangeTimer=setTimeout(install,190);
+  }else{
+   install();
   }
-  const timing=lyricRainTiming(item,aligned,rainWords.length);
-  rainWordStart=timing.start;
-  rainWordStep=timing.step;
-  requestLyricFit();
  }
- const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  for(let i=0;i<rainWords.length;i++){
   const landed=reduced||aligned+.045>=rainWordStart+rainWordStep*i;
   if(rainWords[i].classList.contains('landed')!==landed)
