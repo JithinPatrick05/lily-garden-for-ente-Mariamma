@@ -1143,6 +1143,126 @@ body:not(.yt-collapsed) .stage #lyric .lyric-sentence.caption-lyric {
  }
 }
 
+
+/* v-final: smaller iridescent Instagram captions, true viewport-centred. */
+.stage,body:not(.yt-collapsed) .stage{
+  position:fixed!important;
+  top:50%!important;
+  bottom:auto!important;
+  left:50%!important;
+  right:auto!important;
+  width:min(92vw,720px)!important;
+  height:auto!important;
+  min-height:0!important;
+  max-height:calc(100dvh - 152px)!important;
+  transform:translate(-50%,-50%)!important;
+  padding:0 5px!important;
+  margin:0!important;
+  display:flex!important;
+  justify-content:center!important;
+  align-items:center!important;
+  overflow:visible!important;
+}
+.stage #lyric.lyric.glow,body:not(.yt-collapsed) .stage #lyric.lyric.glow{
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  background:none!important;
+  filter:none!important;
+}
+.stage #lyric .ig-stack{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:.045em!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin:0 auto!important;
+  text-align:center!important;
+}
+.stage #lyric .ig-row{
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  justify-content:center!important;
+  align-items:baseline!important;
+  width:max-content!important;
+  max-width:none!important;
+  gap:.19em!important;
+  white-space:nowrap!important;
+  font-family:"Montserrat","Arial Black",Arial,sans-serif!important;
+  font-weight:900!important;
+  line-height:.98!important;
+  letter-spacing:-.052em!important;
+  text-transform:uppercase!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  text-shadow:none!important;
+}
+.stage #lyric .ig-tier-1{font-size:1.49em!important}
+.stage #lyric .ig-tier-2{font-size:1.22em!important}
+.stage #lyric .ig-tier-3{font-size:.99em!important}
+.stage #lyric .ig-word{
+  display:inline-block!important;
+  flex-shrink:0!important;
+  background:linear-gradient(110deg,#fff4fb 0%,#ff85c8 25%,#ffb4a2 47%,#ffd680 63%,#d0a4ff 83%,#a1e6ff 100%)!important;
+  background-size:140% 140%!important;
+  background-clip:text!important;
+  -webkit-background-clip:text!important;
+  color:transparent!important;
+  -webkit-text-fill-color:transparent!important;
+  text-shadow:none!important;
+  opacity:0;
+  transform:translate3d(0,8px,0) scale(.97);
+  filter:blur(.6px);
+  transition:opacity .20s ease-out,transform .34s cubic-bezier(.16,.87,.18,1),filter .24s ease!important;
+  will-change:opacity,transform;
+}
+.stage #lyric .ig-tier-2 .ig-word{
+  background-image:linear-gradient(110deg,#ffe9f6 0%,#ff8ecf 32%,#d0a4ff 65%,#a2dcff 100%)!important;
+}
+.stage #lyric .ig-tier-3 .ig-word{
+  background-image:linear-gradient(110deg,#ffdae9 0%,#ffb79b 30%,#ffe1a1 62%,#f3bbef 100%)!important;
+}
+.stage #lyric .ig-word.ig-visible{
+  opacity:1!important;
+  transform:translate3d(0,0,0) scale(1)!important;
+  filter:none!important;
+}
+.stage #lyric .lyric-sentence.caption-lyric{
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0 auto!important;
+}
+@media(max-width:720px){
+  .stage,body:not(.yt-collapsed) .stage{
+    width:94vw!important;
+    padding:0 3px!important;
+    max-height:calc(100dvh - 148px)!important;
+  }
+  .stage #lyric .ig-tier-1{font-size:1.4em!important}
+  .stage #lyric .ig-tier-2{font-size:1.15em!important}
+  .stage #lyric .ig-tier-3{font-size:.95em!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage #lyric .ig-word,
+  .stage #lyric .ig-word.ig-visible{
+    opacity:1!important;
+    transform:none!important;
+    filter:none!important;
+    transition:none!important;
+  }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -1230,7 +1350,8 @@ function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;i
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
 // Aligned to the supplied recording. Updates at each sentence boundary,
 // with a short fade-out and slow, luminous fade-in.
-const LYRIC_OFFSET_SECONDS=0.10;
+// Positive look-ahead makes the displayed words appear earlier.
+const LYRIC_OFFSET_SECONDS=0.60;
 const LYRIC_FADE_OUT_MS=125;
 let lyricTransitionId=0;
 let lyricChangeTimer=null;
@@ -1238,26 +1359,25 @@ function fitLyric(){
  const container=lyricEl.closest('.stage');
  const sentence=lyricEl.querySelector('.lyric-sentence');
  if(!container||!sentence)return;
- const limitHeight=Math.max(75,container.getBoundingClientRect().height-14);
+ // Use viewport space, not the stage's auto-height (which equals the caption).
+ const widthLimit=Math.max(150,container.getBoundingClientRect().width-14);
+ const heightLimit=Math.max(100,Math.min(window.innerHeight*.58,window.innerHeight-145));
+ const isMobile=window.innerWidth<=720;
  const stack=sentence.querySelector('.ig-stack');
- if(stack){
-   const limitWidth=container.getBoundingClientRect().width-12;
-   let size=window.innerWidth<=720?Math.min(38,Math.max(27,window.innerWidth*.086)):
-       Math.min(51,Math.max(32,window.innerWidth*.043));
-   if(window.innerHeight<600)size*=.81;
-   while(size>16){
-     lyricEl.style.setProperty('font-size',size.toFixed(1)+'px','important');
-     const width=Math.max(...[...stack.querySelectorAll('.ig-row')].map(row=>row.scrollWidth));
-     if(width<=limitWidth&&stack.getBoundingClientRect().height<=limitHeight)break;
-     size-=.8;
-   }
- }else{
-   let size=window.innerWidth<=720?Math.min(36,window.innerWidth*.081):Math.min(48,window.innerWidth*.05);
-   while(size>19){
-     lyricEl.style.setProperty('font-size',size.toFixed(1)+'px','important');
-     if(sentence.getBoundingClientRect().height<=limitHeight)break;
-     size-=1;
-   }
+ let size=stack
+   ? (isMobile?Math.min(33,Math.max(23,window.innerWidth*.076)):
+       Math.min(43,Math.max(28,window.innerWidth*.033)))
+   : (isMobile?Math.min(29,Math.max(22,window.innerWidth*.067)):
+       Math.min(37,Math.max(25,window.innerWidth*.039)));
+ if(window.innerHeight<650)size*=.90;
+ if(window.innerHeight<520)size*=.84;
+ const minFont=stack?14:18;
+ while(size>minFont){
+   lyricEl.style.setProperty('font-size',size.toFixed(1)+'px','important');
+   const widest=stack?Math.max(0,...[...stack.querySelectorAll('.ig-row')].map(row=>row.scrollWidth)):sentence.scrollWidth;
+   const height=(stack||sentence).getBoundingClientRect().height;
+   if(widest<=widthLimit&&height<=heightLimit)break;
+   size-=.6;
  }
 }
 let fitRequest=null;
