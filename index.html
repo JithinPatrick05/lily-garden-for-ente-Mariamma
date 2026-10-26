@@ -946,6 +946,85 @@ body:not(.yt-collapsed) .stage #lyric .lyric-sentence {
   }
 }
 
+
+/* v2026-10-26: full-height minimalist word rain from the top of the page. */
+.stage,body:not(.yt-collapsed) .stage{
+  top:calc(69px + env(safe-area-inset-top,0px))!important;
+  bottom:calc(87px + env(safe-area-inset-bottom,0px))!important;
+  width:min(96vw,900px)!important;
+  padding:0 4px!important;
+  overflow:visible!important;
+}
+.stage #lyric.lyric.glow,body:not(.yt-collapsed) .stage #lyric.lyric.glow{
+  font-size:clamp(38px,5.7vw,68px)!important;
+  font-weight:500!important;
+  letter-spacing:-.025em!important;
+  line-height:1.16!important;
+}
+.stage #lyric .lyric-sentence.caption-lyric,
+.stage #lyric .lyric-sentence.caption-lyric.is-entering,
+.stage #lyric .lyric-sentence.caption-lyric.is-current{
+  opacity:1!important;
+  transform:none!important;
+  filter:none!important;
+  display:flex!important;
+  flex-wrap:wrap;
+  align-content:center;
+  justify-content:center!important;
+  column-gap:.25em;
+  row-gap:.045em;
+  width:100%!important;
+}
+.stage #lyric .rain-word{
+  display:inline-block!important;
+  opacity:0!important;
+  transform:translate3d(0,calc(-1 * var(--rain-drop,42vh)),0) scale(.99)!important;
+  filter:blur(2px)!important;
+  transition:
+    opacity .56s ease-out,
+    transform .91s cubic-bezier(.15,.76,.19,1),
+    filter .70s ease-out!important;
+  will-change:transform,opacity;
+  white-space:nowrap;
+}
+.stage #lyric .rain-word.landed{
+  opacity:1!important;
+  transform:translate3d(0,0,0) scale(1)!important;
+  filter:none!important;
+}
+.stage #lyric .rain-snap .rain-word{
+  transition:none!important;
+}
+.stage #lyric .lyric-sentence.is-leaving{
+  transition-duration:.26s!important;
+  pointer-events:none;
+}
+@media(max-width:720px){
+  .stage,body:not(.yt-collapsed) .stage{
+    top:calc(67px + env(safe-area-inset-top,0px))!important;
+    bottom:calc(91px + env(safe-area-inset-bottom,0px))!important;
+    width:97vw!important;
+    padding:0 3px!important;
+  }
+  .stage #lyric.lyric.glow,body:not(.yt-collapsed) .stage #lyric.lyric.glow{
+    font-size:clamp(31px,9.4vw,49px)!important;
+  }
+}
+@media(max-height:530px){
+  .stage,body:not(.yt-collapsed) .stage{
+    top:calc(60px + env(safe-area-inset-top,0px))!important;
+    bottom:calc(85px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .stage #lyric .rain-word,.stage #lyric .rain-word.landed{
+    transition:none!important;
+    transform:none!important;
+    filter:none!important;
+    opacity:1!important;
+  }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -1044,9 +1123,9 @@ function fitLyric(){
  const avail=Math.max(74,container.getBoundingClientRect().height-12);
  const w=window.innerWidth, h=window.innerHeight;
  const isMobile=w<=720;
- let size=isMobile?Math.max(27,Math.min(42,w*.082)):Math.max(31,Math.min(53,w*.058));
- if(h<=700)size=Math.min(size,Math.max(24,Math.min(35,w*.077)));
- if(h<=575)size=Math.min(size,Math.max(20,Math.min(28,w*.069)));
+ let size=isMobile?Math.max(31,Math.min(49,w*.094)):Math.max(38,Math.min(68,w*.057));
+ if(h<=640)size=Math.min(size,Math.max(28,Math.min(42,w*.09)));
+ if(h<=510)size=Math.min(size,Math.max(23,Math.min(35,w*.078)));
  while(size>20){
    lyricEl.style.setProperty('font-size',size.toFixed(1)+'px','important');
    if(sentence.getBoundingClientRect().height<=avail)break;
@@ -1058,25 +1137,38 @@ function requestLyricFit(){
  if(fitRequest!==null)cancelAnimationFrame(fitRequest);
  fitRequest=requestAnimationFrame(()=>{fitRequest=null;fitLyric()});
 }
-// The MP3 clock reveals each word; paused and seeking lyrics stay synchronized.
-let rainWords=[],rainWordStart=0,rainWordStep=.2;
+// Keep word reveal based on the MP3 clock; quotes use a different transition.
+let rainWords=[],rainWordStart=0,rainWordStep=.2,rainReady=true;
 function lyricRainTiming(item,t,count){
  let start=t,windowSeconds=2.2;
- if(item.key==='quote1'){start=0;windowSeconds=5.6}
- else if(item.key==='quote2'){start=12.9;windowSeconds=4.8}
- else if(item.key.startsWith('lyric-')){
+ if(item.key.startsWith('lyric-')){
   const i=Number(item.key.slice(6));
   if(Number.isInteger(i)&&cues[i]){
     start=cues[i].t;
     const next=cues[i+1],span=next?Math.max(.8,next.t-start):4.3;
     windowSeconds=Math.max(.95,Math.min(4.3,span*.78));
   }
- }else if(item.key.startsWith('note-')){
-   start=Number(item.key.slice(5))||t;windowSeconds=2.5;
- }else if(item.key.startsWith('hold-')){
-   start=cues[Number(item.key.slice(5))]?.t||t;windowSeconds=1.8;
  }
  return {start,step:count>1?windowSeconds/(count-1):0};
+}
+function revealRainAt(aligned){
+ if(!rainReady)return;
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ for(let i=0;i<rainWords.length;i++){
+  const landed=reduced||aligned+.045>=rainWordStart+rainWordStep*i;
+  if(rainWords[i].classList.contains('landed')!==landed)
+    rainWords[i].classList.toggle('landed',landed);
+ }
+}
+// Each word starts close to the page's top edge, then falls to its final
+// position. Calculate its own travel distance after fitting text to screen.
+function measureRainDrop(sentence){
+ const sentenceTop=sentence.getBoundingClientRect().top;
+ const launchY=Math.max(28,Math.min(54,window.innerHeight*.055));
+ for(const word of rainWords){
+  const landingY=sentenceTop+word.offsetTop;
+  word.style.setProperty('--rain-drop',Math.max(60,landingY-launchY).toFixed(1)+'px');
+ }
 }
 function displayLyric(t,force=false){
  const aligned=Math.max(0,t+LYRIC_OFFSET_SECONDS);
@@ -1087,15 +1179,17 @@ function displayLyric(t,force=false){
   const transition=++lyricTransitionId;
   clearTimeout(lyricChangeTimer);
   const previous=lyricEl.querySelector('.lyric-sentence');
-  // Replace the text only after the outgoing line fades; no simultaneous
-  // captions or stacked grid children are allowed.
   const install=()=>{
    if(transition!==lyricTransitionId)return;
    const isQuote=item.key==='quote1'||item.key==='quote2'||item.key.startsWith('note-');
    const sentence=document.createElement('span');
    const animate=!force&&!reduced;
-   sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+(animate?' is-entering':' is-current');
+   // Lyrics stay centred while individual words fall from the top.
+   // Quotes slide horizontally as a single piece.
+   sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+
+     (isQuote&&animate?' is-entering':' is-current');
    rainWords=[];
+   rainReady=false;
    if(isQuote){
     sentence.textContent=item.text||' ';
    }else{
@@ -1108,39 +1202,52 @@ function displayLyric(t,force=false){
     }
     if(!rainWords.length)sentence.textContent=' ';
    }
-   lyricEl.replaceChildren(sentence);
+   lyricEl.replaceChildren(sentence); // Strictly one caption in the DOM.
    const timing=lyricRainTiming(item,aligned,rainWords.length);
    rainWordStart=timing.start;
    rainWordStep=timing.step;
-   requestLyricFit();
-   // Catch up to the actual MP3 time after the brief exit transition.
-   const now=Math.max(0,(music.currentTime||t)+LYRIC_OFFSET_SECONDS);
-   for(let i=0;i<rainWords.length;i++){
-    rainWords[i].classList.toggle('landed',reduced||now+.045>=rainWordStart+rainWordStep*i);
-   }
-   if(animate){
-    requestAnimationFrame(()=>{
-     if(transition!==lyricTransitionId||!sentence.isConnected)return;
+   fitLyric();
+   if(isQuote){
+    rainReady=true;
+    if(animate){
+     requestAnimationFrame(()=>{
+      if(transition!==lyricTransitionId||!sentence.isConnected)return;
+      sentence.getBoundingClientRect();
+      sentence.classList.remove('is-entering');
+      sentence.classList.add('is-current');
+     });
+    }
+   }else{
+    // Force seeks snap previously sung words into place. During normal playback,
+    // start animation on the following paint so the browser can animate the fall.
+    if(force||reduced)sentence.classList.add('rain-snap');
+    measureRainDrop(sentence);
+    const trackTime=()=>Math.max(0,(Number.isFinite(music.currentTime)?music.currentTime:t)+LYRIC_OFFSET_SECONDS);
+    if(force||reduced){
+     rainReady=true;
+     revealRainAt(trackTime());
+     requestAnimationFrame(()=>{
+      if(sentence.isConnected)sentence.classList.remove('rain-snap');
+     });
+    }else{
      sentence.getBoundingClientRect();
-     sentence.classList.remove('is-entering');
-     sentence.classList.add('is-current');
-    });
+     requestAnimationFrame(()=>{
+      if(transition!==lyricTransitionId||!sentence.isConnected)return;
+      rainReady=true;
+      revealRainAt(trackTime());
+     });
+    }
    }
   };
   if(!force&&!reduced&&previous){
-   previous.classList.remove('is-current','is-entering');
-   previous.classList.add('is-leaving');
-   // The exit finishes before incoming text is created; never duplicate it.
-   lyricChangeTimer=setTimeout(install,190);
+    previous.classList.remove('is-current','is-entering');
+    previous.classList.add('is-leaving');
+    lyricChangeTimer=setTimeout(install,260);
   }else{
-   install();
+    install();
   }
  }
- for(let i=0;i<rainWords.length;i++){
-  const landed=reduced||aligned+.045>=rainWordStart+rainWordStep*i;
-  if(rainWords[i].classList.contains('landed')!==landed)
-   rainWords[i].classList.toggle('landed',landed);
- }
+ revealRainAt(aligned);
 }
 
 const music=document.getElementById('lovesong-audio');
