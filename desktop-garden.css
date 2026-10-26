@@ -22,13 +22,13 @@
  /* Keep only select original full bouquets behind the individualized flowers,
     so the background stays recognisable without duplicating the same cluster. */
  body.unique-lilies-ready #bouquets>.bouquet{
-   opacity:.065!important;
+   opacity:.025!important;
    pointer-events:none!important;
  }
- body.unique-lilies-ready #bouquets>.bouquet:nth-child(-n+5),
- body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+17):nth-child(-n+21),
- body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+33):nth-child(-n+36){
-   opacity:.29!important;
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(-n+4),
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+17):nth-child(-n+20),
+ body.unique-lilies-ready #bouquets>.bouquet:nth-child(n+33):nth-child(-n+35){
+   opacity:.14!important;
  }
  #individual-lily-garden{display:block}
  #individual-lily-garden::after{
