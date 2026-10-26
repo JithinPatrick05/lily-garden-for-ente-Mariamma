@@ -16,7 +16,7 @@
       html=html.replace(a,b);
     };
     replace('</style></head>',
-      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-5"></head>',
+      '</style><link rel="stylesheet" href="./desktop-garden.css?v=20261026-6"></head>',
       'enhancements');
     /* Keep the existing photos but omit expensive unused desktop vector flowers. */
     replace('desktopLilyPositions.forEach((p,i)=>{','[].forEach((p,i)=>{','vector performance');
@@ -35,7 +35,7 @@
       'smooth caption transition');
     // Load the extra ORIGINAL lilies after the page's own script,
     // inside the same execution block. This avoids browser script-order races.
-    const addonResponse=await fetch('./desktop-garden.js?v=20261026-5',{cache:'no-cache'});
+    const addonResponse=await fetch('./desktop-garden.js?v=20261026-6',{cache:'no-cache'});
     if(!addonResponse.ok)throw new Error('Original lily decorations could not load');
     const originalLilyFill=await addonResponse.text();
     const tail='</scr'+'ipt></body></html>';
