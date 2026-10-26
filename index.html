@@ -808,6 +808,89 @@ body,.brand h1,.stage #lyric,.stage #lyric .lyric-sentence,
 @media(prefers-reduced-motion:reduce){
  .stage #lyric .rain-word{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
 }
+
+/* Separate centre-stage transitions: quotes sweep sideways, song lyrics descend. */
+.stage #lyric.lyric.glow,
+body:not(.yt-collapsed) .stage #lyric.lyric.glow {
+  position:relative!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr);
+  place-items:center;
+  width:100%!important;
+  isolation:isolate;
+}
+.stage #lyric .lyric-sentence,
+body:not(.yt-collapsed) .stage #lyric .lyric-sentence {
+  grid-area:1 / 1;
+  position:relative;
+  margin:0 auto;
+  width:100%;
+  max-width:100%;
+  text-align:center!important;
+  will-change:opacity,transform,filter;
+  transition:
+    transform .78s cubic-bezier(.20,.78,.20,1),
+    opacity .55s cubic-bezier(.20,.75,.23,1),
+    filter .55s ease!important;
+  opacity:1;
+  transform:translate3d(0,0,0);
+  filter:blur(0);
+}
+.stage #lyric .lyric-sentence.caption-quote {
+  display:block!important;
+  text-wrap:balance;
+  overflow-wrap:break-word;
+}
+.stage #lyric .lyric-sentence.caption-lyric {
+  display:inline-flex!important;
+  flex-wrap:wrap;
+  align-items:center;
+  align-content:center;
+  justify-content:center;
+  column-gap:.24em;
+  row-gap:.04em;
+}
+.stage #lyric .lyric-sentence.caption-quote.is-entering {
+  opacity:0!important;
+  transform:translate3d(-54px,0,0) scale(.987)!important;
+  filter:blur(4px);
+}
+.stage #lyric .lyric-sentence.caption-quote.is-leaving {
+  opacity:0!important;
+  transform:translate3d(54px,0,0) scale(.987)!important;
+  filter:blur(4px);
+}
+.stage #lyric .lyric-sentence.caption-lyric.is-entering {
+  opacity:0!important;
+  transform:translate3d(0,-54px,0) scale(.987)!important;
+  filter:blur(3px);
+}
+.stage #lyric .lyric-sentence.caption-lyric.is-leaving {
+  opacity:0!important;
+  transform:translate3d(0,54px,0) scale(.987)!important;
+  filter:blur(3px);
+}
+.stage #lyric .lyric-sentence.is-current {
+  opacity:1!important;
+  transform:translate3d(0,0,0)!important;
+  filter:blur(0);
+}
+@media(max-width:720px){
+  .stage #lyric .lyric-sentence.caption-quote.is-entering {transform:translate3d(-35px,0,0)!important}
+  .stage #lyric .lyric-sentence.caption-quote.is-leaving {transform:translate3d(35px,0,0)!important}
+  .stage #lyric .lyric-sentence.caption-lyric.is-entering {transform:translate3d(0,-43px,0)!important}
+  .stage #lyric .lyric-sentence.caption-lyric.is-leaving {transform:translate3d(0,43px,0)!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .stage #lyric .lyric-sentence {
+    transition:none!important;
+    transform:none!important;
+    filter:none!important;
+  }
+  .stage #lyric .lyric-sentence.is-entering,
+  .stage #lyric .lyric-sentence.is-leaving {opacity:0!important}
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
@@ -901,7 +984,7 @@ let lyricTransitionId=0;
 let lyricChangeTimer=null;
 function fitLyric(){
  const container=lyricEl.closest('.stage');
- const sentence=lyricEl.querySelector('.lyric-sentence');
+ const sentence=lyricEl.querySelector('.lyric-sentence.is-current') || lyricEl.querySelector('.lyric-sentence.is-entering') || lyricEl.querySelector('.lyric-sentence');
  if(!container||!sentence)return;
  const avail=Math.max(74,container.getBoundingClientRect().height-12);
  const w=window.innerWidth, h=window.innerHeight;
@@ -948,19 +1031,49 @@ function displayLyric(t,force=false){
   lyricTransitionId++;
   clearTimeout(lyricChangeTimer);
   lyricEl.classList.remove('switching');
+  const isQuote=item.key==='quote1'||item.key==='quote2'||item.key.startsWith('note-');
   const sentence=document.createElement('span');
-  sentence.className='lyric-sentence';
-  const tokens=(item.text||'').trim().split(/\s+/).filter(Boolean);
+  sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+(force?' is-current':' is-entering');
   rainWords=[];
-  tokens.forEach(word=>{
+  if(isQuote){
+   // Quotes move as a single centred thought, not word-by-word.
+   sentence.textContent=item.text||' ';
+  }else{
+   // Sung lyrics keep their timed, falling-word reveal.
+   const tokens=(item.text||'').trim().split(/\s+/).filter(Boolean);
+   tokens.forEach(word=>{
     const el=document.createElement('span');
     el.className='rain-word';
     el.textContent=word;
     sentence.appendChild(el);
     rainWords.push(el);
-  });
-  if(!rainWords.length)sentence.textContent=' ';
-  lyricEl.replaceChildren(sentence);
+   });
+   if(!rainWords.length)sentence.textContent=' ';
+  }
+  if(force){
+   // Seeking snaps straight to the correct caption instead of replaying an old transition.
+   lyricEl.replaceChildren(sentence);
+  }else{
+   const previous=[...lyricEl.querySelectorAll('.lyric-sentence')];
+   previous.forEach(old=>{
+    if(old.classList.contains('is-leaving')){
+     old.remove();
+     return;
+    }
+    old.classList.remove('is-current','is-entering');
+    old.classList.add('is-leaving');
+    old.setAttribute('aria-hidden','true');
+    setTimeout(()=>old.remove(),820);
+   });
+   lyricEl.appendChild(sentence);
+   // Ensure the browser paints the entry position before animating to the centre.
+   requestAnimationFrame(()=>{
+    if(!sentence.isConnected)return;
+    sentence.getBoundingClientRect();
+    sentence.classList.remove('is-entering');
+    sentence.classList.add('is-current');
+   });
+  }
   const timing=lyricRainTiming(item,aligned,rainWords.length);
   rainWordStart=timing.start;
   rainWordStep=timing.step;
