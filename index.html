@@ -1456,9 +1456,115 @@ body .stage #lyric .lyric-sentence.caption-quote.is-current.is-exiting{
   .secret-letter-overlay,.secret-letter-card{animation:none!important;transition:none!important}
 }
 
+
+/* Multilingual finale — a heart gradually blooms word by word. */
+.heart-finale{
+ position:fixed;
+ top:50%;left:50%;
+ width:min(94vw,530px);
+ height:min(60dvh,405px);
+ transform:translate(-50%,-50%);
+ z-index:11;pointer-events:none;
+ isolation:isolate;
+}
+.heart-finale[hidden]{display:none!important}
+.heart-sketch{
+ position:absolute;inset:2% 0 0;width:100%;height:96%;
+ fill:none;stroke:rgba(255,146,206,.28);
+ stroke-width:1.35;
+ stroke-linecap:round;
+ overflow:visible;
+ filter:drop-shadow(0 0 9px rgba(255,109,189,.31));
+ stroke-dasharray:1200;
+ stroke-dashoffset:1200;
+}
+.heart-finale.is-visible .heart-sketch{
+ animation:heart-outline-draw 25s cubic-bezier(.18,.7,.2,1) both;
+}
+@keyframes heart-outline-draw{
+ 0%{stroke-dashoffset:1200;opacity:.08}
+ 100%{stroke-dashoffset:0;opacity:.65}
+}
+.heart-language{
+ position:absolute;
+ left:var(--hx);top:var(--hy);
+ max-width:34%;
+ transform:translate(-50%,-15%) translateY(19px) scale(.86);
+ opacity:0;
+ text-align:center;text-wrap:balance;
+ font-family:"Outfit","Noto Sans Malayalam",system-ui,sans-serif;
+ font-size:clamp(11px,2.65vw,16px);
+ font-weight:600;
+ line-height:1.33;
+ letter-spacing:.005em;
+ color:#ffeaf8;
+ overflow-wrap:normal;
+ text-shadow:0 0 11px rgba(255,138,210,.28),0 1px 8px rgba(0,0,0,.8);
+ filter:blur(5px);
+ transition:
+   transform 1.07s cubic-bezier(.16,.85,.21,1),
+   opacity .76s ease-out,
+   filter 1.05s ease-out;
+ will-change:transform,opacity;
+}
+.heart-language:nth-of-type(3n+1){color:#ffc8e5}
+.heart-language:nth-of-type(3n+2){color:#d9c5ff}
+.heart-language:nth-of-type(3n){color:#ffdfc8}
+.heart-language.is-bloomed{
+ transform:translate(-50%,-15%) translateY(0) scale(1);
+ opacity:1;filter:blur(0);
+}
+.heart-finale.is-complete .heart-language.is-bloomed{
+ animation:heart-text-breathe 5s ease-in-out infinite alternate;
+}
+@keyframes heart-text-breathe{
+ from{filter:drop-shadow(0 0 0 transparent)}
+ to{filter:drop-shadow(0 0 7px rgba(255,171,218,.44))}
+}
+.heart-center{
+ position:absolute;top:48%;left:50%;
+ transform:translate(-50%,-40%) scale(.92);
+ display:flex;flex-direction:column;align-items:center;gap:2px;
+ min-width:170px;max-width:54%;
+ opacity:0;text-align:center;
+ font-family:"Great Vibes","Outfit",cursive;
+ font-size:clamp(19px,4.5vw,29px);
+ line-height:1.25;
+ color:rgba(255,215,236,.95);
+ text-shadow:0 0 18px rgba(255,136,204,.40);
+ transition:opacity 1.35s ease,transform 1.55s cubic-bezier(.16,.83,.23,1);
+}
+.heart-center-symbol{font-family:system-ui,sans-serif;font-size:33px;line-height:1;color:#ffb9db}
+.heart-center-break{display:block}
+.heart-finale.is-complete .heart-center{
+ opacity:1;transform:translate(-50%,-40%) scale(1);
+}
+.stage #lyric.heart-lyric-hidden{visibility:hidden!important}
+.secret-lily-trigger.secret-hint-hidden .secret-lily-hint{
+ opacity:0!important;
+ visibility:hidden!important;
+ pointer-events:none!important;
+}
+@media(max-width:720px){
+ .heart-finale{width:96vw;height:min(58dvh,405px)}
+ .heart-language{font-size:clamp(10px,2.7vw,13px);max-width:37%;line-height:1.28}
+ .heart-center{font-size:clamp(18px,5.2vw,23px)}
+ .heart-center-symbol{font-size:28px}
+}
+@media(max-height:590px){
+ .heart-finale{height:57dvh}
+ .heart-language{font-size:clamp(9px,2.4vw,13px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .heart-finale.is-visible .heart-sketch{animation:none;stroke-dashoffset:0}
+ .heart-language,.heart-language.is-bloomed,.heart-center,.heart-finale.is-complete .heart-center{
+  transition:none!important;animation:none!important;filter:none!important;
+ }
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
-<header class="brand"><h1>Ente Mariammekku 🌸💗</h1></header>
+<header class="brand"><h1>🌸 Ente Mariammekku 🌸</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2></main><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
 <audio id="lovesong-audio" src="assets/Lovesong.mp3" preload="metadata" playsinline></audio>
 <div id="toast" class="toast" hidden></div>
@@ -1469,7 +1575,7 @@ const q1="Flowers don't need a reason to bloom, I will love you till our graves 
 const q2="Enikku ninnee othiri othiri othiri ishtamaaa ente mariammee .....";
 const timedLrc = "[00:00.00] \n[00:26.13] Whenever I'm alone with you\n[00:32.05] \n[00:34.41] You make me feel like I am home again\n[00:41.87] Whenever I'm alone with you\n[00:48.24] \n[00:50.33] You make me feel like I am whole again\n[00:57.25] \n[01:15.44] Whenever I'm alone with you\n[01:23.34] You make me feel like I am young again\n[01:31.69] Whenever I'm alone with you\n[01:39.35] You make me feel like I am fun again\n[01:47.39] However far away\n[01:52.15] I will always love you\n[01:56.20] However long I stay\n[02:00.37] I will always love you\n[02:04.18] Whatever words I say\n[02:08.98] I will always love you\n[02:13.40] I will always love you\n[02:19.06] \n[02:32.63] Whenever I'm alone with you\n[02:40.67] You make me feel like I am free again\n[02:48.56] Whenever I'm alone with you\n[02:55.23] \n[02:57.66] You make me feel like I am clean again\n[03:05.32] However far away\n[03:10.15] I will always love you\n[03:13.83] However long I stay\n[03:18.37] I will always love you\n[03:21.82] Whatever words I say\n[03:26.66] I will always love you\n[03:30.39] I will always love you\n[03:37.25] \n[04:06.94] However far away\n[04:11.79] I will always love you\n[04:15.25] However long I stay\n[04:19.97] I will always love you\n[04:23.42] Whatever words I say\n[04:28.29] I will always love you\n[04:34.08] I'll always love you\n[04:38.10] I'll always love you\n[04:42.61] 'Cause I love you\n[04:44.85] \n[05:19.97] ";
 function parseLRC(src){const parsed=[];for(const ln of src.split(/\r?\n/)){const times=[...ln.matchAll(/\[(\d{1,2}):(\d{2})(?:\.(\d{1,3}))?\]/g)];const text=ln.replace(/\[[^\]]*\]/g,'').trim();for(const m of times){const millis=Number((m[3]||'0').padEnd(3,'0'));parsed.push({t:Number(m[1])*60+Number(m[2])+millis/1000,text,sub:''})}}return parsed.sort((a,b)=>a.t-b.t)}
-const cues=parseLRC(timedLrc);const breaks=[{start:57.25,end:75.44,lines:[{at:57.25,text:'In every season, I would choose you.'}]},{start:139.06,end:152.63,lines:[{at:139.06,text:'For every lifetime, a thousand lilies.'}]},{start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]},{start:284.85,end:319.97,lines:[{at:284.85,text:q1},{at:302,text:q2}]}];
+const cues=parseLRC(timedLrc);const breaks=[{start:57.25,end:75.44,lines:[{at:57.25,text:'In every season, I would choose you.'}]},{start:139.06,end:152.63,lines:[{at:139.06,text:'For every lifetime, a thousand lilies.'}]},{start:217.25,end:246.94,lines:[{at:217.25,text:'Even in silence, I’ll love you.'},{at:231,text:'Some feelings bloom forever.'}]}];
 const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getElementById('particles'),lyricEl=document.getElementById('lyric'),playBtn=document.getElementById('play'),pauseBtn=document.getElementById('pause'),rewindBtn=document.getElementById('rewind'),seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
 let lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;let positionSeconds=0,durationSeconds=approxDuration;
 const positions=[{x:6,y:14,w:190,r:-20,s:0.92,o:0.46,d:8.2},{x:8,y:28,w:215,r:-12,s:0.99,o:0.55,d:8.7},{x:8,y:42,w:245,r:-10,s:1.08,o:0.62,d:8.3},{x:7,y:58,w:240,r:-16,s:1.05,o:0.62,d:8.1},{x:8,y:74,w:220,r:-18,s:0.96,o:0.53,d:8.0},{x:13,y:86,w:175,r:-18,s:0.80,o:0.36,d:8.8},{x:20,y:12,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:20,y:86,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:31,y:10,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:31,y:88,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:50,y:7,w:160,r:0,s:0.70,o:0.22,d:10.4},{x:50,y:90,w:165,r:0,s:0.72,o:0.22,d:10.2},{x:69,y:10,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:69,y:88,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:80,y:12,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:80,y:86,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:94,y:14,w:190,r:20,s:0.92,o:0.46,d:8.2},{x:92,y:28,w:215,r:12,s:0.99,o:0.55,d:8.7},{x:92,y:42,w:245,r:10,s:1.08,o:0.62,d:8.3},{x:93,y:58,w:240,r:16,s:1.05,o:0.62,d:8.1},{x:92,y:74,w:220,r:18,s:0.96,o:0.53,d:8.0},{x:87,y:86,w:175,r:18,s:0.80,o:0.36,d:8.8},{x:16,y:22,w:142,r:-22,s:0.62,o:0.22,d:10.8},{x:16,y:66,w:142,r:-24,s:0.62,o:0.22,d:10.7},{x:84,y:22,w:142,r:22,s:0.62,o:0.22,d:10.8},{x:84,y:66,w:142,r:24,s:0.62,o:0.22,d:10.7},{x:38,y:16,w:128,r:-3,s:0.56,o:0.16,d:10.9},{x:62,y:16,w:128,r:3,s:0.56,o:0.16,d:10.9}];
@@ -1646,6 +1752,92 @@ document.addEventListener('keydown',ev=>{
 });
 // Preserve the garden's existing shy-on-touch effect, while buttons handle the reveal.
 
+/* A heart formed by thirteen translated love messages in the final instrumental.
+   The lyrics at the start and all the other instrumental quotes are unchanged. */
+const HEART_START=284.85;
+const HEART_WORDS=[
+ {text:"I love you",language:"English",x:27,y:17,delay:0},
+ {text:"ഞാൻ നിന്നെ സ്നേഹിക്കുന്നു",language:"Malayalam",x:73,y:17,delay:1.55},
+ {text:"Te amo",language:"Spanish",x:13,y:32,delay:3.45},
+ {text:"Je t’aime",language:"French",x:87,y:32,delay:5.25},
+ {text:"Ti amo",language:"Italian",x:12,y:46,delay:7.10},
+ {text:"Ich liebe dich",language:"German",x:88,y:46,delay:8.95},
+ {text:"사랑해",language:"Korean",x:17,y:60,delay:10.80},
+ {text:"愛してる",language:"Japanese",x:83,y:60,delay:12.65},
+ {text:"أحبك",language:"Arabic",x:27,y:72,delay:14.50},
+ {text:"我爱你",language:"Mandarin",x:73,y:72,delay:16.35},
+ {text:"Eu te amo",language:"Portuguese",x:38,y:82,delay:18.20},
+ {text:"Mahal kita",language:"Filipino",x:62,y:82,delay:20.05},
+ {text:"நான் உன்னை காதலிக்கிறேன்",language:"Tamil",x:50,y:94,delay:22.0}
+];
+const heartFinale=document.createElement('div');
+heartFinale.className='heart-finale';
+heartFinale.hidden=true;
+heartFinale.setAttribute('role','group');
+heartFinale.setAttribute('aria-label','A heart formed from I love you in different languages, beginning with English and Malayalam');
+heartFinale.innerHTML='<svg class="heart-sketch" viewBox="0 0 400 320" aria-hidden="true"><path d="M200 68 C153 7 73 -14 29 44 C-25 122 62 228 200 310 C338 228 425 122 371 44 C327 -14 247 7 200 68" /></svg><div class="heart-center"><span class="heart-center-symbol">♡</span><span>In every language,<span class="heart-center-break"> it’s always you.</span></span></div>';
+const heartTextNodes=HEART_WORDS.map((entry,index)=>{
+ const el=document.createElement('span');
+ el.className='heart-language';
+ el.textContent=entry.text;
+ el.style.setProperty('--hx',entry.x+'%');
+ el.style.setProperty('--hy',entry.y+'%');
+ el.style.setProperty('--hue-index',String(index));
+ el.setAttribute('lang',({Malayalam:'ml',Tamil:'ta',Korean:'ko',Japanese:'ja',Arabic:'ar',Mandarin:'zh',French:'fr',Spanish:'es',Italian:'it',German:'de',Portuguese:'pt',Filipino:'fil'})[entry.language]||'en');
+ heartFinale.appendChild(el);
+ return el;
+});
+document.body.appendChild(heartFinale);
+let finaleActive=false;
+function updateHeartFinale(t,force=false){
+ const shouldShow=t>=HEART_START;
+ if(!shouldShow){
+  if(finaleActive){
+   finaleActive=false;
+   heartFinale.hidden=true;
+   heartFinale.classList.remove('is-visible','is-complete');
+   heartTextNodes.forEach(node=>node.classList.remove('is-bloomed'));
+   lyricEl.classList.remove('heart-lyric-hidden');
+   lastCue='';
+  }
+  return false;
+ }
+ if(!finaleActive){
+  finaleActive=true;
+  heartFinale.hidden=false;
+  heartFinale.classList.add('is-visible');
+  lyricEl.replaceChildren();
+  lyricEl.classList.add('heart-lyric-hidden');
+  lastCue='heart-finale';
+ }
+ let complete=true;
+ for(let i=0;i<HEART_WORDS.length;i++){
+  const revealed=t>=HEART_START+HEART_WORDS[i].delay;
+  if(!revealed)complete=false;
+  if(heartTextNodes[i].classList.contains('is-bloomed')!==revealed)
+   heartTextNodes[i].classList.toggle('is-bloomed',revealed);
+ }
+ heartFinale.classList.toggle('is-complete',complete);
+ return true;
+}
+function keepLilyHintsClear(){
+ const caption=lyricEl.querySelector('.lyric-sentence');
+ const lyricShowing=caption?.classList.contains('caption-lyric')||finaleActive;
+ const rect=caption?.getBoundingClientRect();
+ for(const {button} of secretButtons){
+  if(button.hidden)continue;
+  const hint=button.querySelector('.secret-lily-hint');
+  if(!hint)continue;
+  let collision=false;
+  if(rect){
+   const hr=hint.getBoundingClientRect(),pad=22;
+   collision=hr.right>rect.left-pad&&hr.left<rect.right+pad&&
+     hr.bottom>rect.top-pad&&hr.top<rect.bottom+pad;
+  }
+  button.classList.toggle('secret-hint-hidden',Boolean(lyricShowing||collision));
+ }
+}
+
 function showMessage(t){toast.textContent=t;toast.hidden=false;clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>toast.hidden=true,2600)}
 function findCue(t){let lo=0,hi=cues.length-1;while(lo<=hi){const m=(lo+hi)>>1;if(cues[m].t<=t)lo=m+1;else hi=m-1}return Math.max(0,hi)}
 function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.9?q1:q2};const i=findCue(t),cue=cues[i],next=cues[i+1];if(cue&&cue.text)return{key:'lyric-'+i,text:cue.text};if(next&&cue&&next.t-cue.t<9){for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text}}const section=breaks.find(b=>t>=b.start&&t<b.end);if(section){let line=section.lines[0];for(const candidate of section.lines)if(t>=candidate.at)line=candidate;return{key:'note-'+line.at,text:line.text}}for(let j=i-1;j>=0;j--)if(cues[j].text)return{key:'lyric-'+j,text:cues[j].text};return{key:'quote1',text:q1}}
@@ -1815,6 +2007,7 @@ function installCaption(item,t,force){
 // instantly. The replacement itself stays on the existing MP3 cue.
 const CAPTION_EXIT_LEAD=0.16;
 function displayLyric(t,force=false){
+ if(updateHeartFinale(t,force))return;
  const aligned=Math.max(0,t+LYRIC_OFFSET_SECONDS);
  const item=getCaption(aligned);
  if(force||item.key!==lastCue){
@@ -1872,6 +2065,7 @@ function frame(now){
  displayLyric(t);
  updateSecretLilies(t);
  if(now-lastFrame>=110){
+   keepLilyHintsClear();
    lastFrame=now;
    timeEl.textContent=formatTime(t)+' / '+formatTime(durationSeconds);
    seek.value=String(Math.min(1000,Math.round(t/Math.max(1,durationSeconds)*1000)));
