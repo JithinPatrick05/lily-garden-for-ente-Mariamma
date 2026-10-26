@@ -69,12 +69,12 @@
    const source=Math.floor(noise(seed+20)*count);
    const props={
      x:x.toFixed(2)+'%',y:y.toFixed(2)+'%',
-     w:range(seed+21,rank===0?158:109,rank===0?224:167).toFixed(1)+'px',
-     opacity:range(seed+22,rank===0?.68:.49,rank===0?.98:.79).toFixed(3),
-     rot:range(seed+23,-64,64).toFixed(1)+'deg',
+     w:range(seed+21,rank===0?146:94,rank===0?198:142).toFixed(1)+'px',
+     opacity:range(seed+22,rank===0?.56:.36,rank===0?.82:.58).toFixed(3),
+     rot:range(seed+23,-52,52).toFixed(1)+'deg',
      flip:noise(seed+24)>.5?'1':'-1',
-     stretch:range(seed+25,.86,1.15).toFixed(3),
-     duration:range(seed+26,9,17).toFixed(2)+'s',
+     stretch:range(seed+25,.92,1.10).toFixed(3),
+     duration:range(seed+26,10,18).toFixed(2)+'s',
      delay:(-range(seed+27,0,16)).toFixed(2)+'s'
    };
    for(const [name,value] of Object.entries(props))el.style.setProperty('--'+name,value);
@@ -97,26 +97,29 @@
    if(layer.children.length && tier===lastTier)return;
    lastTier=tier;layer.replaceChildren();
    const frag=document.createDocumentFragment();
-   const rows=tier==='wide'?13:tier==='laptop'?11:9;
-   const bands=tier==='wide'?4:tier==='laptop'?3:2;
+   // Airy border: preserve individual lily textures, with intentional negative
+   // space around the caption and no dense canopy.
+   const rows=tier==='wide'?9:tier==='laptop'?7:6;
+   const sideBands=tier==='wide'?[3.5,15.5,25.0]
+     :tier==='laptop'?[5.5,19.5]:[7.5,21.5];
    for(let side=0;side<2;side++){
-    for(let band=0;band<bands;band++){
-     for(let row=0;row<rows;row++){
-       const seed=900+side*711+band*163+row*29;
-       const offset=[0.8,10.8,19.6,27.2][band]+range(seed+1,-2.8,2.8);
-       const x=side===0?offset:100-offset;
-       const y=5+(row+.37)/rows*90+range(seed+2,-3.4,3.4);
-       frag.appendChild(createElement(seed,x,y,band===0?0:1));
+     for(let band=0;band<sideBands.length;band++){
+       for(let row=0;row<rows;row++){
+         const seed=900+side*711+band*163+row*29;
+         const inset=sideBands[band]+range(seed+1,-2.2,2.2);
+         const x=side===0?inset:100-inset;
+         const y=10+((row+.5)/rows)*80+range(seed+2,-3,3);
+         frag.appendChild(createElement(seed,x,y,band===0?0:1));
+       }
      }
-    }
    }
-   // Full lower flower bed, individual flower heads rather than cloned bouquets.
-   const rim=tier==='wide'?26:tier==='laptop'?19:12;
+   // Sparse flower bed, almost entirely below the bottom edge.
+   const rim=tier==='wide'?14:tier==='laptop'?11:8;
    for(let i=0;i<rim;i++){
-      const seed=7200+i*37;
-      const x=1+(i+.4)/rim*98+range(seed+1,-1.2,1.2);
-      const y=i%5===0?range(seed+2,-3,4):range(seed+3,96,107);
-      frag.appendChild(createElement(seed,x,y,1));
+     const seed=7200+i*37;
+     const x=6+((i+.5)/rim)*88+range(seed+1,-1.4,1.4);
+     const y=100+(i%4===0?range(seed+2,-2,1.6):range(seed+3,-.4,3.8));
+     frag.appendChild(createElement(seed,x,y,1));
    }
    layer.appendChild(frag);
    document.body.classList.add('unique-lilies-ready');
