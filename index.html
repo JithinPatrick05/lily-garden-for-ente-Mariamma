@@ -978,7 +978,7 @@ body:not(.yt-collapsed) .stage #lyric .lyric-sentence {
 .stage #lyric .rain-word{
   display:inline-block!important;
   opacity:0!important;
-  transform:translate3d(0,calc(-1 * var(--rain-drop,42vh)),0) scale(.99)!important;
+  transform:translate3d(0,calc(0px - var(--rain-drop,42vh)),0) scale(.99)!important;
   filter:blur(2px)!important;
   transition:
     opacity .56s ease-out,
@@ -1294,6 +1294,17 @@ function frame(now){
  seek.value=String(Math.min(1000,Math.round(t/Math.max(1,durationSeconds)*1000)));
  lastTime=t;
 }
+// Refit after screen rotation or browser viewport changes without
+// affecting playback, the quote transition, or the single-caption guarantee.
+window.addEventListener('resize',()=>{
+ if(fitRequest!==null)cancelAnimationFrame(fitRequest);
+ fitRequest=requestAnimationFrame(()=>{
+  fitRequest=null;
+  fitLyric();
+  const current=lyricEl.querySelector('.lyric-sentence.caption-lyric');
+  if(current)measureRainDrop(current);
+ });
+},{passive:true});
 updateButtons();
 requestAnimationFrame(frame);
 })();
