@@ -1848,6 +1848,28 @@ html body #bouquets .bouquet{
  html body #bouquets .bouquet{translate:0 0!important;transition:none!important}
 }
 
+
+/* Crisp lilies: defined petals, improved visibility, restrained luminous edges.
+   Existing touch reaction, music sway and secret flower bloom are preserved. */
+#bouquets .bouquet:not(.secret-lily-ready):not(.secret-lily-bloom){
+  filter:
+    drop-shadow(0 0 7px rgba(255,151,217,.28))
+    saturate(1.24)
+    contrast(1.17)
+    brightness(1.12)!important;
+}
+#bouquets .bouquet::before,
+#bouquets .bouquet::after{
+  filter:blur(.8px)!important;
+  opacity:.095!important;
+}
+#scene > .vignette{
+  background:radial-gradient(ellipse at 50% 49%,
+    transparent 33%,
+    rgba(0,0,0,.14) 66%,
+    rgba(0,0,0,.61) 100%)!important;
+}
+
 </style></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>🌸 Ente Mariammekku 🌸</h1></header>
@@ -1865,7 +1887,7 @@ const cues=parseLRC(timedLrc);const breaks=[{start:57.25,end:75.44,lines:[{at:57
 const bouquetLayer=document.getElementById('bouquets'),sparkLayer=document.getElementById('particles'),lyricEl=document.getElementById('lyric'),playBtn=document.getElementById('play'),pauseBtn=document.getElementById('pause'),rewindBtn=document.getElementById('rewind'),seek=document.getElementById('seek'),timeEl=document.getElementById('time'),toast=document.getElementById('toast');
 let lastCue='',lastTime=-1,toastTimeout=null;const approxDuration=319.97;let positionSeconds=0,durationSeconds=approxDuration;
 const positions=[{x:6,y:14,w:190,r:-20,s:0.92,o:0.46,d:8.2},{x:8,y:28,w:215,r:-12,s:0.99,o:0.55,d:8.7},{x:8,y:42,w:245,r:-10,s:1.08,o:0.62,d:8.3},{x:7,y:58,w:240,r:-16,s:1.05,o:0.62,d:8.1},{x:8,y:74,w:220,r:-18,s:0.96,o:0.53,d:8.0},{x:13,y:86,w:175,r:-18,s:0.80,o:0.36,d:8.8},{x:20,y:12,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:20,y:86,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:31,y:10,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:31,y:88,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:50,y:7,w:160,r:0,s:0.70,o:0.22,d:10.4},{x:50,y:90,w:165,r:0,s:0.72,o:0.22,d:10.2},{x:69,y:10,w:150,r:6,s:0.66,o:0.20,d:10.0},{x:69,y:88,w:150,r:-6,s:0.66,o:0.20,d:10.1},{x:80,y:12,w:160,r:8,s:0.72,o:0.24,d:9.5},{x:80,y:86,w:160,r:-8,s:0.72,o:0.24,d:9.6},{x:94,y:14,w:190,r:20,s:0.92,o:0.46,d:8.2},{x:92,y:28,w:215,r:12,s:0.99,o:0.55,d:8.7},{x:92,y:42,w:245,r:10,s:1.08,o:0.62,d:8.3},{x:93,y:58,w:240,r:16,s:1.05,o:0.62,d:8.1},{x:92,y:74,w:220,r:18,s:0.96,o:0.53,d:8.0},{x:87,y:86,w:175,r:18,s:0.80,o:0.36,d:8.8},{x:16,y:22,w:142,r:-22,s:0.62,o:0.22,d:10.8},{x:16,y:66,w:142,r:-24,s:0.62,o:0.22,d:10.7},{x:84,y:22,w:142,r:22,s:0.62,o:0.22,d:10.8},{x:84,y:66,w:142,r:24,s:0.62,o:0.22,d:10.7},{x:38,y:16,w:128,r:-3,s:0.56,o:0.16,d:10.9},{x:62,y:16,w:128,r:3,s:0.56,o:0.16,d:10.9}];
-positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,s:0.91,o:0.46,d:9.5},{x:97,y:32,w:185,r:18,s:0.84,o:0.38,d:9},{x:99,y:63,w:200,r:24,s:0.91,o:0.46,d:9.4},{x:11,y:95,w:235,r:-12,s:0.99,o:0.46,d:8.7},{x:23,y:98,w:212,r:8,s:0.9,o:0.43,d:9.2},{x:35,y:99,w:168,r:-9,s:0.79,o:0.35,d:10.3},{x:49,y:101,w:188,r:0,s:0.89,o:0.32,d:9.9},{x:64,y:99,w:168,r:9,s:0.79,o:0.35,d:10.1},{x:77,y:98,w:212,r:-8,s:0.9,o:0.43,d:9},{x:90,y:95,w:235,r:12,s:0.99,o:0.46,d:8.8},{x:16,y:45,w:156,r:-25,s:0.73,o:0.24,d:10.7},{x:84,y:45,w:156,r:25,s:0.73,o:0.24,d:10.6},{x:4,y:84,w:160,r:-19,s:0.78,o:0.37,d:10.1},{x:96,y:84,w:160,r:19,s:0.78,o:0.37,d:10.3});positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
+positions.push({x:3,y:32,w:185,r:-18,s:0.84,o:0.38,d:9.1},{x:1,y:63,w:200,r:-24,s:0.91,o:0.46,d:9.5},{x:97,y:32,w:185,r:18,s:0.84,o:0.38,d:9},{x:99,y:63,w:200,r:24,s:0.91,o:0.46,d:9.4},{x:11,y:95,w:235,r:-12,s:0.99,o:0.46,d:8.7},{x:23,y:98,w:212,r:8,s:0.9,o:0.43,d:9.2},{x:35,y:99,w:168,r:-9,s:0.79,o:0.35,d:10.3},{x:49,y:101,w:188,r:0,s:0.89,o:0.32,d:9.9},{x:64,y:99,w:168,r:9,s:0.79,o:0.35,d:10.1},{x:77,y:98,w:212,r:-8,s:0.9,o:0.43,d:9},{x:90,y:95,w:235,r:12,s:0.99,o:0.46,d:8.8},{x:16,y:45,w:156,r:-25,s:0.73,o:0.24,d:10.7},{x:84,y:45,w:156,r:25,s:0.73,o:0.24,d:10.6},{x:4,y:84,w:160,r:-19,s:0.78,o:0.37,d:10.1},{x:96,y:84,w:160,r:19,s:0.78,o:0.37,d:10.3});positions.forEach(p=>{const el=document.createElement('div');el.className='bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:Math.min(.94,p.o*1.30+.10),d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
 
 /* The animated flower images respond independently of their idle sway.
    Touch events are observed on the page, so music controls remain usable. */
