@@ -1,71 +1,48 @@
-/* Desktop photographic garden + music-anchored caption polish — 2026-10-26.
-   Preserve the original textured stargazer source in .bouquet.
-   All garden items are visual-only; interactive original lilies are untouched. */
-@media (min-width:900px) {
-  /* Retire the flatter legacy vector fillers. Photographic cut-outs replace them. */
-  #desktop-lily-garden .desktop-bloom { display:none !important; }
-  #desktop-lily-garden .desktop-photo-bloom {
-    position:absolute;
-    left:var(--x); top:var(--y);
-    width:var(--w);
-    aspect-ratio:1 / 1;
-    height:auto;
-    display:block;
-    background-size:var(--crop-size) auto !important;
-    background-position:var(--crop-x) var(--crop-y) !important;
-    background-repeat:no-repeat!important;
-    opacity:var(--o);
-    mix-blend-mode:screen;
-    filter:hue-rotate(var(--hue)) saturate(var(--sat)) brightness(var(--bright))
-      drop-shadow(0 0 9px rgba(248,112,201,.17))!important;
-    transform:translate3d(-50%,-50%,0) rotate(var(--r)) scale(var(--scale))!important;
-    animation:photoLilyBreath var(--duration) ease-in-out var(--delay) infinite alternate!important;
-    mask-image:radial-gradient(ellipse at center,#000 42%,rgba(0,0,0,.96) 53%,rgba(0,0,0,.6) 66%,transparent 81%);
-    -webkit-mask-image:radial-gradient(ellipse at center,#000 42%,rgba(0,0,0,.96) 53%,rgba(0,0,0,.6) 66%,transparent 81%);
-    transform-origin:center 64%;
-    pointer-events:none;
-    transition:none!important;
-    contain:layout style;
-  }
-  #desktop-lily-garden .desktop-photo-bloom::before,
-  #desktop-lily-garden .desktop-photo-bloom::after{display:none!important}
-  #particles .photo-twinkle {
-    display:block;position:absolute;left:var(--x);top:var(--y);
-    width:var(--size);height:var(--size);border-radius:100%;
-    background:rgba(var(--light),.92);
-    box-shadow:0 0 7px rgba(var(--light),.50),0 0 16px rgba(var(--light),.23);
-    pointer-events:none;opacity:.14;
-    animation:photoTwinkle var(--duration) ease-in-out var(--delay) infinite alternate;
-    transform-origin:center;will-change:auto;
-  }
-  #particles .photo-twinkle.star-cross::before,
-  #particles .photo-twinkle.star-cross::after {
-    content:"";position:absolute;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    background:rgba(var(--light),.55);border-radius:100%;
-  }
-  #particles .photo-twinkle.star-cross::before{width:1px;height:11px}
-  #particles .photo-twinkle.star-cross::after{width:11px;height:1px}
-  /* Darken behind the central caption only; flowers remain visible as a frame. */
+/* ORIGINAL LILY GARDEN • desktop fill.
+   All added flowers use the exact original .bouquet artwork, intact.
+   No masking, photo-crops, hue rotation, SVGs or recolouring. */
+#desktop-lily-garden .original-extra-lily{
+  position:absolute;
+  left:var(--x);
+  top:var(--y);
+  width:var(--w);
+  aspect-ratio:.80;
+  opacity:var(--o);
+  transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s));
+  transform-origin:50% 62%;
+  background-position:center!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  mix-blend-mode:screen;
+  filter:drop-shadow(0 0 19px rgba(255,103,181,.32)) saturate(1.08);
+  animation:sway var(--d) ease-in-out var(--delay) infinite alternate;
+  pointer-events:none!important;
+}
+#desktop-lily-garden .original-extra-lily::before,
+#desktop-lily-garden .original-extra-lily::after{
+  display:none!important;
+}
+@media(max-width:899px){
+  #desktop-lily-garden .original-extra-lily{display:none!important}
+}
+@media(min-width:900px){
+  /* Preserve more detail on the original lilies along the laptop borders. */
+  #desktop-lily-garden{overflow:hidden;pointer-events:none}
   #desktop-lily-garden::after{
-    background:radial-gradient(ellipse 37% 35% at 50% 49%,rgba(0,0,0,.58),
-      rgba(0,0,0,.25) 59%,transparent 100%)!important;
+    content:"";position:absolute;inset:0;
+    pointer-events:none;
+    background:radial-gradient(ellipse 31% 37% at 50% 49%,
+      rgba(0,0,0,.39),rgba(0,0,0,.21) 60%,transparent 100%);
   }
 }
-@keyframes photoLilyBreath {
-  from{transform:translate3d(-50%,-50%,0) rotate(calc(var(--r) - 2deg)) scale(var(--scale))}
-  to{transform:translate3d(-50%,calc(-50% - 7px),0) rotate(calc(var(--r) + 2deg)) scale(calc(var(--scale) * 1.014))}
+@media(prefers-reduced-motion:reduce){
+  #desktop-lily-garden .original-extra-lily{
+    animation:none!important;
+    transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s))!important;
+  }
 }
-@keyframes photoTwinkle {
-  from{opacity:.06;transform:translate3d(0,0,0) scale(.58)}
-  to{opacity:.74;transform:translate3d(0,-2px,0) scale(1.15)}
-}
-@media(max-width:899px) {
-  #desktop-lily-garden .desktop-photo-bloom,#particles .photo-twinkle{display:none!important}
-}
-/* One single text stage: entering caption falls softly from above,
-   outgoing caption fades quickly downward in its own absolute layer.
-   The audio-clock controls words, CSS only interpolates movement. */
+/* Keep the smoother audio-timed caption changes from the previous update.
+   The original lily imagery and colours above are never altered. */
 html body .stage #lyric{position:relative!important;isolation:isolate}
 html body .stage #lyric .lyric-sentence.caption-lyric:not(.ig-instant):not(.lyric-leaving){
   animation:captionRain .52s cubic-bezier(.18,.82,.22,1) both!important;
@@ -100,22 +77,12 @@ html body .stage #lyric .lyric-sentence.caption-quote.is-current{
 }
 html body .stage #lyric .ig-word{
   transition:opacity .47s cubic-bezier(.2,.7,.22,1),
-    transform .65s cubic-bezier(.18,.86,.24,1)!important;
-}
-@media (min-width:1024px) {
-  html body .stage #lyric.lyric {
-    letter-spacing:-.021em!important;
-    line-height:1.19!important;
-  }
-  html body .stage #lyric .lyric-sentence.caption-lyric .ig-stack{gap:.09em}
+  transform .65s cubic-bezier(.18,.86,.24,1)!important;
 }
 @media(prefers-reduced-motion:reduce){
-  #desktop-lily-garden .desktop-photo-bloom,#particles .photo-twinkle{
-    animation:none!important;transition:none!important;
-  }
   html body .stage #lyric .lyric-sentence.caption-lyric,
   html body .stage #lyric .lyric-sentence.lyric-leaving,
   html body .stage #lyric .lyric-sentence.caption-quote{
-    animation:none!important;transition:none!important;opacity:1!important;transform:none!important
+    animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
   }
 }
