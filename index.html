@@ -1575,6 +1575,9 @@ let secretOpenIndex=-1,secretLastFocus=null,secretRevealTimer=null;
 const secretButtons=SECRET_LETTERS.map((letter,i)=>{
  const {p,index}= {p:selectedSpots[i].p,index:selectedSpots[i].i};
  const bloom=interactiveBlooms[index];
+ bloom.addEventListener('animationend',ev=>{
+   if(ev.animationName==='secret-real-bloom')bloom.classList.remove('secret-lily-bloom');
+ });
  const button=document.createElement('button');
  button.type='button';
  button.className='secret-lily-trigger';
