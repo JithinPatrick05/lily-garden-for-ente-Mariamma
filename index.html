@@ -1563,51 +1563,44 @@ body .stage #lyric .lyric-sentence.caption-quote.is-current.is-exiting{
 }
 
 
-/* AUDIO-LOCKED WORDS — smooth animations controlled by media.currentTime. */
-.stage #lyric .ig-word,
-.stage #lyric .ig-word.ig-visible,
-body .stage #lyric .ig-word,
-body .stage #lyric .ig-word.ig-visible {
-  display:inline-block!important;
-  flex-shrink:0!important;
-  opacity:1!important;
-  transform:none!important;
-  filter:none!important;
-  transition:none!important;
-  background:none!important;
-  -webkit-text-fill-color:inherit!important;
-  will-change:auto!important;
+
+/* Final mobile-safe lyric styling: direct audio-timed spans. */
+.stage #lyric .lyric-sentence.caption-lyric .ig-row .ig-word,
+body .stage #lyric .lyric-sentence.caption-lyric .ig-row .ig-word{
+ display:inline-block!important;flex-shrink:0!important;
+ opacity:1;transform:none;
+ filter:none!important;transition:none!important;
+ background:linear-gradient(110deg,#fff4fb,#ff85c8 25%,#ffb4a2 47%,#ffd680 63%,#d0a4ff 83%,#a1e6ff)!important;
+ -webkit-background-clip:text!important;background-clip:text!important;
+ -webkit-text-fill-color:transparent!important;color:transparent!important;
+ text-shadow:none!important;backface-visibility:visible!important;
+ will-change:auto!important;
 }
-.stage #lyric .ig-glyph {
-  display:inline-block;
-  opacity:0;
-  transform:translate3d(0,9px,0) scale(.975);
-  transform-origin:center bottom;
-  background:linear-gradient(110deg,#fff4fb 0%,#ff85c8 25%,#ffb4a2 47%,#ffd680 63%,#d0a4ff 83%,#a1e6ff 100%);
-  background-clip:text;
-  -webkit-background-clip:text;
-  color:transparent;
-  -webkit-text-fill-color:transparent;
-  will-change:transform,opacity;
-  backface-visibility:hidden;
+.stage #lyric .lyric-sentence.caption-lyric .ig-tier-2 .ig-word{
+ background-image:linear-gradient(110deg,#ffe9f6,#ff8ecf 32%,#d0a4ff 65%,#a2dcff)!important;
 }
-.stage #lyric .ig-tier-2 .ig-glyph{
-  background-image:linear-gradient(110deg,#ffe9f6,#ff8ecf 32%,#d0a4ff 65%,#a2dcff);
+.stage #lyric .lyric-sentence.caption-lyric .ig-tier-3 .ig-word{
+ background-image:linear-gradient(110deg,#ffdae9,#ffb79b 30%,#ffe1a1 62%,#f3bbef)!important;
 }
-.stage #lyric .ig-tier-3 .ig-glyph{
-  background-image:linear-gradient(110deg,#ffdae9,#ffb79b 30%,#ffe1a1 62%,#f3bbef);
-}
-body .stage #lyric .lyric-sentence.caption-lyric {
-  transition:opacity .18s ease-out,transform .22s ease-out!important;
+body .stage #lyric .lyric-sentence.caption-lyric{
+ transition:opacity .15s ease-out,transform .19s ease-out!important;
 }
 body.has-song .bouquet:not(.secret-lily-bloom){
-  /* Filter animation on dozens of large transparent flowers was forcing
-     expensive paint work each frame. Keep their original gentle sway. */
-  animation:sway var(--d) ease-in-out infinite alternate!important;
+ animation:sway var(--d) ease-in-out infinite alternate!important;
+}
+/* Lock romantic heading: no flicker, movement, fade, or pulse. */
+html body .brand{
+ position:fixed!important;top:max(17px,env(safe-area-inset-top))!important;
+ left:50%!important;transform:translate3d(-50%,0,0)!important;
+ animation:none!important;transition:none!important;opacity:1!important;
+ filter:none!important;will-change:auto!important;z-index:16!important;
+}
+html body .brand h1,html body .brand h1::after{
+ animation:none!important;transition:none!important;
+ opacity:1!important;transform:none!important;filter:none!important;
 }
 @media(prefers-reduced-motion:reduce){
- .stage #lyric .ig-glyph{transform:none!important;}
- body .stage #lyric .lyric-sentence.caption-lyric{transition:none!important;}
+ body .stage #lyric .lyric-sentence.caption-lyric{transition:none!important}
 }
 
 </style></head><body>
@@ -1698,14 +1691,12 @@ window.addEventListener('pointercancel',()=>{clearTimeout(settleTimer);settleTim
 const SECRET_LETTERS=[
  {at:58.0,title:"Marriamme,",text:"If lilies could keep secrets, every petal would hold a reason I love you. You turn ordinary moments into the sweetest memories, and wherever life takes us, my heart will always find its way home to you."},
  {at:140.1,title:"My love,",text:"You are the calm in my busiest days, the smile I look for without even thinking. I would choose you in a thousand lifetimes, and still wish for one more minute beside you."},
- {at:219.0,title:"Muthe,",text:"Enikku ninne othiri ishtamaanu. Even on the quietest days, you make my world feel warm. If I could gather every star and every flower, it still wouldn't show how precious you are to me."},
- {at:286.0,title:"My world,",text:"If forever had a colour, it would be the soft pink of these lilies blooming for you. I don't need a perfect story — just the beautiful little life we can write together, one day and one heartbeat at a time."}
+ {at:219.0,title:"Muthe,",text:"Enikku ninne othiri ishtamaanu. Even on the quietest days, you make my world feel warm. If I could gather every star and every flower, it still wouldn't show how precious you are to me."}
 ];
 const letterSpots=[
  positions.map((p,i)=>({p,i})).filter(({p})=>p.x<22&&p.y>=19&&p.y<52),
  positions.map((p,i)=>({p,i})).filter(({p})=>p.x>78&&p.y>=19&&p.y<52),
- positions.map((p,i)=>({p,i})).filter(({p})=>p.x<22&&p.y>=53&&p.y<76),
- positions.map((p,i)=>({p,i})).filter(({p})=>p.x>78&&p.y>=53&&p.y<76)
+ positions.map((p,i)=>({p,i})).filter(({p})=>p.x<22&&p.y>=53&&p.y<76)
 ];
 // Pick randomly within each quadrant; shuffle which letter goes in which area.
 const selectedSpots=letterSpots.map(group=>group[Math.floor(Math.random()*group.length)]);
@@ -1892,50 +1883,43 @@ function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.
 // Aligned to the supplied recording. Updates at each sentence boundary,
 // with a short fade-out and slow, luminous fade-in.
 // Positive look-ahead makes the displayed words appear earlier.
-/* AUDIO-LOCKED CAPTIONS v3
-   A lyric line is prepared just ahead of its cue, but every WORD'S opacity
-   and position are driven from the MP3's actual currentTime. CSS transitions
-   no longer accumulate drift or continue advancing while paused. */
+/* STABLE MUSIC-SYNCHRONIZED LYRICS V4: audio-clock opacity and movement.
+   One span per word; no WAAPI, nested glyphs, or drifting transitions. */
 const LYRIC_LINE_ADVANCE=0.20;
-const LYRIC_WORD_ADVANCE=0.25;
-const CAPTION_EXIT_LEAD=0.18;
-const WORD_EASE_MS=315;
-let lyricTransitionId=0;
-let lyricChangeTimer=null;
-let captionWords=[],captionTimes=[],captionAnimations=[];
+const LYRIC_WORD_ADVANCE=0.32;
+const CAPTION_EXIT_LEAD=0.15;
+const WORD_EASE_SECONDS=0.42;
+let lyricTransitionId=0,lyricChangeTimer=null;
+let captionWords=[],captionTimes=[],captionProgress=[];
 let activeIsQuote=false,captionReady=true;
 const lyricReducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
 const cachedCaptionSizes=new Map();
-
 function fitLyric(){
- const container=lyricEl.closest('.stage');
- const sentence=lyricEl.querySelector('.lyric-sentence');
+ const container=lyricEl.closest('.stage'),sentence=lyricEl.querySelector('.lyric-sentence');
  if(!container||!sentence)return;
  const stack=sentence.querySelector('.ig-stack');
- const widthLimit=Math.max(145,container.getBoundingClientRect().width-14);
- const heightLimit=Math.max(96,Math.min(innerHeight*.57,innerHeight-147));
- const mobile=innerWidth<=720;
+ const widthLimit=Math.max(145,container.getBoundingClientRect().width-16);
+ const heightLimit=Math.max(96,Math.min(window.innerHeight*.57,window.innerHeight-147));
+ const mobile=window.innerWidth<=720;
  const minSize=stack?14:17;
  let size=stack
-   ? (mobile?Math.min(33,Math.max(23,innerWidth*.076)):Math.min(43,Math.max(28,innerWidth*.033)))
-   : (mobile?Math.min(29,Math.max(22,innerWidth*.067)):Math.min(37,Math.max(25,innerWidth*.039)));
- if(innerHeight<650)size*=.90;
- if(innerHeight<520)size*=.84;
+   ?(mobile?Math.min(33,Math.max(23,window.innerWidth*.076)):Math.min(43,Math.max(28,window.innerWidth*.033)))
+   :(mobile?Math.min(29,Math.max(22,window.innerWidth*.067)):Math.min(37,Math.max(25,window.innerWidth*.039)));
+ if(window.innerHeight<650)size*=.90;
+ if(window.innerHeight<520)size*=.84;
  const textKey=(stack?'lyrics:':'quote:')+(sentence.textContent||'')+
-   ':'+Math.round(innerWidth/8)+':'+Math.round(innerHeight/8);
+  ':'+Math.round(window.innerWidth/8)+':'+Math.round(window.innerHeight/8);
  const cached=cachedCaptionSizes.get(textKey);
  if(cached){lyricEl.style.setProperty('font-size',cached+'px','important');return;}
  lyricEl.style.setProperty('font-size',size.toFixed(1)+'px','important');
- // Only one geometry read and at most one correction; the old loop could
- // force layout dozens of times at each lyric line on a mobile phone.
- const wide=stack?Math.max(1,...[...stack.querySelectorAll('.ig-row')].map(row=>row.scrollWidth))
-   :Math.max(1,sentence.scrollWidth);
+ const wide=stack?Math.max(1,...[...stack.querySelectorAll('.ig-row')].map(row=>row.scrollWidth)):
+  Math.max(1,sentence.scrollWidth);
  const high=Math.max(1,(stack||sentence).getBoundingClientRect().height);
  const ratio=Math.min(1,widthLimit/wide,heightLimit/high);
  if(ratio<.985)size=Math.max(minSize,size*ratio*.967);
  const finalSize=Number(size.toFixed(1));
  lyricEl.style.setProperty('font-size',finalSize+'px','important');
- if(cachedCaptionSizes.size>120)cachedCaptionSizes.clear();
+ if(cachedCaptionSizes.size>100)cachedCaptionSizes.clear();
  cachedCaptionSizes.set(textKey,finalSize);
 }
 let fitRequest=null;
@@ -1944,9 +1928,7 @@ function requestLyricFit(){
  cachedCaptionSizes.clear();
  fitRequest=requestAnimationFrame(()=>{fitRequest=null;fitLyric()});
 }
-// Known sung-phrase shapes stay anchored to the recording's existing LRC
-// line starts; fractional positions are still approximations, not measured
-// individual word transcriptions.
+// Preserves the original cue timing and word profiles.
 const WORD_PROFILES={
   whenever:[0,.21,.46,.69,.87],
   youmake:[0,.10,.21,.35,.49,.57,.66,.81,.94],
@@ -1993,118 +1975,70 @@ function captionRows(words){
  return [words.slice(0,cut),words.slice(cut)];
 }
 
-function clearCaptionAnimations(){
- for(const animation of captionAnimations)if(animation)animation.cancel();
- captionAnimations=[];
-}
+
 function syncCaptionWords(audioTime){
  if(!captionReady||activeIsQuote)return;
- const reduced=lyricReducedMotion.matches;
  for(let i=0;i<captionWords.length;i++){
-   const anim=captionAnimations[i];
-   const elapsedMs=(audioTime-captionTimes[i]+LYRIC_WORD_ADVANCE)*1000;
-   const ms=reduced?(elapsedMs>=0?WORD_EASE_MS:0):
-     Math.max(0,Math.min(WORD_EASE_MS,elapsedMs));
-   if(anim){
-     // WAAPI's paused animation is audio-scrubbed: seeking, pausing and
-     // playback-frame drops always produce the CURRENT correct visual state.
-     if(anim.currentTime===null||Math.abs(anim.currentTime-ms)>.25)anim.currentTime=ms;
-   }else{
-     captionWords[i].style.opacity=elapsedMs>=0?'1':'0';
-   }
+   const el=captionWords[i];
+   const raw=lyricReducedMotion.matches?
+      (audioTime+LYRIC_WORD_ADVANCE>=captionTimes[i]?1:0):
+      Math.max(0,Math.min(1,(audioTime-captionTimes[i]+LYRIC_WORD_ADVANCE)/WORD_EASE_SECONDS));
+   if(Math.abs(raw-(captionProgress[i]??-1))<.004)continue;
+   captionProgress[i]=raw;
+   const eased=raw*raw*(3-2*raw);
+   el.style.setProperty('opacity',eased.toFixed(3),'important');
+   el.style.setProperty('transform','translate3d(0,'+((1-eased)*9).toFixed(2)+'px,0) scale('+
+     (0.975+0.025*eased).toFixed(4)+')','important');
  }
 }
 function installCaption(item,audioTime,force=false){
  ++lyricTransitionId;
  clearTimeout(lyricChangeTimer);
- clearCaptionAnimations();
- captionWords=[];
- captionTimes=[];
- captionReady=false;
+ captionWords=[];captionTimes=[];captionProgress=[];captionReady=false;
  const reduced=lyricReducedMotion.matches;
  const isQuote=item.key==='quote1'||item.key==='quote2'||item.key.startsWith('note-');
  activeIsQuote=isQuote;
  const sentence=document.createElement('span');
  sentence.className='lyric-sentence '+(isQuote?'caption-quote':'caption-lyric')+
    (isQuote&&!force&&!reduced?' is-entering':' is-current');
- if(isQuote){
-   sentence.textContent=item.text||' ';
- }else{
-   const words=(item.text||'').split(/\s+/).filter(Boolean);
-   const stack=document.createElement('span');
+ if(isQuote)sentence.textContent=item.text||' ';
+ else{
+   const words=(item.text||'').split(/\s+/).filter(Boolean),stack=document.createElement('span');
    stack.className='ig-stack';
    for(const [rowNumber,parts] of captionRows(words).filter(row=>row.length).entries()){
-     const row=document.createElement('span');
-     row.className='ig-row ig-tier-'+Math.min(rowNumber+1,3);
+     const row=document.createElement('span');row.className='ig-row ig-tier-'+Math.min(rowNumber+1,3);
      for(const part of parts){
        const word=document.createElement('span');
-       word.className='ig-word';
-       const glyph=document.createElement('span');
-       glyph.className='ig-glyph';
-       glyph.textContent=part;
-       word.appendChild(glyph);
-       row.appendChild(word);
-       captionWords.push(glyph);
+       word.className='ig-word';word.textContent=part;row.appendChild(word);captionWords.push(word);
      }
      stack.appendChild(row);
    }
    sentence.appendChild(stack);
    captionTimes=getWordTimes(item,words);
+   captionProgress=new Array(captionWords.length).fill(-1);
  }
- // Never stack an outgoing line underneath an incoming one.
  lyricEl.replaceChildren(sentence);
  fitLyric();
- if(isQuote){
-   captionReady=true;
-   if(!force&&!reduced){
-     requestAnimationFrame(()=>{
-       if(!sentence.isConnected)return;
-       sentence.getBoundingClientRect();
-       sentence.classList.remove('is-entering');
-       sentence.classList.add('is-current');
-     });
-   }
- }else{
-   for(const glyph of captionWords){
-     if(typeof glyph.animate!=='function'){
-       captionAnimations.push(null);
-       continue;
-     }
-     const motion=glyph.animate([
-       {opacity:0,transform:'translate3d(0,9px,0) scale(.975)'},
-       {opacity:1,transform:'translate3d(0,0,0) scale(1)'}
-     ],{
-       duration:WORD_EASE_MS,
-       easing:'cubic-bezier(.16,.84,.20,1)',
-       fill:'both',
-       iterations:1
-     });
-     motion.pause();
-     captionAnimations.push(motion);
-   }
-   captionReady=true;
-   syncCaptionWords(audioTime);
- }
+ captionReady=true;
+ if(isQuote&&!force&&!reduced){
+   requestAnimationFrame(()=>{
+     if(!sentence.isConnected)return;
+     sentence.getBoundingClientRect();
+     sentence.classList.remove('is-entering');sentence.classList.add('is-current');
+   });
+ }else syncCaptionWords(audioTime);
 }
 function displayLyric(t,force=false){
- if(updateHeartFinale(t,force)){
-   if(captionAnimations.length)clearCaptionAnimations();
-   return;
- }
- const audioTime=Math.max(0,t);
- const current=getCaption(audioTime+LYRIC_LINE_ADVANCE);
- if(force||current.key!==lastCue){
-   lastCue=current.key;
-   installCaption(current,audioTime,force);
- }
+ if(updateHeartFinale(t,force))return;
+ const currentTime=Math.max(0,t),item=getCaption(currentTime+LYRIC_LINE_ADVANCE);
+ if(force||item.key!==lastCue){lastCue=item.key;installCaption(item,currentTime,force)}
  const sentence=lyricEl.querySelector('.lyric-sentence');
  if(sentence){
-   const approaching=getCaption(audioTime+LYRIC_LINE_ADVANCE+CAPTION_EXIT_LEAD);
-   const fading=!force&&!music.paused&&approaching.key!==current.key;
-   if(sentence.classList.contains('is-exiting')!==fading)
-      sentence.classList.toggle('is-exiting',fading);
+  const next=getCaption(currentTime+LYRIC_LINE_ADVANCE+CAPTION_EXIT_LEAD);
+  const fading=!force&&!music.paused&&next.key!==item.key;
+  if(sentence.classList.contains('is-exiting')!==fading)sentence.classList.toggle('is-exiting',fading);
  }
- syncCaptionWords(audioTime);
+ syncCaptionWords(currentTime);
 }
 
 const music=document.getElementById('lovesong-audio');
