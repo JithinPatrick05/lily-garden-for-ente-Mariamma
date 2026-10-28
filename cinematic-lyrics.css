@@ -1,0 +1,55 @@
+/* Cinematic captions: each word moves on the MP3 playback clock.
+   No animation queues or per-word CSS transitions: seeking and resuming stay in sync. */
+html body .stage #lyric .lyric-sentence.caption-lyric .ig-word,
+html body .stage #lyric .lyric-sentence.caption-lyric .ig-word.ig-visible {
+  opacity:var(--cin-opacity,0)!important;
+  transform:translate3d(0,var(--cin-y,-28px),0) scale(var(--cin-scale,.94))!important;
+  transition:none!important;
+  filter:none!important;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  will-change:opacity,transform;
+}
+html body .stage #lyric .lyric-sentence.caption-lyric .ig-word.cin-active {
+  -webkit-text-stroke:.16px rgba(255,250,255,.26)!important;
+}
+html body .stage #lyric .lyric-sentence.caption-lyric {
+  transform:translate3d(0,0,0)!important;
+  backface-visibility:hidden;
+}
+html body .stage #lyric .lyric-sentence.cin-ghost,
+html body .stage #lyric .lyric-sentence.cin-ghost.is-current {
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  pointer-events:none!important;
+  opacity:var(--cin-ghost-opacity,1)!important;
+  transform:var(--cin-ghost-transform,translate3d(0,0,0))!important;
+  transition:opacity .34s cubic-bezier(.22,.70,.27,1),
+             transform .42s cubic-bezier(.18,.76,.22,1)!important;
+  filter:none!important;
+  z-index:-1!important;
+}
+html body .stage #lyric {position:relative!important;isolation:isolate;}
+@media(max-width:720px){
+  html body .stage #lyric .lyric-sentence.caption-lyric .ig-word.cin-active {
+    -webkit-text-stroke:.1px rgba(255,249,255,.19)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html body .stage #lyric .lyric-sentence.caption-lyric .ig-word,
+  html body .stage #lyric .lyric-sentence.caption-lyric .ig-word.ig-visible {
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+    will-change:auto!important;
+  }
+  html body .stage #lyric .lyric-sentence.cin-ghost{display:none!important;transition:none!important}
+}
