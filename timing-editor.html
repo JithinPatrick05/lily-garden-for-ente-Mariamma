@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Lyric Timing Studio · Ente Mariammekku</title>
+<style>
+:root{color-scheme:dark;--ink:#fff0fb;--muted:#c4adc4;--pink:#fc9dd5;--panel:#160c1b;--border:#4a2b45}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#09050c;color:var(--ink);font-family:system-ui,Arial,sans-serif}body{padding:clamp(12px,2vw,26px)}
+header{max-width:1250px;margin:auto auto 18px}h1{font-size:clamp(24px,4vw,38px);margin:0;color:#ffe7f7}p{color:var(--muted);line-height:1.55}
+small{color:var(--muted)}a{color:#ffa7da}button,input{font:inherit}
+button{border:1px solid var(--border);border-radius:12px;background:#251128;color:#ffe5f7;padding:10px 13px;cursor:pointer}
+button:hover{background:#44213d}button:focus-visible,input:focus-visible{outline:2px solid #ff9cd8;outline-offset:2px}
+button.primary{background:#8f3677;border-color:#d974b6;font-weight:700}button:disabled{opacity:.3;cursor:not-allowed}
+main{max-width:1250px;margin:auto;display:grid;grid-template-columns:minmax(240px,390px) minmax(0,1fr);gap:16px}
+.panel{border:1px solid var(--border);border-radius:19px;background:var(--panel);padding:18px}
+#lines{max-height:68vh;overflow-y:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+#lines button{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;font-size:13px;padding:10px}
+#lines button.active{background:#722d62;border-color:#eb9dd7}
+#lines time{font-variant-numeric:tabular-nums;flex:none;color:#cbb8cd}
+audio{width:100%;margin:9px 0 14px}
+#words{display:flex;flex-wrap:wrap;gap:9px;min-height:64px;margin:20px 0}
+#words button{border-radius:13px;padding:12px;font-size:16px}
+#words button.active{background:#a34082;border-color:#ffb3e4;box-shadow:0 0 15px #e767a244}
+#words button.playing{outline:2px solid #ffdce9}
+#words button small{display:block;font-size:11px;margin-top:6px}
+#edit{display:flex;flex-wrap:wrap;align-items:end;gap:9px;margin:15px 0}
+#edit label{display:flex;flex-direction:column;gap:7px;font-size:13px;color:#efd0e9}
+#timeValue{background:#08070d;border:1px solid #78506c;border-radius:10px;width:150px;color:white;padding:10px}
+#playerTime{font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;color:#ffc2e6}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+#info{font-size:13px;color:#e6a5cf;min-height:20px}
+@media(max-width:720px){main{grid-template-columns:1fr}#lines{max-height:205px}.panel{padding:13px}#words button{padding:10px}}
+</style>
+<script src="word-timings.js?v=20261028a"></script>
+</head>
+<body>
+<header><h1>🌸 Lyric Timing Studio</h1>
+<p>Fine-tune the <strong>actual MP3's</strong> word starts in hundredths of a second. Select a line, listen, select a word, and press <strong>M</strong> exactly when it's sung. Changes are saved on this browser and automatically used by the main website on this device. Export the timing file to publish corrections for everyone.</p>
+<p><a href="./">← Open main lily garden</a></p>
+</header>
+<main>
+<section class="panel" aria-label="Select lyric line"><h2>35 lyric lines</h2><div id="lines"></div></section>
+<section class="panel" aria-label="Timing editor">
+<h2 id="lineTitle">Select a line</h2><audio id="audio" controls preload="metadata" src="assets/Lovesong.mp3"></audio>
+<div id="playerTime">0:00.00</div>
+<div class="actions"><button id="playLine">▶ Play selected line</button><button id="back">↶ 2 seconds</button><button id="toggle">Pause / play</button></div>
+<div id="words" role="group" aria-label="Select a word"></div>
+<div id="edit">
+<label>Word starts at (seconds)<input type="number" step=".01" min="0" max="319" id="timeValue"></label>
+<button class="primary" id="mark">● Mark at audio time (M)</button>
+<button id="minus">− 0.05s</button><button id="plus">+ 0.05s</button>
+<button id="previous">← Previous word</button><button id="next">Next word →</button>
+</div>
+<div class="actions"><button id="reset">Reset selected line</button><button id="save" class="primary">Save for this browser</button><button id="copy">Copy all timings</button><button id="download">Download word-timings.js</button></div>
+<p id="info" role="status"></p>
+<p><small>Shortcuts: <strong>M</strong> stamps the active word at the player's current position; <strong>← / →</strong> select words; <strong>[ / ]</strong> adjust by 0.05 seconds; <strong>space</strong> pauses/plays. Word timings generated from audio onsets are starting points, not verified phoneme alignments. Corrections here are saved locally unless exported and committed to GitHub.</small></p>
+</section>
+</main>
+<script>
+(()=>{
+'use strict';
+const track=[[1,"Whenever I'm alone with you"],[3,"You make me feel like I am home again"],[4,"Whenever I'm alone with you"],[6,"You make me feel like I am whole again"],[8,"Whenever I'm alone with you"],[9,"You make me feel like I am young again"],[10,"Whenever I'm alone with you"],[11,"You make me feel like I am fun again"],[12,"However far away"],[13,"I will always love you"],[14,"However long I stay"],[15,"I will always love you"],[16,"Whatever words I say"],[17,"I will always love you"],[18,"I will always love you"],[20,"Whenever I'm alone with you"],[21,"You make me feel like I am free again"],[22,"Whenever I'm alone with you"],[24,"You make me feel like I am clean again"],[25,"However far away"],[26,"I will always love you"],[27,"However long I stay"],[28,"I will always love you"],[29,"Whatever words I say"],[30,"I will always love you"],[31,"I will always love you"],[33,"However far away"],[34,"I will always love you"],[35,"However long I stay"],[36,"I will always love you"],[37,"Whatever words I say"],[38,"I will always love you"],[39,"I'll always love you"],[40,"I'll always love you"],[41,"'Cause I love you"]];
+const KEY='mariamma-word-times-v1';
+const original=window.MARIAMMA_WORD_TIMES||{};
+const clone=x=>JSON.parse(JSON.stringify(x));
+let edited=clone(original);
+try{
+ const saved=JSON.parse(localStorage.getItem(KEY)||'null');
+ if(saved&&typeof saved==='object'){
+  for(const [key,values] of Object.entries(saved)){
+   if(Array.isArray(original[key])&&Array.isArray(values)&&values.length===original[key].length
+     &&values.every(v=>typeof v==='number'&&Number.isFinite(v)&&v>=0))edited[key]=values.slice();
+  }
+ }
+}catch(e){}
+const $=id=>document.getElementById(id), audio=$('audio'),lineList=$('lines'),wordsBox=$('words');
+let lineIndex=0,wordIndex=0;
+const tformat=t=>Math.floor(t/60)+':'+(t%60).toFixed(2).padStart(5,'0');
+const active=()=>track[lineIndex];
+const values=()=>edited[active()[0]];
+function message(msg){$('info').textContent=msg}
+function createLineButtons(){
+ lineList.replaceChildren();
+ track.forEach(([key,title],i)=>{
+  const button=document.createElement('button'),name=document.createElement('span'),time=document.createElement('time');
+  name.textContent=title;time.textContent=tformat(edited[key][0]||0);
+  button.append(name,time);
+  button.classList.toggle('active',i===lineIndex);
+  button.addEventListener('click',()=>chooseLine(i,true));
+  lineList.append(button);
+ });
+}
+function chooseLine(i,seek=true){
+ lineIndex=Math.max(0,Math.min(track.length-1,i));wordIndex=0;
+ const [id,content]=active();$('lineTitle').textContent=content;
+ if(seek)audio.currentTime=Math.max(0,edited[id][0]-.5);
+ createLineButtons();renderWords();
+}
+function renderWords(){
+ wordsBox.replaceChildren();
+ const list=active()[1].split(/\s+/),times=values();
+ for(let i=0;i<list.length;i++){
+  const b=document.createElement('button');b.type='button';
+  const label=document.createElement('span'),time=document.createElement('small');
+  label.textContent=list[i];time.textContent=times[i].toFixed(2)+'s';
+  b.append(label,time);
+  b.classList.toggle('active',i===wordIndex);
+  b.classList.toggle('playing',audio.currentTime>=times[i]&&(!times[i+1]||audio.currentTime<times[i+1]));
+  b.addEventListener('click',()=>{wordIndex=i;audio.currentTime=Math.max(0,times[i]-.35);renderWords()});
+  wordsBox.append(b);
+ }
+ $('timeValue').value=times[wordIndex].toFixed(2);
+}
+function chooseWord(n){wordIndex=Math.max(0,Math.min(values().length-1,n));renderWords()}
+function setTime(value){
+ let n=Number(value);if(!Number.isFinite(n))return;
+ const a=values(),prev=a[wordIndex-1],next=a[wordIndex+1];
+ if(prev!==undefined)n=Math.max(prev+.02,n);
+ if(next!==undefined)n=Math.min(next-.02,n);
+ a[wordIndex]=Math.round(Math.max(0,Math.min(319,n))*100)/100;
+ renderWords();createLineButtons();message('Unsaved timing change — press Save for this browser.');
+}
+$('timeValue').addEventListener('change',e=>setTime(e.target.value));
+$('mark').addEventListener('click',()=>{setTime(audio.currentTime);chooseWord(wordIndex+1)});
+$('minus').addEventListener('click',()=>setTime(values()[wordIndex]-.05));
+$('plus').addEventListener('click',()=>setTime(values()[wordIndex]+.05));
+$('previous').addEventListener('click',()=>chooseWord(wordIndex-1));
+$('next').addEventListener('click',()=>chooseWord(wordIndex+1));
+$('playLine').addEventListener('click',()=>{audio.currentTime=Math.max(0,values()[0]-.55);audio.play().catch(()=>{})});
+$('back').addEventListener('click',()=>{audio.currentTime=Math.max(0,audio.currentTime-2)});
+$('toggle').addEventListener('click',()=>{if(audio.paused)audio.play().catch(()=>{});else audio.pause()});
+$('reset').addEventListener('click',()=>{edited[active()[0]]=original[active()[0]].slice();renderWords();message('Restored initial timings for this lyric line.')});
+$('save').addEventListener('click',()=>{try{localStorage.setItem(KEY,JSON.stringify(edited));message('Saved to this browser. Refresh the main site here to apply it.')}catch(e){message('Could not save in this browser; use Download instead.')}});
+$('copy').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(JSON.stringify(edited,null,2));message('Copied timing JSON to clipboard.')}catch(e){message('Clipboard unavailable; use Download instead.')}});
+$('download').addEventListener('click',()=>{
+ const data='/* Word-aligned lyric timestamps, seconds. */\nwindow.MARIAMMA_WORD_TIMES='+JSON.stringify(edited)+';\n';
+ const blob=new Blob([data],{type:'text/javascript;charset=utf-8'});
+ const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='word-timings.js';
+ document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(link.href),2000);
+ message('Downloaded. Commit this file to GitHub to share corrections with all visitors.');
+});
+audio.addEventListener('timeupdate',()=>{$('playerTime').textContent=tformat(audio.currentTime);[...wordsBox.children].forEach((b,i)=>b.classList.toggle('playing',audio.currentTime>=values()[i]&&(!values()[i+1]||audio.currentTime<values()[i+1])))});
+window.addEventListener('keydown',e=>{
+ if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
+ if(e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key.toLowerCase()==='m'){e.preventDefault();setTime(audio.currentTime);chooseWord(wordIndex+1)}
+ else if(e.key==='ArrowLeft'){e.preventDefault();chooseWord(wordIndex-1)}
+ else if(e.key==='ArrowRight'){e.preventDefault();chooseWord(wordIndex+1)}
+ else if(e.key==='['){e.preventDefault();setTime(values()[wordIndex]-.05)}
+ else if(e.key===']'){e.preventDefault();setTime(values()[wordIndex]+.05)}
+ else if(e.key===' '){e.preventDefault();if(audio.paused)audio.play().catch(()=>{});else audio.pause()}
+});
+chooseLine(0,false);
+})();
+</script>
+</body></html>
