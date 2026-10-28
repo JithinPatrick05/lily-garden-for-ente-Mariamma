@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="build-version" content="2026-10-28-no-overlap-100ms-word-lead"><title>Ente Mariammekku 🌸💗</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Great+Vibes&amp;family=Montserrat:wght@600;700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><meta name="description" content="Ente Mariammekku — black stargazer lily lyric page."><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="build-version" content="2026-10-29-no-overlap-500ms-earlier"><title>Ente Mariammekku 🌸💗</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Great+Vibes&amp;family=Montserrat:wght@600;700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><meta name="description" content="Ente Mariammekku — black stargazer lily lyric page."><style>
 :root{--text:#fff4fb;--pink:#ff74cb;--violet:#c59bff;--glass:rgba(255,255,255,.04);color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;background:#000}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}button,input,a{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 #scene,#bouquets,#particles,#scene > .glow,.vignette{position:fixed;inset:0;pointer-events:none}#scene{background:#000}#scene > .glow{background:radial-gradient(circle at 50% 52%,rgba(255,61,171,.08),transparent 24%),radial-gradient(circle at 25% 28%,rgba(255,120,190,.06),transparent 24%),radial-gradient(circle at 75% 32%,rgba(255,120,190,.05),transparent 22%),radial-gradient(circle at 50% 88%,rgba(255,80,186,.08),transparent 34%);filter:blur(20px)}.vignette{background:radial-gradient(circle at center,transparent 28%,rgba(0,0,0,.35) 70%,rgba(0,0,0,.9) 100%)}
 .bouquet{position:absolute;left:var(--x);top:var(--y);width:var(--w);aspect-ratio:.80;transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s));opacity:var(--o);background:url('assets/original-stargazer.png') center/contain no-repeat;mix-blend-mode:screen;filter:drop-shadow(0 0 20px rgba(255,92,191,.25)) saturate(1.06) contrast(1.05);animation:sway var(--d) ease-in-out infinite alternate,pulse calc(var(--d)*.92) ease-in-out infinite alternate}
@@ -2012,7 +2012,7 @@ html body .stage #lyric .ig-instant .ig-word{transition:none!important}
 
 /* Hide the six extra originals on small screens to keep the mobile garden airy. */
 @media(max-width:899px){.bouquet.subtle-desktop-extra{display:none!important}}
-</style><link rel="stylesheet" href="cinematic-lyrics.css?v=20261028c"></head><body>
+</style><link rel="stylesheet" href="cinematic-lyrics.css?v=20261029a"></head><body>
 <div id="scene"><div class="glow"></div><div id="particles"></div><div id="bouquets"></div><div class="vignette"></div></div>
 <header class="brand"><h1>🌸 Ente Mariammekku 🌸</h1></header>
 <main class="stage"><h2 id="lyric" class="lyric glow" aria-live="polite" aria-atomic="true">Like flowers don't need a reason to bloom, I will love you till our graves bloom with lillies</h2></main><section class="controls-dock" aria-label="Music controls"><div class="controls"><button class="ctrl" id="rewind" type="button" aria-label="Rewind 10 seconds">↶<small>10</small></button><button class="ctrl play" id="play" type="button" aria-label="Play Lovesong">▶</button><button class="ctrl" id="pause" type="button" aria-label="Pause Lovesong">❚❚</button></div><div class="progress"><input type="range" min="0" max="1000" step="1" value="0" id="seek" aria-label="Song playback position"><span id="time" class="time">0:00 / 5:20</span></div></section>
@@ -2387,10 +2387,11 @@ function getCaption(t){if(t<26.13)return{key:t<12.9?'quote1':'quote2',text:t<12.
    One span per word; no WAAPI, nested glyphs, or drifting transitions. */
 // Mount the next sentence early enough to reveal its first word, without
 // displaying two different sentences at the same time.
-const LYRIC_LINE_ADVANCE=0.34;
+const LYRIC_LINE_ADVANCE=0.84;
 const CAPTION_EXIT_LEAD=0.20;
-// Finish each word's fade exactly 100 ms before its audio timestamp.
-const WORD_EARLY_SECONDS=0.10;
+// Advance every lyric word by another 500 ms: finish 600 ms before the stored audio timestamp.
+// This preserves the current 160 ms cinematic fade and avoids stacked lyric lines.
+const WORD_EARLY_SECONDS=0.60;
 const WORD_EASE_SECONDS=0.16;
 const LYRIC_WORD_ADVANCE=WORD_EARLY_SECONDS+WORD_EASE_SECONDS;
 let lyricTransitionId=0,lyricChangeTimer=null;
