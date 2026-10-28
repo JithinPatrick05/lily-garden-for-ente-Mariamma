@@ -1,20 +1,22 @@
 # Ente Mariammekku 🌸💗
 
-A mobile-first neon lily garden with smoothly animated synchronized love-song lyrics.
+A personal, mobile-first lily garden with romantic quotes and cinematic word-by-word captions.
 
-## Play the music
-The public page embeds Adele's **Lovesong (Lyric Video)** using the official YouTube IFrame Player API, so visitors do **not** need a local MP3.
+## Open the site
+**GitHub Pages:** https://jithinpatrick05.github.io/lily-garden-for-ente-Mariamma/
 
-- Tap **Play Lovesong**, or press Play inside the embedded YouTube video when the browser requires another tap.
-- **Play / Pause**, **Rewind 10 seconds** and the progress slider control the embedded YouTube video.
-- On-screen lyrics advance using YouTube's current playback time; pausing or seeking changes the captions accordingly.
-- A small visible YouTube player stays in the lower corner. YouTube's minimum player size is 200 × 200 pixels; the site does not hide or extract its audio.
-- If a browser or region blocks embedding, tap **↗** to watch on YouTube. Playback in a separate tab cannot synchronize with the site's captions.
+## Experience
+- The original textured stargazer lilies remain unchanged, with additional light blooms along desktop edges.
+- The supplied `assets/Lovesong.mp3` is played using the built-in HTML audio player.
+- Play, pause, rewind 10 seconds, and scrub the track with the compact control dock.
+- Intro and interlude quotes glide horizontally; the lyrics reveal word by word with subtle downward cinematic motion and brief phrase dissolves.
+- Caption movement is driven directly by `audio.currentTime` every animation frame, rather than queued CSS transitions, so play, pause, and seeking do not accumulate visual drift.
+- Respect `prefers-reduced-motion` settings; the original lily animations and mobile layouts are preserved.
 
-## Design
-The centre of the screen showcases full-size softly transitioning neon lyric lines; pink, aqua and violet lilies sway behind them. The owner's exact English and Malayalam quotes appear during the instrumental introduction. Additional notes show only in long instrumental sections.
+## Sync notes
+The supplied timestamps in `timedLrc` align lyric **lines**. Individual word times are estimated by the `WORD_PROFILES` and `getWordTimes()` functions in `index.html`. This is clock-synchronized cinematic animation, **not** a claim of verified phoneme-level forced alignment. If words in a particular line start early or late, adjust its per-word timing profile or add verified word timestamps for that recording.
 
-## Hosting
-GitHub Pages: https://jithinpatrick05.github.io/lily-garden-for-ente-Mariamma/
+Styling for the cinematic reveal is isolated in `cinematic-lyrics.css`; flower art and original backup version are unchanged.
 
-The site includes no downloadable copy of Adele's audio recording.
+## Original backup
+A snapshot of the site before the 28 October 2026 cinematic update is stored in branch `backup/before-cinematic-lyrics-2026-10-28`.
