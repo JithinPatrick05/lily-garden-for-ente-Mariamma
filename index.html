@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="build-version" content="2026-10-29-no-overlap-500ms-earlier"><title>Ente Mariammekku 🌸💗</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Great+Vibes&amp;family=Montserrat:wght@600;700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><meta name="description" content="Ente Mariammekku — black stargazer lily lyric page."><style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#000000"><meta name="build-version" content="2026-10-29-mirrored-original-lilies"><title>Ente Mariammekku 🌸💗</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&amp;family=Great+Vibes&amp;family=Montserrat:wght@600;700;800;900&amp;family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"><meta name="description" content="Ente Mariammekku — black stargazer lily lyric page."><style>
 :root{--text:#fff4fb;--pink:#ff74cb;--violet:#c59bff;--glass:rgba(255,255,255,.04);color-scheme:dark}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;background:#000}body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}button,input,a{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 #scene,#bouquets,#particles,#scene > .glow,.vignette{position:fixed;inset:0;pointer-events:none}#scene{background:#000}#scene > .glow{background:radial-gradient(circle at 50% 52%,rgba(255,61,171,.08),transparent 24%),radial-gradient(circle at 25% 28%,rgba(255,120,190,.06),transparent 24%),radial-gradient(circle at 75% 32%,rgba(255,120,190,.05),transparent 22%),radial-gradient(circle at 50% 88%,rgba(255,80,186,.08),transparent 34%);filter:blur(20px)}.vignette{background:radial-gradient(circle at center,transparent 28%,rgba(0,0,0,.35) 70%,rgba(0,0,0,.9) 100%)}
 .bouquet{position:absolute;left:var(--x);top:var(--y);width:var(--w);aspect-ratio:.80;transform:translate(-50%,-50%) rotate(var(--r)) scale(var(--s));opacity:var(--o);background:url('assets/original-stargazer.png') center/contain no-repeat;mix-blend-mode:screen;filter:drop-shadow(0 0 20px rgba(255,92,191,.25)) saturate(1.06) contrast(1.05);animation:sway var(--d) ease-in-out infinite alternate,pulse calc(var(--d)*.92) ease-in-out infinite alternate}
@@ -2010,6 +2010,25 @@ html body .stage #lyric .ig-instant .ig-word{transition:none!important}
  }
 }
 
+/* Reflect the same original photographic lilies across the centreline. */
+#bouquets .bouquet.lily-mirror{
+  transform:translate(-50%,-50%) rotate(var(--r)) scaleX(-1) scale(var(--s));
+  animation-name:lilyMirrorSway,pulse;
+}
+@keyframes lilyMirrorSway{
+  0%{
+    transform:translate(-50%,-50%) rotate(calc(var(--r) + 2deg))
+      scaleX(-1) scale(var(--s));
+  }
+  100%{
+    transform:translate(-50%,-50%) rotate(calc(var(--r) - 2deg))
+      translateY(-9px) scaleX(-1) scale(calc(var(--s) * 1.02));
+  }
+}
+body.has-song #bouquets .bouquet.lily-mirror:not(.secret-lily-bloom){
+  animation-name:lilyMirrorSway!important;
+}
+
 /* Hide the six extra originals on small screens to keep the mobile garden airy. */
 @media(max-width:899px){.bouquet.subtle-desktop-extra{display:none!important}}
 </style><link rel="stylesheet" href="cinematic-lyrics.css?v=20261029a"></head><body>
@@ -2044,7 +2063,18 @@ positions.push({x:29,y:24,w:112,r:-8,s:0.56,o:0.16,d:12.7,desktopExtra:true},{x:
 // Eight corner fillers of the original textured lilies, two per corner.
 // Restrained opacity and desktop-only positioning preserve caption readability.
 positions.push({x:2,y:6,w:118,r:-26,s:0.61,o:0.2,d:12.5,desktopExtra:true},{x:10,y:4,w:108,r:-16,s:0.56,o:0.16,d:13,desktopExtra:true},{x:98,y:6,w:118,r:26,s:0.61,o:0.2,d:12.5,desktopExtra:true},{x:90,y:4,w:108,r:16,s:0.56,o:0.16,d:13,desktopExtra:true},{x:4,y:98,w:120,r:-18,s:0.62,o:0.19,d:12.7,desktopExtra:true},{x:12,y:101,w:110,r:-10,s:0.57,o:0.16,d:13.1,desktopExtra:true},{x:96,y:98,w:120,r:18,s:0.62,o:0.19,d:12.7,desktopExtra:true},{x:88,y:101,w:110,r:10,s:0.57,o:0.16,d:13.1,desktopExtra:true});
-positions.forEach(p=>{const el=document.createElement('div');el.className=p.desktopExtra?'bouquet subtle-desktop-extra':'bouquet';for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
+// Each left-side bloom defines a matching right-side reflection.
+const symmetricLeft=positions.filter(p=>p.x<44);
+const symmetricCenter=positions.filter(p=>p.x>=44&&p.x<=56);
+positions.length=0;
+symmetricLeft.forEach((p,i)=>{
+  positions.push({...p,pairIndex:i,mirrored:false});
+  positions.push({...p,x:100-p.x,r:-p.r,pairIndex:i,mirrored:true});
+});
+symmetricCenter.forEach((p,i)=>{
+  positions.push({...p,x:50,r:0,pairIndex:symmetricLeft.length+i,mirrored:false});
+});
+positions.forEach(p=>{const el=document.createElement('div');el.className=(p.desktopExtra?'bouquet subtle-desktop-extra':'bouquet')+(p.mirrored?' lily-mirror':'');for(const [k,v] of Object.entries({x:p.x+'%',y:p.y+'%',w:p.w+'px',r:p.r+'deg',s:p.s,o:p.o,d:p.d+'s'}))el.style.setProperty('--'+k,v);bouquetLayer.appendChild(el);});for(let i=0;i<58;i++){const s=document.createElement('span');s.className='spark';s.style.setProperty('--x',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--y',(Math.random()*100).toFixed(2)+'%');s.style.setProperty('--s',(0.8+Math.random()*2.1).toFixed(2)+'px');s.style.setProperty('--d',(1.7+Math.random()*4).toFixed(2)+'s');sparkLayer.appendChild(s);}
 
 
 /* Desktop garden cleanup: original photographed lilies ONLY.
@@ -2652,9 +2682,9 @@ function updateMusicLilies(now){
  for(let i=0;i<interactiveBlooms.length;i++){
   const flower=interactiveBlooms[i];
   if(flower.classList.contains('secret-lily-bloom'))continue;
-  const phase=i*.73;
-  // Subtle mode: barely perceptible, smooth breathing in time with the song.
-  const x=Math.sin(t*.72+phase)*energy*1.45;
+  const phase=(positions[i].pairIndex??i)*.73;
+  // Paired flowers breathe together with opposite horizontal movement.
+  const x=Math.sin(t*.72+phase)*energy*1.45*(positions[i].mirrored?-1:1);
   const y=(Math.cos(t*.93+phase*.82)-.28)*energy*1.85;
   flower.style.setProperty('--song-x',x.toFixed(2)+'px');
   flower.style.setProperty('--song-y',y.toFixed(2)+'px');
